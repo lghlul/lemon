@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.StudentMapper">
+
+    <insert id="saveStudent" parameterType="addStudentDTO">
+    insert into student(studentNumber , studentName , createTime) values(#{studentNumber} , #{studentName} , #{createTime})
+   </insert>
+
+    <select id="getStudent" parameterType="string" resultType="studentDO">
+      select * from student where studentNumber = #{studentNumber}
+    </select>
+
+    <select id="listStudent" parameterType="listStudentDTO" resultType="studentDO">
+        select * from student
+        <where>
+            <if test="studentName != null">
+                and studentName like CONCAT('%',#{studentName},'%')
+            </if>
+        </where>
+        <if test="offset != null and pageSize != null">
+            limit #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="countStudent" parameterType="listStudentDTO" resultType="int">
+        select count(studentNumber) from student
+        <where>
+            <if test="studentName != null">
+                and studentName like CONCAT('%',#{studentName},'%')
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

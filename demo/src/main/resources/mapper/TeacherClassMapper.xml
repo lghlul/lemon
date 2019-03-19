@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.mapper.TeacherClassMapper">
+
+
+    <insert id="saveTeacherClass" parameterType="addTeacherClassDTO">
+    insert into teacherClass(teacherNumber , classNumber  , createTime , term) values( #{teacherNumber} , #{classNumber}  , #{createTime} , #{term})
+   </insert>
+
+
+    <select id="getTeacherClass" parameterType="getTeacherClassDTO" resultType="teacherClassDO">
+        select * from teacherClass
+        <where>
+            <if test="teacherNumber != null">
+                and teacherNumber = #{teacherNumber}
+            </if>
+            <if test="classNumber != null">
+                and classNumber = #{classNumber}
+            </if>
+            <if test="term != null">
+                and term = #{term}
+            </if>
+            <if test="teacherClassId != null">
+                and teacherClassId = #{teacherClassId}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="listTeacherClass" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
+        select a.*,c.* from teacher a , teacherClass b , class c where a.teacherNumber = b.teacherNumber and
+        b.classNumber = c.classNumber
+        <if test="offset != null and pageSize != null">
+            limit #{offset},#{pageSize}
+        </if>
+    </select>
+
+    <select id="countTeacherClass" parameterType="listTeacherClassDTO" resultType="int">
+        select count(1) from teacher a , teacherClass b , class c where a.teacherNumber = b.teacherNumber and b.classNumber = c.classNumber
+    </select>
+
+    <select id="listTeacherClassByTerm" parameterType="string" resultType="listTeacherClassByTermDTO">
+        SELECT
+        m.*, n.className
+        FROM
+        (
+        SELECT
+        term,
+        max(score) maxScore,
+        min(score) minScore,
+        AVG(score) avgScore,
+        classNumber
+        FROM
+        teacherClass a
+        JOIN studentClass b ON a.teacherClassId = b.teacherClassId
+        <where>
+            <if test="teacherNumber != null">
+                and teacherNumber = #{teacherNumber}
+            </if>
+        </where>
+        GROUP BY
+        term,
+        classNumber
+        ) m
+        JOIN class n ON m.classNumber = n.classNumber
+    </select>
+
+
+    <select id="listTeacherClassScore" resultType="listTeacherClassScoreDTO">
+        SELECT
+            m.*, n.className,t.teacherName
+        FROM
+            (
+                SELECT
+                    teacherNumber,
+                    max(score) maxScore,
+                    min(score) minScore,
+                    AVG(score) avgScore,
+                    classNumber
+                FROM
+                    teacherClass a
+                JOIN studentClass b ON a.teacherClassId = b.teacherClassId
+                GROUP BY
+                    teacherNumber,
+                    classNumber
+            ) m
+        , class n , teacher t where m.classNumber = n.classNumber and m.teacherNumber = t.teacherNumber
+    </select>
+
+
+</mapper>
