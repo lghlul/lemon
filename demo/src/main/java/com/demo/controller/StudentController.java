@@ -3,7 +3,10 @@ package com.demo.controller;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.model.Student;
+import com.demo.model.StudentClass;
 import com.demo.service.IStudentService;
+import com.demo.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +22,9 @@ public class StudentController {
     @Autowired
     private IStudentService studentService;
 
+    @Autowired
+    private ITeacherService teacherService;
+
 
     /*
      * @author ll
@@ -26,11 +32,17 @@ public class StudentController {
      * @param ListStudentDTO
      * @return ResultBean
      */
-    @PostMapping("addStudent")
-    public ResultBean addStudent(AddStudentDTO addStudentDTO) {
-        try{
-            return studentService.save(addStudentDTO);
-        }catch (Exception e){
+    @PostMapping("add")
+    public ResultBean add(AddStudentDTO addStudentDTO) {
+        try {
+            if (studentService.checkStudentExist(addStudentDTO.getStudentNumber())) {
+                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            } else {
+                //编号不存在
+                return studentService.save(addStudentDTO);
+            }
+
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -41,11 +53,11 @@ public class StudentController {
      * @param ListStudentDTO
      * @return ResultBean
      */
-    @GetMapping("listStudent")
-    public ResultBean listStudent(ListStudentDTO studentDTO) {
-        try{
+    @GetMapping("list")
+    public ResultBean list(ListStudentDTO studentDTO) {
+        try {
             return studentService.list(studentDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -58,9 +70,24 @@ public class StudentController {
      */
     @PostMapping("addStudentClass")
     public ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) {
-        try{
-            return studentService.addStudentClass(addStudentClassDTO);
-        }catch (Exception e){
+        try {
+            //校验课程是否存在
+            if (!studentService.checkStudentExist(addStudentClassDTO.getStudentNumber())) {
+                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
+            }
+            //校验是否存在这门课程
+            if (!teacherService.checkTeacherClassExist(addStudentClassDTO.getTeacherClassId())) {
+                return new ResultBean(ResultCodeConstant.TEACHER_CLASS_MISMATCHING);
+            }
+            //校验该学生是否选过这门课程
+            if (!studentService.checkStudentClassExist(addStudentClassDTO.getStudentNumber(),addStudentClassDTO.getTeacherClassId() )) {
+                return studentService.addStudentClass(addStudentClassDTO);
+            } else {
+                //已经选过该课程
+                return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST);
+            }
+
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -73,9 +100,14 @@ public class StudentController {
      */
     @PutMapping("updateStudentClass")
     public ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) {
-        try{
+        try {
+            //是否选课
+            if (!studentService.checkStudentClassExist(updateStudentClassDTO.getStudentNumber(), updateStudentClassDTO.getTeacherClassId())) {
+                //没有选课
+                return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS);
+            }
             return studentService.updateStudentClass(updateStudentClassDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -88,9 +120,9 @@ public class StudentController {
      */
     @GetMapping("listStudentClass")
     public ResultBean listStudentClass(ListStudentClassDTO listStudentClassDTO) {
-        try{
+        try {
             return studentService.listStudentClass(listStudentClassDTO);
-        }catch (Exception e){
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -101,11 +133,17 @@ public class StudentController {
      * @param String
      * @return ResultBean
      */
-    @DeleteMapping("deleteStudent")
-    public ResultBean deleteStudent(String studentNumber) {
-        try{
-            return studentService.delete(studentNumber);
-        }catch (Exception e){
+    @DeleteMapping("delete")
+    public ResultBean delete(String studentNumber) {
+        try {
+            if (studentService.checkStudentExist(studentNumber)) {
+                return studentService.delete(studentNumber);
+            } else {
+                //编号不存在
+                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+            }
+
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -116,14 +154,17 @@ public class StudentController {
      * @param UpdateStudentDTO
      * @return ResultBean
      */
-    @PutMapping("updateStudent")
-    public ResultBean updateStudent(UpdateStudentDTO updateStudentDTO) {
-        try{
-            return studentService.update(updateStudentDTO);
-        }catch (Exception e){
+    @PutMapping("update")
+    public ResultBean update(UpdateStudentDTO updateStudentDTO) {
+        try {
+            if (studentService.checkStudentExist(updateStudentDTO.getStudentNumber())) {
+                return studentService.update(updateStudentDTO);
+            } else {
+                //编号不存在
+                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+            }
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
-
-
 }

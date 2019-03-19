@@ -4,7 +4,7 @@
 <mapper namespace="com.demo.mapper.TeacherClassMapper">
 
 
-    <insert id="save" parameterType="addTeacherClassDTO">
+    <insert id="save" parameterType="addTeacherClassDTO" keyProperty="teacherClassId" useGeneratedKeys="true">
     insert into teacherClass(teacherNumber , classNumber  , createTime , term) values( #{teacherNumber} , #{classNumber}  , #{createTime} , #{term})
    </insert>
 
@@ -31,16 +31,9 @@
     <select id="list" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
         select a.*,c.* from teacher a , teacherClass b , classInfo c where a.teacherNumber = b.teacherNumber and
         b.classNumber = c.classNumber
-        <if test="offset != null and pageSize != null">
-            limit #{offset},#{pageSize}
-        </if>
     </select>
 
-    <select id="count" parameterType="listTeacherClassDTO" resultType="int">
-        select count(1) from teacher a , teacherClass b , classInfo c where a.teacherNumber = b.teacherNumber and b.classNumber = c.classNumber
-    </select>
-
-    <select id="listByTerm" parameterType="string" resultType="listTeacherClassByTermDTO">
+    <select id="listClass" parameterType="string" resultType="listTeacherClassByTermDTO">
         SELECT
         m.*, n.className
         FROM
@@ -67,7 +60,7 @@
     </select>
 
 
-    <select id="listWithScore" resultType="listTeacherClassScoreDTO">
+    <select id="listTeacherByTeacherLevel" resultType="listTeacherClassScoreDTO">
         SELECT
             m.*, n.className,t.teacherName
         FROM

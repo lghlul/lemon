@@ -52,6 +52,10 @@ public class ResultCodeConstant {
      * 不能重复选课
      */
     public static final int STUDENT_CLASS_EXIST = 1007;
+    /**
+     * 编号不存在
+     */
+    public static final int NUMBER_NOT_EXIST = 1008;
 
 
 }

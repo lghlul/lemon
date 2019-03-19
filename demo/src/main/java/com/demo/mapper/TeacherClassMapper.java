@@ -14,10 +14,8 @@ public interface TeacherClassMapper {
 
     List<ListTeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO);
 
-    int count(ListTeacherClassDTO listTeacherClassDTO);
+    List<ListTeacherClassByTermDTO> listClass(@Param("teacherNumber") String teacherNumber);
 
-    List<ListTeacherClassByTermDTO> listByTerm(@Param("teacherNumber") String teacherNumber);
-
-    List<ListTeacherClassScoreDTO> listWithScore();
+    List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel();
 
 }

@@ -10,7 +10,6 @@
     <packaging>jar</packaging>
 
     <name>demo</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -102,6 +101,12 @@
             <artifactId>commons-lang</artifactId>
             <version>2.5</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.3</version>
         </dependency>
 
     </dependencies>

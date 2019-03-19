@@ -18,18 +18,6 @@
                 and studentName like CONCAT('%',#{studentName},'%')
             </if>
         </where>
-        <if test="offset != null and pageSize != null">
-            limit #{offset},#{pageSize}
-        </if>
-    </select>
-
-    <select id="count" parameterType="listStudentDTO" resultType="int">
-        select count(studentNumber) from student
-        <where>
-            <if test="studentName != null">
-                and studentName like CONCAT('%',#{studentName},'%')
-            </if>
-        </where>
     </select>
 
     <update id="update" parameterType="updateStudentDTO">
@@ -39,6 +27,7 @@
     <delete id="delete" parameterType="string">
       delete from student where studentNumber = #{studentNumber}
     </delete>
+
 
 
 </mapper>

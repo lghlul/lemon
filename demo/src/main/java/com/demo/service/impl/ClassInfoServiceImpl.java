@@ -17,18 +17,10 @@ public class ClassInfoServiceImpl implements IClassInfoService {
 
     @Override
     public ResultBean save(AddClassDTO addClassDTO)  throws Exception{
-        ClassInfo classDO = classMapper.get(addClassDTO.getClassNumber());
-        if (classDO == null) {
-            //编号不存在 可以添加
-            addClassDTO.setCreateTime(System.currentTimeMillis());
-            if (classMapper.save(addClassDTO) > 0) {
-                return new ResultBean(ResultCodeConstant.SUCCESS);
-            } else {
-                return new ResultBean(ResultCodeConstant.FAIL);
-            }
+        if (classMapper.save(addClassDTO) > 0) {
+            return new ResultBean(ResultCodeConstant.SUCCESS , addClassDTO);
         } else {
-            //编号重复
-            return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            return new ResultBean(ResultCodeConstant.FAIL);
         }
     }
 
@@ -49,5 +41,20 @@ public class ClassInfoServiceImpl implements IClassInfoService {
         } else {
             return new ResultBean(ResultCodeConstant.FAIL);
         }
+    }
+
+
+    @Override
+    public ClassInfo get(String classNumber) {
+        return classMapper.get(classNumber);
+    }
+
+    @Override
+    public boolean checkClassExist(String classNumber) throws Exception {
+        ClassInfo classInfo = classMapper.get(classNumber);
+        if (classInfo == null) {
+            return false;
+        }
+        return true;
     }
 }

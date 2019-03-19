@@ -2,12 +2,14 @@ package com.demo.service.impl;
 
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
-import com.demo.constant.CommonConstant;
 import com.demo.common.ResultBean;
 import com.demo.mapper.*;
-import com.demo.model.ClassInfo;
+import com.demo.model.Student;
 import com.demo.model.Teacher;
+import com.demo.model.TeacherClass;
 import com.demo.service.ITeacherService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,58 +24,33 @@ public class TeacherServiceImpl implements ITeacherService {
     private TeacherMapper teacherMapper;
 
     @Autowired
-    private ClassInfoMapper classMapper;
-
-    @Autowired
     private TeacherClassMapper teacherClassMapper;
 
 
     @Override
     public ResultBean save(AddTeacherDTO addTeacherDTO) throws Exception {
-        Teacher teacher = teacherMapper.get(addTeacherDTO.getTeacherNumber());
-        if (teacher == null) {
-            //编号不存在 可以添加
-            addTeacherDTO.setCreateTime(System.currentTimeMillis());
-            if (teacherMapper.save(addTeacherDTO) > 0) {
-                return new ResultBean(ResultCodeConstant.SUCCESS);
-            } else {
-                return new ResultBean(ResultCodeConstant.FAIL);
-            }
+        addTeacherDTO.setCreateTime(System.currentTimeMillis());
+        if (teacherMapper.save(addTeacherDTO) > 0) {
+            return new ResultBean(ResultCodeConstant.SUCCESS, addTeacherDTO);
         } else {
-            //编号重复
-            return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            return new ResultBean(ResultCodeConstant.FAIL);
         }
     }
 
     @Override
     public ResultBean list(ListTeacherDTO listTeacherDTO) throws Exception {
-        int pageSize = listTeacherDTO.getPageSize();
-        listTeacherDTO.setOffset((listTeacherDTO.getPageNumber() - 1) * pageSize);
-        List<Teacher> teacherList = this.teacherMapper.list(listTeacherDTO);
-        int totalCount = this.teacherMapper.count(listTeacherDTO);
-        int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
-        Map<String, Object> map = new HashMap<>();
-        map.put("totalCount", totalCount);
-        map.put("teacherList", teacherList);
-        map.put("totalPage", totalPage);
-        return new ResultBean(ResultCodeConstant.SUCCESS, map);
+        PageHelper.startPage(listTeacherDTO.getOffset() , listTeacherDTO.getLimit());
+        List<Teacher> teacherList = teacherMapper.list(listTeacherDTO);
+        //得到分页的结果对象
+        PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
+        return new ResultBean(ResultCodeConstant.SUCCESS, pageInfo);
     }
 
     @Override
     public ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) throws Exception {
-        //校验 老师是否存在
-        if (!checkTeacherExist(addTeacherClassDTO.getTeacherNumber())) {
-            return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
-        }
-
-        //校验课程是否存在
-        ClassInfo classDO = classMapper.get(addTeacherClassDTO.getClassNumber());
-        if (classDO == null) {
-            return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
-        }
         addTeacherClassDTO.setCreateTime(System.currentTimeMillis());
         if (this.teacherClassMapper.save(addTeacherClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
+            return new ResultBean(ResultCodeConstant.SUCCESS , addTeacherClassDTO);
         } else {
             return new ResultBean(ResultCodeConstant.FAIL);
         }
@@ -82,70 +59,30 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Override
     public ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
-        int pageSize = listTeacherClassDTO.getPageSize();
-        listTeacherClassDTO.setOffset((listTeacherClassDTO.getPageNumber() - 1) * pageSize);
-        List<ListTeacherClassDTO> teacherClassList = this.teacherClassMapper.list(listTeacherClassDTO);
-        int totalConunt = this.teacherClassMapper.count(listTeacherClassDTO);
-        int totalPage = totalConunt % pageSize == 0 ? totalConunt / pageSize : totalConunt / pageSize + 1;
-        Map<String, Object> map = new HashMap<>();
-        map.put("totalCount", totalConunt);
-        map.put("teacherClassList", teacherClassList);
-        map.put("totalPage", totalPage);
-        return new ResultBean(ResultCodeConstant.SUCCESS, map);
+        PageHelper.startPage(listTeacherClassDTO.getOffset() , listTeacherClassDTO.getLimit());
+        List<ListTeacherClassDTO> teacherClassDTOList = teacherClassMapper.list(listTeacherClassDTO);
+        //得到分页的结果对象
+        PageInfo<ListTeacherClassDTO> pagrInfo = new PageInfo<>(teacherClassDTOList);
+        return new ResultBean(ResultCodeConstant.SUCCESS, pagrInfo);
     }
 
 
     @Override
     public ResultBean listByTerm(String teacherNumber) throws Exception {
-        //校验 老师是否存在
-        if (!checkTeacherExist(teacherNumber)) {
-            return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
-        }
-        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listByTerm(teacherNumber);
+        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listClass(teacherNumber);
         return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassByTermDTOS);
-    }
-
-    /**
-     * @param teacherNumber
-     * @return false 不存在 true 存在
-     * @description 校验教师是否存在
-     */
-    private boolean checkTeacherExist(String teacherNumber) throws Exception {
-        //校验 老师是否存在
-        Teacher teacherDO = teacherMapper.get(teacherNumber);
-        if (teacherDO == null) {
-            return false;
-        }
-        return true;
     }
 
 
     @Override
-    public ResultBean listByLevel(String teacherNumber) throws Exception {
-        //校验 老师是否存在
-        Teacher teacherDO = teacherMapper.get(teacherNumber);
-        if (teacherDO == null) {
-            return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
-        }
-        //校验是否有教务主任权限
-        if (teacherDO.getTeacherLevel() != CommonConstant.TEACHER_LEVEL_REGISTRAR) {
-            //不是教务主任没有权限
-            return new ResultBean(ResultCodeConstant.NO_PERMISSION);
-        }
-        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listByTerm(null);
+    public ResultBean listClassByTeacherLevel(String teacherNumber) throws Exception {
+        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listClass(null);
         return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassByTermDTOS);
     }
 
     @Override
-    public ResultBean listWithScore(String teacherNumber) throws Exception {
-        //校验 老师是否存在
-        Teacher teacherDO = teacherMapper.get(teacherNumber);
-        //校验是否有教务主任权限
-        if (teacherDO.getTeacherLevel() != CommonConstant.TEACHER_LEVEL_REGISTRAR) {
-            //不是教务主任没有权限
-            return new ResultBean(ResultCodeConstant.NO_PERMISSION);
-        }
-        List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassMapper.listWithScore();
+    public ResultBean listTeacherByTeacherLevel(String teacherNumber) throws Exception {
+        List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassMapper.listTeacherByTeacherLevel();
         return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassScoreDTOS);
     }
 
@@ -164,6 +101,35 @@ public class TeacherServiceImpl implements ITeacherService {
             return new ResultBean(ResultCodeConstant.SUCCESS);
         } else {
             return new ResultBean(ResultCodeConstant.FAIL);
+        }
+    }
+
+    @Override
+    public Teacher get(String teacherNumber) {
+        return teacherMapper.get(teacherNumber);
+    }
+
+    @Override
+    public boolean checkTeacherExist(String teacherNumber) {
+        //校验 老师是否存在
+        Teacher teacher = teacherMapper.get(teacherNumber);
+        if (teacher == null) {
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean checkTeacherClassExist(int teacherClassId) {
+        //检验这门课程是否存在
+        GetTeacherClassDTO readTeacherClassDTO = new GetTeacherClassDTO();
+        readTeacherClassDTO.setTeacherClassId(teacherClassId);
+        TeacherClass teacherClass = this.teacherClassMapper.get(readTeacherClassDTO);
+        if (teacherClass == null) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

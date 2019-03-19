@@ -22,22 +22,8 @@
                 and teacherLevel = #{teacherLevel}
             </if>
         </where>
-        <if test="offset != null and pageSize != null">
-            limit #{offset},#{pageSize}
-        </if>
     </select>
 
-    <select id="count" parameterType="listTeacherDTO" resultType="int">
-        select count(teacherNumber) from teacher
-        <where>
-            <if test="teacherName != null">
-                and teacherName like CONCAT('%',#{teacherName},'%')
-            </if>
-            <if test="teacherLevel != null">
-                and teacherLevel = #{teacherLevel}
-            </if>
-        </where>
-    </select>
 
     <update id="update" parameterType="updateTeacherDTO">
       update teacher

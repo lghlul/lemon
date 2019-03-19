@@ -15,8 +15,6 @@ public interface TeacherMapper {
 
     List<Teacher> list(ListTeacherDTO teacherDTO);
 
-    int count(ListTeacherDTO teacherDTO);
-
     int delete(String teacherNumber);
 
     int update(UpdateTeacherDTO updateTeacherDTO);

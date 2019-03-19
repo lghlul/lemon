@@ -15,10 +15,10 @@ public interface StudentMapper {
 
     List<Student> list(ListStudentDTO studentDTO);
 
-    int count(ListStudentDTO studentDTO);
-
     int delete(String studentNumber);
 
     int update(UpdateStudentDTO updateStudentDTO);
+
+
 
 }

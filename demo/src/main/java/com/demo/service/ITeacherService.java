@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.model.Teacher;
 
 public interface ITeacherService {
 
@@ -15,12 +16,18 @@ public interface ITeacherService {
 
     ResultBean listByTerm(String teacherNumber) throws Exception;
 
-    ResultBean listByLevel(String teacherNumber) throws Exception;
+    ResultBean listClassByTeacherLevel(String teacherNumber) throws Exception;
 
-    ResultBean listWithScore(String teacherNumber) throws Exception;
+    ResultBean listTeacherByTeacherLevel(String teacherNumber) throws Exception;
 
     ResultBean delete(String teacherNumber) throws Exception;
 
     ResultBean update(UpdateTeacherDTO updateTeacherDTO) throws Exception;
+
+    Teacher get(String teacherNumber);
+
+    boolean checkTeacherExist(String teacherNumber);
+
+    boolean checkTeacherClassExist(int teacherClassId);
 
 }

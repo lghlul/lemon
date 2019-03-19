@@ -1,8 +1,11 @@
 package com.demo.controller;
 
+import com.demo.constant.CommonConstant;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.model.Teacher;
+import com.demo.service.IClassInfoService;
 import com.demo.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,16 +22,23 @@ public class TeacherController {
     @Autowired
     private ITeacherService teacherService;
 
+    @Autowired
+    private IClassInfoService classInfoService;
+
     /*
      * @author ll
      * @Description 添加教师信息
      * @param AddTeacherDTO
      * @return ResultBean
      */
-    @PostMapping("addTeacher")
-    public ResultBean addTeacher(AddTeacherDTO addTeacherDTO) {
+    @PostMapping("add")
+    public ResultBean add(AddTeacherDTO addTeacherDTO) {
         try{
-            return teacherService.save(addTeacherDTO);
+            if(teacherService.checkTeacherExist(addTeacherDTO.getTeacherNumber())){
+                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            }else{
+                return teacherService.save(addTeacherDTO);
+            }
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
@@ -40,8 +50,8 @@ public class TeacherController {
      * @param listTeacher
      * @return ResultBean
      */
-    @GetMapping("listTeacher")
-    public ResultBean listTeacher(ListTeacherDTO listTeacherDTO) {
+    @GetMapping("list")
+    public ResultBean list(ListTeacherDTO listTeacherDTO) {
         try{
             return teacherService.list(listTeacherDTO);
         }catch (Exception e){
@@ -58,6 +68,14 @@ public class TeacherController {
     @PostMapping("addTeacherClass")
     public ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) {
         try{
+            //校验 老师是否存在
+            if (!teacherService.checkTeacherExist(addTeacherClassDTO.getTeacherNumber())) {
+                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+            }
+            //校验课程是否存在
+            if (!classInfoService.checkClassExist(addTeacherClassDTO.getTeacherNumber())) {
+                return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
+            }
             return teacherService.addTeacherClass(addTeacherClassDTO);
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
@@ -100,10 +118,14 @@ public class TeacherController {
      * @param teacherNumber
      * @return ResultBean
      */
-    @GetMapping("listWithLevel")
-    public ResultBean listWithLevel(String teacherNumber) {
+    @GetMapping("listClassByTeacherLevel")
+    public ResultBean listClassByTeacherLevel(String teacherNumber) {
         try{
-            return teacherService.listByLevel(teacherNumber);
+            ResultBean resultBean = checkPermission(teacherNumber);
+            if(resultBean != null){
+                return resultBean;
+            }
+            return teacherService.listClassByTeacherLevel(teacherNumber);
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
@@ -117,10 +139,14 @@ public class TeacherController {
      * @param teacherNumber
      * @return ResultBean
      */
-    @GetMapping("listWithScore")
-    public ResultBean listWithScore(String teacherNumber) {
+    @GetMapping("listTeacherByTeacherLevel")
+    public ResultBean listTeacherByTeacherLevel(String teacherNumber) {
         try{
-            return teacherService.listWithScore(teacherNumber);
+            ResultBean resultBean = checkPermission(teacherNumber);
+            if(resultBean != null){
+                return resultBean;
+            }
+            return teacherService.listTeacherByTeacherLevel(teacherNumber);
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
@@ -133,8 +159,8 @@ public class TeacherController {
      * @param String
      * @return ResultBean
      */
-    @DeleteMapping("deleteTeacher")
-    public ResultBean deleteTeacher(String teacherNumber) {
+    @DeleteMapping("delete")
+    public ResultBean delete(String teacherNumber) {
         try{
             return teacherService.delete(teacherNumber);
         }catch (Exception e){
@@ -148,13 +174,31 @@ public class TeacherController {
      * @param UpdateTeacherDTO
      * @return ResultBean
      */
-    @PutMapping("updateTeacher")
-    public ResultBean updateTeacher(UpdateTeacherDTO updateTeacherDTO) {
+    @PutMapping("update")
+    public ResultBean update(UpdateTeacherDTO updateTeacherDTO) {
         try{
             return teacherService.update(updateTeacherDTO);
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
-
+    /*
+     * @author ll
+     * @Description 校验是否有权限
+     * @param String
+     * @return ResultBean
+     */
+    private ResultBean checkPermission(String teacherNumber){
+        //校验 老师是否存在
+        Teacher teacherDO = teacherService.get(teacherNumber);
+        if (teacherDO == null) {
+            return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+        }
+        //校验是否有教务主任权限
+        if (teacherDO.getTeacherLevel() != CommonConstant.TEACHER_LEVEL_REGISTRAR) {
+            //不是教务主任没有权限
+            return new ResultBean(ResultCodeConstant.NO_PERMISSION);
+        }
+        return null;
+    }
 }

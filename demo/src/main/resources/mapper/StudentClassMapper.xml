@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.StudentClassMapper">
 
-    <insert id="save" parameterType="addStudentClassDTO">
+    <insert id="save" parameterType="addStudentClassDTO" keyProperty="id" useGeneratedKeys="true">
     insert into studentClass(studentNumber , teacherClassId , createTime) values(#{studentNumber} , #{teacherClassId}  , #{createTime})
    </insert>
 
@@ -32,7 +32,7 @@
 
 
     <select id="list" parameterType="listStudentClassDTO" resultType="listStudentClassDTO">
-        select a.*,c.className,b.term from studentClass a ,teacherClass b , class c where a.teacherClassId =
+        select a.*,c.className,b.term from studentClass a ,teacherClass b , classInfo c where a.teacherClassId =
         b.teacherClassId and b.classNumber = c.classNumber
         <if test="studentNumber != null">
             and studentNumber = #{studentNumber}

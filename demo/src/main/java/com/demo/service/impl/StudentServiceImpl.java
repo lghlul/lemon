@@ -10,6 +10,8 @@ import com.demo.mapper.StudentClassMapper;
 import com.demo.mapper.StudentMapper;
 import com.demo.mapper.TeacherClassMapper;
 import com.demo.service.IStudentService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,67 +33,31 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public ResultBean save(AddStudentDTO addStudentDTO) throws Exception {
-        Student stu = studentMapper.get(addStudentDTO.getStudentNumber());
-        if (stu == null) {
-            //编号不存在 可以添加
-            addStudentDTO.setCreateTime(System.currentTimeMillis());
-            if (studentMapper.save(addStudentDTO) > 0) {
-                return new ResultBean(ResultCodeConstant.SUCCESS);
-            } else {
-                return new ResultBean(ResultCodeConstant.FAIL);
-            }
+        addStudentDTO.setCreateTime(System.currentTimeMillis());
+        if (studentMapper.save(addStudentDTO) > 0) {
+            return new ResultBean(ResultCodeConstant.SUCCESS , addStudentDTO);
         } else {
-            //编号重复
-            return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            return new ResultBean(ResultCodeConstant.FAIL);
         }
     }
 
 
     @Override
-    public ResultBean list(ListStudentDTO studentDTO) throws Exception {
-        int pageSize = studentDTO.getPageSize();
-        studentDTO.setOffset((studentDTO.getPageNumber() - 1) * pageSize);
-        List<Student> studentList = this.studentMapper.list(studentDTO);
-        int totalCount = this.studentMapper.count(studentDTO);
-        int totalPage = totalCount % pageSize == 0 ? totalCount / pageSize : totalCount / pageSize + 1;
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("studentList", studentList);
-        map.put("totalCount", totalCount);
-        map.put("totalPage", totalPage);
-
-        return new ResultBean(ResultCodeConstant.SUCCESS, map);
+    public ResultBean list(ListStudentDTO listStudentDTO) throws Exception {
+        PageHelper.startPage(listStudentDTO.getOffset() , listStudentDTO.getLimit());
+        List<Student> studentList = studentMapper.list(listStudentDTO);
+        //得到分页的结果对象
+        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
+        return new ResultBean(ResultCodeConstant.SUCCESS, pageInfo);
     }
 
 
     @Override
     public ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) throws Exception {
-        //校验 学生是否存在
-        Student stu = studentMapper.get(addStudentClassDTO.getStudentNumber());
-        if (stu == null) {
-            return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
-        }
-
-        //检验这么课程是否存在
-        GetTeacherClassDTO readTeacherClassDTO = new GetTeacherClassDTO();
-        readTeacherClassDTO.setTeacherClassId(addStudentClassDTO.getTeacherClassId());
-        TeacherClass teacherClass = this.teacherClassMapper.get(readTeacherClassDTO);
-        if (teacherClass == null) {
-            return new ResultBean(ResultCodeConstant.TEACHER_CLASS_MISMATCHING);
-        }
-        //校验是否已经选了该课程
-        GetStudentClassDTO getStudentClassDTO = new GetStudentClassDTO();
-        getStudentClassDTO.setTeacherClassId(addStudentClassDTO.getTeacherClassId());
-        getStudentClassDTO.setStudentNumber(addStudentClassDTO.getStudentNumber());
-        StudentClass studentClass = this.studentClassMapper.get(getStudentClassDTO);
-        if (studentClass != null) {
-            //已经选了该课程
-            return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST);
-        }
 
         addStudentClassDTO.setCreateTime(System.currentTimeMillis());
         if (this.studentClassMapper.save(addStudentClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
+            return new ResultBean(ResultCodeConstant.SUCCESS , addStudentClassDTO);
         } else {
             return new ResultBean(ResultCodeConstant.FAIL);
         }
@@ -100,15 +66,6 @@ public class StudentServiceImpl implements IStudentService {
 
     @Override
     public ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) throws Exception {
-        //是否选课
-        GetStudentClassDTO getStudentClassDTO = new GetStudentClassDTO();
-        getStudentClassDTO.setStudentNumber(updateStudentClassDTO.getStudentNumber());
-        getStudentClassDTO.setTeacherClassId(updateStudentClassDTO.getTeacherClassId());
-        StudentClass studentClass = this.studentClassMapper.get(getStudentClassDTO);
-        if (studentClass == null) {
-            //没有选课
-            return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS);
-        }
         //录入分数
         if (this.studentClassMapper.update(updateStudentClassDTO) > 0) {
             return new ResultBean(ResultCodeConstant.SUCCESS);
@@ -142,4 +99,35 @@ public class StudentServiceImpl implements IStudentService {
             return new ResultBean(ResultCodeConstant.FAIL);
         }
     }
+
+    @Override
+    public Student get(String studentNumber) {
+        return this.studentMapper.get(studentNumber);
+    }
+
+
+    @Override
+    public boolean checkStudentExist(String studentNumber) {
+        Student student = studentMapper.get(studentNumber);
+        if (student == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean checkStudentClassExist(String studentNumber, int teacherClassId) {
+        GetStudentClassDTO getStudentClassDTO = new GetStudentClassDTO();
+        getStudentClassDTO.setStudentNumber(studentNumber);
+        getStudentClassDTO.setTeacherClassId(teacherClassId);
+        StudentClass studentClass = this.studentClassMapper.get(getStudentClassDTO);
+        if (studentClass == null) {
+            //没有选课
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

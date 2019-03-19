@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class ClassInfoController {
 
     @Autowired
-    private IClassInfoService classService;
+    private IClassInfoService classInfoService;
 
 
     /*
@@ -26,11 +26,17 @@ public class ClassInfoController {
      * @param AddClassDTO
      * @return ResultBean
      */
-    @PostMapping("addClass")
-    public ResultBean addClass(AddClassDTO addClassDTO) {
-        try{
-            return classService.save(addClassDTO);
-        }catch (Exception e){
+    @PostMapping("add")
+    public ResultBean add(AddClassDTO addClassDTO) {
+        try {
+            //校验编号
+            if(classInfoService.checkClassExist(addClassDTO.getClassNumber())){
+                //编号重复
+                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+            }else{
+                return classInfoService.save(addClassDTO);
+            }
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -41,11 +47,19 @@ public class ClassInfoController {
      * @param String
      * @return ResultBean
      */
-    @DeleteMapping("deleteClass")
-    public ResultBean deleteClass(String classNumber) {
-        try{
-            return classService.delete(classNumber);
-        }catch (Exception e){
+    @DeleteMapping("delete")
+    public ResultBean delete(String classNumber) {
+        try {
+            //校验编号
+            if(classInfoService.checkClassExist(classNumber)){
+                return classInfoService.delete(classNumber);
+
+            }else{
+                //编号重复
+                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+            }
+
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -56,12 +70,19 @@ public class ClassInfoController {
      * @param UpdateClassDTO
      * @return ResultBean
      */
-    @PutMapping("updateClass")
-    public ResultBean updateClass(UpdateClassDTO updateClassDTO) {
-        try{
-            return classService.update(updateClassDTO);
-        }catch (Exception e){
+    @PutMapping("update")
+    public ResultBean update(UpdateClassDTO updateClassDTO) {
+        try {
+
+            //校验编号
+            if(classInfoService.checkClassExist(updateClassDTO.getClassNumber())){
+                return classInfoService.update(updateClassDTO);
+            }else{
+                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+            }
+        } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
+
 }

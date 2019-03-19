@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.model.Student;
 
 public interface IStudentService {
 
@@ -18,4 +19,11 @@ public interface IStudentService {
     ResultBean delete(String studentNumber) throws Exception;
 
     ResultBean update(UpdateStudentDTO updateStudentDTO) throws Exception;
+
+    Student get(String studentNumber);
+
+    boolean checkStudentExist(String studentNumber);
+
+    boolean checkStudentClassExist(String studentNumber , int teacherClassId);
+
 }
