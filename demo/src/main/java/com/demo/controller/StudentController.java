@@ -140,7 +140,7 @@ public class StudentController {
                 return studentService.delete(studentNumber);
             } else {
                 //编号不存在
-                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
             }
 
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public class StudentController {
                 return studentService.update(updateStudentDTO);
             } else {
                 //编号不存在
-                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
             }
         } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);

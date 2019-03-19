@@ -56,7 +56,7 @@
         term,
         classNumber
         ) m
-        JOIN class n ON m.classNumber = n.classNumber
+        JOIN classInfo n ON m.classNumber = n.classNumber
     </select>
 
 
@@ -78,7 +78,7 @@
                     teacherNumber,
                     classNumber
             ) m
-        , class n , teacher t where m.classNumber = n.classNumber and m.teacherNumber = t.teacherNumber
+        , classInfo n , teacher t where m.classNumber = n.classNumber and m.teacherNumber = t.teacherNumber
     </select>
 
 

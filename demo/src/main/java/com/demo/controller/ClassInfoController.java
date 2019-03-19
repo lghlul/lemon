@@ -53,10 +53,8 @@ public class ClassInfoController {
             //校验编号
             if(classInfoService.checkClassExist(classNumber)){
                 return classInfoService.delete(classNumber);
-
             }else{
-                //编号重复
-                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+                return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
             }
 
         } catch (Exception e) {
@@ -78,7 +76,7 @@ public class ClassInfoController {
             if(classInfoService.checkClassExist(updateClassDTO.getClassNumber())){
                 return classInfoService.update(updateClassDTO);
             }else{
-                return new ResultBean(ResultCodeConstant.NUMBER_NOT_EXIST);
+                return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
             }
         } catch (Exception e) {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);

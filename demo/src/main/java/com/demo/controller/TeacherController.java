@@ -73,7 +73,7 @@ public class TeacherController {
                 return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
             }
             //校验课程是否存在
-            if (!classInfoService.checkClassExist(addTeacherClassDTO.getTeacherNumber())) {
+            if (!classInfoService.checkClassExist(addTeacherClassDTO.getClassNumber())) {
                 return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
             }
             return teacherService.addTeacherClass(addTeacherClassDTO);
@@ -106,7 +106,12 @@ public class TeacherController {
     @GetMapping("listByTerm")
     public ResultBean listByTerm(String teacherNumber) {
         try{
-            return teacherService.listByTerm(teacherNumber);
+            if(teacherService.checkTeacherExist(teacherNumber)){
+                return teacherService.listByTerm(teacherNumber);
+            }else{
+                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+            }
+
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
@@ -162,7 +167,12 @@ public class TeacherController {
     @DeleteMapping("delete")
     public ResultBean delete(String teacherNumber) {
         try{
-            return teacherService.delete(teacherNumber);
+            if(teacherService.checkTeacherExist(teacherNumber)){
+                return teacherService.delete(teacherNumber);
+            }else{
+                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+            }
+
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
@@ -177,7 +187,11 @@ public class TeacherController {
     @PutMapping("update")
     public ResultBean update(UpdateTeacherDTO updateTeacherDTO) {
         try{
-            return teacherService.update(updateTeacherDTO);
+            if(teacherService.checkTeacherExist(updateTeacherDTO.getTeacherNumber())){
+                return teacherService.update(updateTeacherDTO);
+            }else{
+                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+            }
         }catch (Exception e){
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
