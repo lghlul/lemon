@@ -1,19 +1,25 @@
 package com.demo.mapper;
 
-import com.demo.domain.DO.TeacherDO;
-import com.demo.domain.DTO.AddTeacherDTO;
-import com.demo.domain.DTO.ListTeacherDTO;
+import com.demo.dto.UpdateStudentDTO;
+import com.demo.dto.UpdateTeacherDTO;
+import com.demo.model.Teacher;
+import com.demo.dto.AddTeacherDTO;
+import com.demo.dto.ListTeacherDTO;
 
 import java.util.List;
 
 public interface TeacherMapper {
-    int saveTeacher(AddTeacherDTO addTeacherDTO);
+    int save(AddTeacherDTO addTeacherDTO);
 
-    TeacherDO getTeacher(String teacherNumber);
+    Teacher get(String teacherNumber);
 
-    List<TeacherDO> listTeacher(ListTeacherDTO teacherDTO);
+    List<Teacher> list(ListTeacherDTO teacherDTO);
 
-    int countTeacher(ListTeacherDTO teacherDTO);
+    int count(ListTeacherDTO teacherDTO);
+
+    int delete(String teacherNumber);
+
+    int update(UpdateTeacherDTO updateTeacherDTO);
 
 
 }

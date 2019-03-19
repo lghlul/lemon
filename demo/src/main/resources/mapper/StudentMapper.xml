@@ -3,15 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.StudentMapper">
 
-    <insert id="saveStudent" parameterType="addStudentDTO">
+    <insert id="save" parameterType="addStudentDTO">
     insert into student(studentNumber , studentName , createTime) values(#{studentNumber} , #{studentName} , #{createTime})
    </insert>
 
-    <select id="getStudent" parameterType="string" resultType="studentDO">
+    <select id="get" parameterType="string" resultType="student">
       select * from student where studentNumber = #{studentNumber}
     </select>
 
-    <select id="listStudent" parameterType="listStudentDTO" resultType="studentDO">
+    <select id="list" parameterType="listStudentDTO" resultType="student">
         select * from student
         <where>
             <if test="studentName != null">
@@ -23,7 +23,7 @@
         </if>
     </select>
 
-    <select id="countStudent" parameterType="listStudentDTO" resultType="int">
+    <select id="count" parameterType="listStudentDTO" resultType="int">
         select count(studentNumber) from student
         <where>
             <if test="studentName != null">
@@ -31,6 +31,14 @@
             </if>
         </where>
     </select>
+
+    <update id="update" parameterType="updateStudentDTO">
+      update student set studentName = #{studentName} where studentNumber = #{studentNumber}
+    </update>
+
+    <delete id="delete" parameterType="string">
+      delete from student where studentNumber = #{studentNumber}
+    </delete>
 
 
 </mapper>

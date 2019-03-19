@@ -1,20 +1,21 @@
 package com.demo.service;
 
-import com.demo.domain.DTO.*;
+import com.demo.dto.*;
 import com.demo.common.ResultBean;
 
 public interface IStudentService {
 
-    ResultBean addStudent(AddStudentDTO addStudentDTO);
+    ResultBean save(AddStudentDTO addStudentDTO) throws Exception;
 
-    ResultBean listStudent(ListStudentDTO studentDTO);
+    ResultBean list(ListStudentDTO studentDTO) throws Exception;
 
+    ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) throws Exception;
 
-    ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO);
+    ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) throws Exception;
 
+    ResultBean listStudentClass(ListStudentClassDTO studentClassWithScoreDTO) throws Exception;
 
-    ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO);
+    ResultBean delete(String studentNumber) throws Exception;
 
-
-    ResultBean listStudentClass(ListStudentClassDTO studentClassWithSocreDTO);
+    ResultBean update(UpdateStudentDTO updateStudentDTO) throws Exception;
 }

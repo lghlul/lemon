@@ -1,11 +1,11 @@
-package com.demo.domain.DTO;
+package com.demo.dto;
 
 /**
- * @ClassName AddTeacherDTO
- * @Description 添加教师传输对象
+ * @ClassName UpdateTeacherDTO
+ * @Description 更新教师传输对象
  * @Auther ll
  **/
-public class AddTeacherDTO {
+public class UpdateTeacherDTO {
     /**
      * 教师编号
      */
@@ -19,18 +19,6 @@ public class AddTeacherDTO {
      */
     private int teacherLevel;
 
-    /**
-     * 录入时间
-     */
-    private long createTime;
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
 
     public String getTeacherNumber() {
         return teacherNumber;

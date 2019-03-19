@@ -1,21 +1,21 @@
 package com.demo.mapper;
 
-import com.demo.domain.DO.StudentClassDO;
-import com.demo.domain.DTO.AddStudentClassDTO;
-import com.demo.domain.DTO.GetStudentClassDTO;
-import com.demo.domain.DTO.ListStudentClassDTO;
-import com.demo.domain.DTO.UpdateStudentClassDTO;
+import com.demo.model.StudentClass;
+import com.demo.dto.AddStudentClassDTO;
+import com.demo.dto.GetStudentClassDTO;
+import com.demo.dto.ListStudentClassDTO;
+import com.demo.dto.UpdateStudentClassDTO;
 
 import java.util.List;
 
 public interface StudentClassMapper {
 
-    int saveStudentClass(AddStudentClassDTO addStudentClassDTO);
+    int save(AddStudentClassDTO addStudentClassDTO);
 
-    int updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO);
+    int update(UpdateStudentClassDTO updateStudentClassDTO);
 
-    StudentClassDO getStudentClass(GetStudentClassDTO getStudentClassDTO);
+    StudentClass get(GetStudentClassDTO getStudentClassDTO);
 
-    List<ListStudentClassDTO> listStudentClass(ListStudentClassDTO studentClassWithScoreDTO);
+    List<ListStudentClassDTO> list(ListStudentClassDTO studentClassWithScoreDTO);
 
 }

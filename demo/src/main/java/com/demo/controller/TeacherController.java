@@ -1,13 +1,11 @@
 package com.demo.controller;
 
-import com.demo.domain.DTO.*;
+import com.demo.constant.ResultCodeConstant;
+import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.service.ITeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName TeacherController
@@ -29,7 +27,11 @@ public class TeacherController {
      */
     @PostMapping("addTeacher")
     public ResultBean addTeacher(AddTeacherDTO addTeacherDTO) {
-        return teacherService.addTeacher(addTeacherDTO);
+        try{
+            return teacherService.save(addTeacherDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -40,7 +42,11 @@ public class TeacherController {
      */
     @GetMapping("listTeacher")
     public ResultBean listTeacher(ListTeacherDTO listTeacherDTO) {
-        return teacherService.listTeacher(listTeacherDTO);
+        try{
+            return teacherService.list(listTeacherDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -51,7 +57,11 @@ public class TeacherController {
      */
     @PostMapping("addTeacherClass")
     public ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) {
-        return teacherService.addTeacherClass(addTeacherClassDTO);
+        try{
+            return teacherService.addTeacherClass(addTeacherClassDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -62,7 +72,11 @@ public class TeacherController {
      */
     @GetMapping("listTeacherClass")
     public ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) {
-        return teacherService.listTeacherClass(listTeacherClassDTO);
+        try{
+            return teacherService.listTeacherClass(listTeacherClassDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -71,9 +85,13 @@ public class TeacherController {
      * @param teacherNumber
      * @return ResultBean
      */
-    @GetMapping("listTeacherClassByTerm")
-    public ResultBean listTeacherClassByTerm(String teacherNumber) {
-        return teacherService.listTeacherClassByTerm(teacherNumber);
+    @GetMapping("listByTerm")
+    public ResultBean listByTerm(String teacherNumber) {
+        try{
+            return teacherService.listByTerm(teacherNumber);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -82,9 +100,14 @@ public class TeacherController {
      * @param teacherNumber
      * @return ResultBean
      */
-    @GetMapping("listTeacherClassByTermWithLevel")
-    public ResultBean listTeacherClassByTermWithLevel(String teacherNumber) {
-        return teacherService.listTeacherClassByTermWithLevel(teacherNumber);
+    @GetMapping("listWithLevel")
+    public ResultBean listWithLevel(String teacherNumber) {
+        try{
+            return teacherService.listByLevel(teacherNumber);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+
     }
 
 
@@ -94,10 +117,44 @@ public class TeacherController {
      * @param teacherNumber
      * @return ResultBean
      */
-    @GetMapping("listTeacherClassScore")
-    public ResultBean listTeacherClassScore(String teacherNumber) {
-        return teacherService.listTeacherClassScore(teacherNumber);
+    @GetMapping("listWithScore")
+    public ResultBean listWithScore(String teacherNumber) {
+        try{
+            return teacherService.listWithScore(teacherNumber);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
+
+    /*
+     * @author ll
+     * @Description 删除教师信息
+     * @param String
+     * @return ResultBean
+     */
+    @DeleteMapping("deleteTeacher")
+    public ResultBean deleteTeacher(String teacherNumber) {
+        try{
+            return teacherService.delete(teacherNumber);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
+
+    /*
+     * @author ll
+     * @Description 更新教师信息
+     * @param UpdateTeacherDTO
+     * @return ResultBean
+     */
+    @PutMapping("updateTeacher")
+    public ResultBean updateTeacher(UpdateTeacherDTO updateTeacherDTO) {
+        try{
+            return teacherService.update(updateTeacherDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
 
 }

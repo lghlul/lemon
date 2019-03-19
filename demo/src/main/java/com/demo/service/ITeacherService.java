@@ -1,23 +1,26 @@
 package com.demo.service;
 
-import com.demo.domain.DTO.*;
+import com.demo.dto.*;
 import com.demo.common.ResultBean;
 
 public interface ITeacherService {
 
-    ResultBean addTeacher(AddTeacherDTO addTeacherDTO);
+    ResultBean save(AddTeacherDTO addTeacherDTO) throws Exception;
 
-    ResultBean listTeacher(ListTeacherDTO listTeacherDTO);
+    ResultBean list(ListTeacherDTO listTeacherDTO) throws Exception;
 
+    ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) throws Exception;
 
-    ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO);
+    ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
 
+    ResultBean listByTerm(String teacherNumber) throws Exception;
 
-    ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO);
+    ResultBean listByLevel(String teacherNumber) throws Exception;
 
-    ResultBean listTeacherClassByTerm(String teacherNumber);
+    ResultBean listWithScore(String teacherNumber) throws Exception;
 
-    ResultBean listTeacherClassByTermWithLevel(String teacherNumber);
+    ResultBean delete(String teacherNumber) throws Exception;
 
-    ResultBean listTeacherClassScore(String teacherNumber);
+    ResultBean update(UpdateTeacherDTO updateTeacherDTO) throws Exception;
+
 }

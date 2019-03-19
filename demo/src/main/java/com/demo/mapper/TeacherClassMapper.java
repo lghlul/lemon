@@ -1,23 +1,23 @@
 package com.demo.mapper;
 
-import com.demo.domain.DO.TeacherClassDO;
-import com.demo.domain.DTO.*;
+import com.demo.model.TeacherClass;
+import com.demo.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface TeacherClassMapper {
 
-    int saveTeacherClass(AddTeacherClassDTO addTeacherClassDtO);
+    int save(AddTeacherClassDTO addTeacherClassDTO);
 
-    TeacherClassDO getTeacherClass(GetTeacherClassDTO getTeacherClassDTO);
+    TeacherClass get(GetTeacherClassDTO getTeacherClassDTO);
 
-    List<ListTeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO);
+    List<ListTeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO);
 
-    int countTeacherClass(ListTeacherClassDTO listTeacherClassDTO);
+    int count(ListTeacherClassDTO listTeacherClassDTO);
 
-    List<ListTeacherClassByTermDTO> listTeacherClassByTerm(@Param("teacherNumber") String teacherNumber);
+    List<ListTeacherClassByTermDTO> listByTerm(@Param("teacherNumber") String teacherNumber);
 
-    List<ListTeacherClassScoreDTO> listTeacherClassScore();
+    List<ListTeacherClassScoreDTO> listWithScore();
 
 }

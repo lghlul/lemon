@@ -1,19 +1,24 @@
 package com.demo.mapper;
 
-import com.demo.domain.DO.StudentDO;
-import com.demo.domain.DTO.AddStudentDTO;
-import com.demo.domain.DTO.ListStudentDTO;
+import com.demo.dto.UpdateStudentDTO;
+import com.demo.model.Student;
+import com.demo.dto.AddStudentDTO;
+import com.demo.dto.ListStudentDTO;
 
 import java.util.List;
 
 public interface StudentMapper {
 
-    int saveStudent(AddStudentDTO addStudentDTO);
+    int save(AddStudentDTO addStudentDTO);
 
-    StudentDO getStudent(String studentNumber);
+    Student get(String studentNumber);
 
-    List<StudentDO> listStudent(ListStudentDTO studentDTO);
+    List<Student> list(ListStudentDTO studentDTO);
 
-    int countStudent(ListStudentDTO studentDTO);
+    int count(ListStudentDTO studentDTO);
+
+    int delete(String studentNumber);
+
+    int update(UpdateStudentDTO updateStudentDTO);
 
 }

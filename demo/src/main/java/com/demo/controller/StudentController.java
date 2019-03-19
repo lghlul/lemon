@@ -1,13 +1,11 @@
 package com.demo.controller;
 
-import com.demo.domain.DTO.*;
+import com.demo.constant.ResultCodeConstant;
+import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @ClassName StudentController
@@ -30,7 +28,11 @@ public class StudentController {
      */
     @PostMapping("addStudent")
     public ResultBean addStudent(AddStudentDTO addStudentDTO) {
-        return studentService.addStudent(addStudentDTO);
+        try{
+            return studentService.save(addStudentDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -41,7 +43,11 @@ public class StudentController {
      */
     @GetMapping("listStudent")
     public ResultBean listStudent(ListStudentDTO studentDTO) {
-        return studentService.listStudent(studentDTO);
+        try{
+            return studentService.list(studentDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -52,7 +58,11 @@ public class StudentController {
      */
     @PostMapping("addStudentClass")
     public ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) {
-        return studentService.addStudentClass(addStudentClassDTO);
+        try{
+            return studentService.addStudentClass(addStudentClassDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -61,9 +71,13 @@ public class StudentController {
      * @param UpdateStudentClassDTO
      * @return ResultBean
      */
-    @PostMapping("updateStudentClass")
+    @PutMapping("updateStudentClass")
     public ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) {
-        return studentService.updateStudentClass(updateStudentClassDTO);
+        try{
+            return studentService.updateStudentClass(updateStudentClassDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
     /*
@@ -74,7 +88,41 @@ public class StudentController {
      */
     @GetMapping("listStudentClass")
     public ResultBean listStudentClass(ListStudentClassDTO listStudentClassDTO) {
-        return studentService.listStudentClass(listStudentClassDTO);
+        try{
+            return studentService.listStudentClass(listStudentClassDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
+
+    /*
+     * @author ll
+     * @Description 删除学生信息
+     * @param String
+     * @return ResultBean
+     */
+    @DeleteMapping("deleteStudent")
+    public ResultBean deleteStudent(String studentNumber) {
+        try{
+            return studentService.delete(studentNumber);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
+
+    /*
+     * @author ll
+     * @Description 更新课程信息
+     * @param UpdateStudentDTO
+     * @return ResultBean
+     */
+    @PutMapping("updateStudent")
+    public ResultBean updateStudent(UpdateStudentDTO updateStudentDTO) {
+        try{
+            return studentService.update(updateStudentDTO);
+        }catch (Exception e){
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
     }
 
 

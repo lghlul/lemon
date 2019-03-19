@@ -1,33 +1,21 @@
-package com.demo.domain.DO;
+package com.demo.dto;
 
 /**
- * @ClassName StudentDO
- * @Description 表 student
- * @date 2019年3月18日
+ * @ClassName UpdateStudentDTO
+ * @Description 更新学生传输对象
  * @Auther ll
  **/
-public class StudentDO {
+public class UpdateStudentDTO {
     /**
      * 学生编号
      */
     private String studentNumber;
+
     /**
      * 学生名称
      */
     private String studentName;
-    /**
-     * 录入时间
-     */
-    private long createTime;
 
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
 
     public String getStudentNumber() {
         return studentNumber;

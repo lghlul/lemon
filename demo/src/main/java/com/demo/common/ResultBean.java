@@ -24,6 +24,10 @@ public class ResultBean {
 
     }
 
+    public ResultBean(Integer resultCode) {
+        this.resultCode = resultCode;
+    }
+
     public ResultBean(Integer resultCode, String message, Object data) {
         this.resultCode = resultCode;
         this.message = message;
@@ -33,6 +37,11 @@ public class ResultBean {
     public ResultBean(Integer resultCode, String message) {
         this.resultCode = resultCode;
         this.message = message;
+    }
+
+    public ResultBean(Integer resultCode, Object data) {
+        this.resultCode = resultCode;
+        this.data = data;
     }
 
 

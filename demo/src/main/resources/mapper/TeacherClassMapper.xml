@@ -4,12 +4,12 @@
 <mapper namespace="com.demo.mapper.TeacherClassMapper">
 
 
-    <insert id="saveTeacherClass" parameterType="addTeacherClassDTO">
+    <insert id="save" parameterType="addTeacherClassDTO">
     insert into teacherClass(teacherNumber , classNumber  , createTime , term) values( #{teacherNumber} , #{classNumber}  , #{createTime} , #{term})
    </insert>
 
 
-    <select id="getTeacherClass" parameterType="getTeacherClassDTO" resultType="teacherClassDO">
+    <select id="get" parameterType="getTeacherClassDTO" resultType="teacherClass">
         select * from teacherClass
         <where>
             <if test="teacherNumber != null">
@@ -28,19 +28,19 @@
     </select>
 
 
-    <select id="listTeacherClass" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
-        select a.*,c.* from teacher a , teacherClass b , class c where a.teacherNumber = b.teacherNumber and
+    <select id="list" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
+        select a.*,c.* from teacher a , teacherClass b , classInfo c where a.teacherNumber = b.teacherNumber and
         b.classNumber = c.classNumber
         <if test="offset != null and pageSize != null">
             limit #{offset},#{pageSize}
         </if>
     </select>
 
-    <select id="countTeacherClass" parameterType="listTeacherClassDTO" resultType="int">
-        select count(1) from teacher a , teacherClass b , class c where a.teacherNumber = b.teacherNumber and b.classNumber = c.classNumber
+    <select id="count" parameterType="listTeacherClassDTO" resultType="int">
+        select count(1) from teacher a , teacherClass b , classInfo c where a.teacherNumber = b.teacherNumber and b.classNumber = c.classNumber
     </select>
 
-    <select id="listTeacherClassByTerm" parameterType="string" resultType="listTeacherClassByTermDTO">
+    <select id="listByTerm" parameterType="string" resultType="listTeacherClassByTermDTO">
         SELECT
         m.*, n.className
         FROM
@@ -67,7 +67,7 @@
     </select>
 
 
-    <select id="listTeacherClassScore" resultType="listTeacherClassScoreDTO">
+    <select id="listWithScore" resultType="listTeacherClassScoreDTO">
         SELECT
             m.*, n.className,t.teacherName
         FROM

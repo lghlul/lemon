@@ -4,15 +4,15 @@
 <mapper namespace="com.demo.mapper.TeacherMapper">
 
 
-    <insert id="saveTeacher" parameterType="addTeacherDTO">
+    <insert id="save" parameterType="addTeacherDTO">
     insert into teacher(teacherNumber , teacherName , teacherLevel , createTime) values(#{teacherNumber} , #{teacherName} , #{teacherLevel} , #{createTime})
    </insert>
 
-    <select id="getTeacher" parameterType="string" resultType="teacherDO">
+    <select id="get" parameterType="string" resultType="teacher">
       select * from teacher where teacherNumber = #{teacherNumber}
     </select>
 
-    <select id="listTeacher" parameterType="listTeacherDTO" resultType="teacherDO">
+    <select id="list" parameterType="listTeacherDTO" resultType="teacher">
         select * from teacher
         <where>
             <if test="teacherName != null">
@@ -27,7 +27,7 @@
         </if>
     </select>
 
-    <select id="countTeacher" parameterType="listTeacherDTO" resultType="int">
+    <select id="count" parameterType="listTeacherDTO" resultType="int">
         select count(teacherNumber) from teacher
         <where>
             <if test="teacherName != null">
@@ -38,5 +38,22 @@
             </if>
         </where>
     </select>
+
+    <update id="update" parameterType="updateTeacherDTO">
+      update teacher
+       <set>
+        <if test="teacherName != null">
+          teacherName = #{teacherName},
+        </if>
+        <if test="teacherLevel != null">
+          teacherLevel = #{teacherLevel},
+        </if>
+       </set>
+       where teacherNumber = #{teacherNumber}
+    </update>
+
+    <delete id="delete" parameterType="string">
+      delete from teacher where teacherNumber = #{teacherNumber}
+    </delete>
 
 </mapper>

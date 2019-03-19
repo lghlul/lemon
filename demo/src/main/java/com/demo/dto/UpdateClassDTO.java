@@ -1,11 +1,11 @@
-package com.demo.domain.DTO;
+package com.demo.dto;
 
 /**
- * @ClassName AddClassDTO
- * @Description 添加课程对象
+ * @ClassName UpdateClassDTO
+ * @Description 更新课程对象
  * @Auther ll
  **/
-public class AddClassDTO {
+public class UpdateClassDTO {
     /**
      * 课程编号
      */
@@ -14,18 +14,7 @@ public class AddClassDTO {
      * 课程名称
      */
     private String className;
-    /**
-     * 录入时间
-     */
-    private long createTime;
 
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
 
     public String getClassNumber() {
         return classNumber;

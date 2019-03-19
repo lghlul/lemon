@@ -3,11 +3,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.mapper.StudentClassMapper">
 
-    <insert id="saveStudentClass" parameterType="addStudentClassDTO">
+    <insert id="save" parameterType="addStudentClassDTO">
     insert into studentClass(studentNumber , teacherClassId , createTime) values(#{studentNumber} , #{teacherClassId}  , #{createTime})
    </insert>
 
-    <update id="updateStudentClass" parameterType="updateStudentClassDTO">
+    <update id="update" parameterType="updateStudentClassDTO">
         update studentClass
         <set>
             <if test="score != null">
@@ -18,7 +18,7 @@
     </update>
 
 
-    <select id="getStudentClass" parameterType="getStudentClassDTO" resultType="studentClassDO">
+    <select id="get" parameterType="getStudentClassDTO" resultType="studentClass">
         select * from studentClass
         <where>
             <if test="studentNumber != null">
@@ -31,7 +31,7 @@
     </select>
 
 
-    <select id="listStudentClass" parameterType="listStudentClassDTO" resultType="listStudentClassDTO">
+    <select id="list" parameterType="listStudentClassDTO" resultType="listStudentClassDTO">
         select a.*,c.className,b.term from studentClass a ,teacherClass b , class c where a.teacherClassId =
         b.teacherClassId and b.classNumber = c.classNumber
         <if test="studentNumber != null">
