@@ -29,10 +29,10 @@ public class StudentController {
     @GetMapping("list")
     public ResultBean list(ListStudentDTO studentDTO) {
         try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.list(studentDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, studentService.list(studentDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 
@@ -47,11 +47,11 @@ public class StudentController {
     public ResultBean delete(Integer studentId) {
         try {
             studentService.delete(studentId);
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功");
+            return new ResultBean(ResultCodeConstant.SUCCESS);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 
@@ -68,14 +68,14 @@ public class StudentController {
             studentDTO.setStudentId(studentId);
             if (!studentService.checkStudentExist(studentDTO)) {
                 //学生不存在
-                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
+                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
             }
             Student student = studentService.get(studentDTO);
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", student);
+            return new ResultBean(ResultCodeConstant.SUCCESS, student);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 
@@ -94,7 +94,7 @@ public class StudentController {
                 student.setStudentId(studentDTO.getStudentId());
                 if (!studentService.checkStudentExist(student)) {
                     //学生不存在
-                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
+                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
                 }
 
                 student.setStudentId(null);
@@ -102,18 +102,18 @@ public class StudentController {
                 Student studentDO = studentService.get(student);
                 //如果改变的编号已经存在与其他学生
                 if (studentDO != null && studentDO.getStudentId() != studentDTO.getStudentId()) {
-                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
                 }
             } else {
                 student.setStudentNumber(studentDTO.getStudentNumber());
                 if (studentService.checkStudentExist(student)) {
-                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
                 }
             }
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdate(studentDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, studentService.saveOrUpdate(studentDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 }

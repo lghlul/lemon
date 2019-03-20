@@ -11,51 +11,47 @@ public class ResultCodeConstant {
     /**
      * 成功
      */
-    public static final int SUCCESS = 1;
+    public static final String SUCCESS = "1,成功";
     /**
      * 失败
      */
-    public static final int FAIL = -1;
+    public static final String FAIL = "-1,失败";
     /**
      * 服务器异常
      */
-    public static final int SERVER_EXCEPTION = -2;
+    public static final String SERVER_EXCEPTION = "-2,服务器异常";
     /**
      * 编号重复
      */
-    public static final int NUMBER_REPEAT = 1000;
+    public static final String NUMBER_REPEAT = "1000,编号重复";
     /**
      * 学生不存在
      */
-    public static final int STUDENT_NOT_EXIST = 1001;
+    public static final String STUDENT_NOT_EXIST = "1001,学生不存在";
     /**
-     * 课程与老师不匹配
+     * 教师不存在
      */
-    public static final int TEACHER_CLASS_MISMATCHING = 1002;
-    /**
-     * 老师不存在
-     */
-    public static final int TEACHER_NOT_EXIST = 1003;
+    public static final String TEACHER_NOT_EXIST = "1003,教师不存在";
     /**
      * 课程不存在
      */
-    public static final int CLASS_NOT_EXIST = 1004;
+    public static final String CLASS_NOT_EXIST = "1004,课程不存在";
     /**
      * 学生暂未拥有该课程
      */
-    public static final int STUDENT_NOT_HAVE_CLASS = 1005;
+    public static final String STUDENT_NOT_HAVE_CLASS = "1005,学生暂未拥有该课程";
     /**
      * 没有权限
      */
-    public static final int NO_PERMISSION = 1006;
+    public static final String NO_PERMISSION = "1006,没有权限";
     /**
      * 不能重复选课
      */
-    public static final int STUDENT_CLASS_EXIST = 1007;
+    public static final String STUDENT_CLASS_EXIST = "1007,不能重复选课";
     /**
      * 教师课程不存在
      */
-    public static final int TEACHER_CLASS_NOT_EXIST = 1008;
+    public static final String TEACHER_CLASS_NOT_EXIST = "1008,教师课程不存在";
 
 
 }

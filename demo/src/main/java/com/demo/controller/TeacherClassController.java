@@ -42,7 +42,7 @@ public class TeacherClassController {
                 TeacherDTO teacherDTO = new TeacherDTO();
                 teacherDTO.setTeacherId(teacherClassDTO.getTeacherId());
                 if (!teacherService.checkTeacherExist(teacherDTO)) {
-                    return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
+                    return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
                 }
             }
             if (teacherClassDTO.getClassId() != null) {
@@ -50,18 +50,18 @@ public class TeacherClassController {
                 classInfoDTO.setClassId(teacherClassDTO.getClassId());
                 //校验课程是否存在
                 if (!classInfoService.checkClassExist(classInfoDTO)) {
-                    return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST, "课程不存在");
+                    return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST);
                 }
             }
             if (teacherClassDTO.getTeacherClassId() != null) {
                 if (!teacherClassService.checkTeacherClassExist(teacherClassDTO.getTeacherClassId())) {
-                    return new ResultBean(ResultCodeConstant.TEACHER_CLASS_NOT_EXIST, "课程不存在");
+                    return new ResultBean(ResultCodeConstant.TEACHER_CLASS_NOT_EXIST);
                 }
             }
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherClassService.saveOrUpdate(teacherClassDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, teacherClassService.saveOrUpdate(teacherClassDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 
@@ -75,10 +75,10 @@ public class TeacherClassController {
     @GetMapping("list")
     public ResultBean list(ListTeacherClassDTO listTeacherClassDTO) {
         try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherClassService.list(listTeacherClassDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, teacherClassService.list(listTeacherClassDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 

@@ -44,30 +44,30 @@ public class StudentClassController {
                 studentDTO.setStudentId(studentClassDTO.getStudentId());
                 //校验学生是否存在
                 if (!studentService.checkStudentExist(studentDTO)) {
-                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
+                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
                 }
                 //校验是否存在这门课程
                 if (!teacherClassService.checkTeacherClassExist(studentClassDTO.getTeacherClassId())) {
-                    return new ResultBean(ResultCodeConstant.TEACHER_CLASS_MISMATCHING, "教师课程不存在");
+                    return new ResultBean(ResultCodeConstant.TEACHER_CLASS_NOT_EXIST);
                 }
                 //添加 校验是否重复选课
                 if (studentClassService.checkStudentClassExist(studentClassDTO)) {
                     //已经选过该课程
-                    return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST, "重复选课");
+                    return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST);
                 }
             } else {
                 //修改校验课程是否存在
                 if (!studentClassService.checkStudentClassExist(studentClassDTO)) {
                     //已经选过该课程
-                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS, "学生课程不存在");
+                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS);
                 }
 
             }
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentClassService.saveOrUpdate(studentClassDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, studentClassService.saveOrUpdate(studentClassDTO));
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 
@@ -80,10 +80,10 @@ public class StudentClassController {
     @GetMapping("list")
     public ResultBean list(ListStudentClassDTO listStudentClassDTO) {
         try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentClassService.list(listStudentClassDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, studentClassService.list(listStudentClassDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
 

@@ -24,23 +24,16 @@ public class ResultBean {
 
     }
 
-    public ResultBean(Integer resultCode) {
-        this.resultCode = resultCode;
+    public ResultBean(String result) {
+        String[] results = result.split(",");
+        this.resultCode = Integer.parseInt(results[0]);
+        this.message = results[1];
     }
 
-    public ResultBean(Integer resultCode, String message, Object data) {
-        this.resultCode = resultCode;
-        this.message = message;
-        this.data = data;
-    }
-
-    public ResultBean(Integer resultCode, String message) {
-        this.resultCode = resultCode;
-        this.message = message;
-    }
-
-    public ResultBean(Integer resultCode, Object data) {
-        this.resultCode = resultCode;
+    public ResultBean(String result, Object data) {
+        String[] results = result.split(",");
+        this.resultCode = Integer.parseInt(results[0]);
+        this.message = results[1];
         this.data = data;
     }
 
