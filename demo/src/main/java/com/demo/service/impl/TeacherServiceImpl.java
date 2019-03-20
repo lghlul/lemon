@@ -30,12 +30,18 @@ public class TeacherServiceImpl implements TeacherService {
 
 
     @Override
-    public PageInfo<Teacher> list(ListTeacherDTO listTeacherDTO) throws Exception {
-        PageHelper.startPage(listTeacherDTO.getOffset(), listTeacherDTO.getLimit());
-        List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
-        //得到分页的结果对象
-        PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
-        return pageInfo;
+    public Object list(ListTeacherDTO listTeacherDTO) throws Exception {
+        if(listTeacherDTO.getPaging()){
+            PageHelper.startPage(listTeacherDTO.getOffset(), listTeacherDTO.getLimit());
+            List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
+            //得到分页的结果对象
+            PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
+            return pageInfo;
+        }else{
+            List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
+            return teacherList;
+        }
+
     }
 
 

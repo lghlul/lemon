@@ -1,5 +1,7 @@
 package com.demo.common;
 
+import com.demo.constant.CommonConstant;
+
 /**
  * @ClassName PageQuery
  * @Description 分页
@@ -17,14 +19,54 @@ public class PageQuery {
      */
     private Integer offset;
 
-    //排序字段
+    /**
+     *  排序字段
+     */
+    private String sort;
 
-    //排序类型
+    /**
+     * 排序类型
+     */
+    private String sortDir;
 
-    //是否需要分页
+    /**
+     * 是否需要分页
+     */
+    private Boolean paging;
+
+    public Boolean getPaging() {
+        if(paging == null){
+            return true;
+        }
+        return paging;
+    }
+
+    public void setPaging(Boolean paging) {
+        this.paging = paging;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
+    public String getSortDir() {
+        return sortDir;
+    }
+
+    public void setSortDir(String sortDir) {
+        this.sortDir = sortDir;
+    }
+
 
 
     public Integer getLimit() {
+        if(limit == null){
+            return CommonConstant.DEFAULT_LIMIT;
+        }
         return limit;
     }
 
@@ -33,6 +75,9 @@ public class PageQuery {
     }
 
     public Integer getOffset() {
+        if(offset == null){
+            return CommonConstant.DEFAULT_OFFSET;
+        }
         return offset;
     }
 

@@ -9,7 +9,7 @@ public interface ClassInfoService {
 
     void delete(Integer classId) throws Exception;
 
-    PageInfo<ClassInfo> list(ListClassInfoDTO listClassInfoDTO) throws Exception;
+    Object list(ListClassInfoDTO listClassInfoDTO) throws Exception;
 
     ClassInfo get(ClassInfoDTO classInfoDTO) throws Exception;
 

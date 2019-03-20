@@ -11,7 +11,7 @@ public interface TeacherClassService {
 
     TeacherClassDTO saveOrUpdate(TeacherClassDTO teacherClassDTO) throws Exception;
 
-    PageInfo<TeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
+    Object list(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
 
     boolean checkTeacherClassExist(int teacherClassId);
 

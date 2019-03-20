@@ -46,14 +46,24 @@ public class TeacherClassServiceImpl implements TeacherClassService {
 
 
     @Override
-    public PageInfo<TeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
-        PageHelper.startPage(listTeacherClassDTO.getOffset(), listTeacherClassDTO.getLimit());
-        //关联属性不应该关联表查询   应将关联表查询 存入缓存
-        List<TeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
-        //得到分页的结果对象
-        PageInfo<TeacherClassDTO> pageInfo = new PageInfo<>(teacherClassDTOList);
-        List<TeacherClassDTO> teacherClassList = pageInfo.getList();
+    public Object list(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
+        if(listTeacherClassDTO.getPaging()){
+            PageHelper.startPage(listTeacherClassDTO.getOffset(), listTeacherClassDTO.getLimit());
+            //关联属性不应该关联表查询   应将关联表查询 存入缓存
+            List<TeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
+            //得到分页的结果对象
+            PageInfo<TeacherClassDTO> pageInfo = new PageInfo<>(teacherClassDTOList);
+            List<TeacherClassDTO> teacherClassList = pageInfo.getList();
+            listClassAndTeacherName(teacherClassList);
+            return pageInfo;
+        }else{
+            List<TeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
+            listClassAndTeacherName(teacherClassDTOList);
+            return teacherClassDTOList;
+        }
+    }
 
+    private void listClassAndTeacherName(List<TeacherClassDTO> teacherClassList){
         if (teacherClassList != null) {
             List<ClassInfo> classInfoList = classInfoDao.list(null);
             // 本应该有缓存   此处用map代替
@@ -85,7 +95,6 @@ public class TeacherClassServiceImpl implements TeacherClassService {
                 }
             }
         }
-        return pageInfo;
     }
 
     @Override

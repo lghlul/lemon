@@ -23,12 +23,19 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public PageInfo<Student> list(ListStudentDTO listStudentDTO) throws Exception {
-        PageHelper.startPage(listStudentDTO.getOffset(), listStudentDTO.getLimit());
-        List<Student> studentList = studentDao.list(listStudentDTO);
-        //得到分页的结果对象
-        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
-        return pageInfo;
+    public Object list(ListStudentDTO listStudentDTO) throws Exception {
+        if (listStudentDTO.getPaging()) {
+            PageHelper.startPage(listStudentDTO.getOffset(), listStudentDTO.getLimit());
+            List<Student> studentList = studentDao.list(listStudentDTO);
+            //得到分页的结果对象
+            PageInfo<Student> pageInfo = new PageInfo<>(studentList);
+            return pageInfo;
+        } else {
+            List<Student> studentList = studentDao.list(listStudentDTO);
+            return studentList;
+        }
+
+
     }
 
 

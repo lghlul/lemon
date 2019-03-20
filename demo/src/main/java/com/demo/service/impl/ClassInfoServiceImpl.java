@@ -53,11 +53,17 @@ public class ClassInfoServiceImpl implements ClassInfoService {
 
 
     @Override
-    public PageInfo<ClassInfo> list(ListClassInfoDTO listClassInfoDTO) throws Exception {
-        PageHelper.startPage(listClassInfoDTO.getOffset(), listClassInfoDTO.getLimit());
-        List<ClassInfo> classInfoList = classInfoDao.list(listClassInfoDTO);
-        //得到分页的结果对象
-        PageInfo<ClassInfo> pageInfo = new PageInfo<>(classInfoList);
-        return pageInfo;
+    public Object list(ListClassInfoDTO listClassInfoDTO) throws Exception {
+        if(listClassInfoDTO.getPaging()){
+            PageHelper.startPage(listClassInfoDTO.getOffset(), listClassInfoDTO.getLimit());
+            List<ClassInfo> classInfoList = classInfoDao.list(listClassInfoDTO);
+            //得到分页的结果对象
+            PageInfo<ClassInfo> pageInfo = new PageInfo<>(classInfoList);
+            return pageInfo;
+        }else{
+            List<ClassInfo> classInfoList = classInfoDao.list(listClassInfoDTO);
+            return classInfoList;
+        }
+
     }
 }
