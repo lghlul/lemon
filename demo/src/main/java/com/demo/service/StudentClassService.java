@@ -12,7 +12,6 @@ import java.util.List;
 public interface StudentClassService {
 
 
-
     StudentClassDTO saveOrUpdate(StudentClassDTO studentClassDTO) throws Exception;
 
     List<ListStudentClassDTO> list(ListStudentClassDTO studentClassWithScoreDTO) throws Exception;

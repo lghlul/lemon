@@ -30,7 +30,6 @@ public class StudentClassController {
     private TeacherClassService teacherClassService;
 
 
-
     /*
      * @author ll
      * @Description 添加或者更新学生课程
@@ -40,7 +39,7 @@ public class StudentClassController {
     @PostMapping("saveOrUpdate")
     public ResultBean save(StudentClassDTO studentClassDTO) {
         try {
-            if(studentClassDTO.getStudentClassId() == null){
+            if (studentClassDTO.getStudentClassId() == null) {
                 StudentDTO studentDTO = new StudentDTO();
                 studentDTO.setStudentId(studentClassDTO.getStudentId());
                 //校验学生是否存在
@@ -52,13 +51,13 @@ public class StudentClassController {
                     return new ResultBean(ResultCodeConstant.TEACHER_CLASS_MISMATCHING, "教师课程不存在");
                 }
                 //添加 校验是否重复选课
-                if(studentClassService.checkStudentClassExist(studentClassDTO)){
+                if (studentClassService.checkStudentClassExist(studentClassDTO)) {
                     //已经选过该课程
                     return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST, "重复选课");
                 }
-            }else{
+            } else {
                 //修改校验课程是否存在
-                if(!studentClassService.checkStudentClassExist(studentClassDTO)){
+                if (!studentClassService.checkStudentClassExist(studentClassDTO)) {
                     //已经选过该课程
                     return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS, "学生课程不存在");
                 }

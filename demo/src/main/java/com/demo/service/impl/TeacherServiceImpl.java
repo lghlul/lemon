@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 @Transactional
 @Service
 public class TeacherServiceImpl implements TeacherService {
@@ -38,8 +39,6 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
 
-
-
     @Override
     public List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception {
         List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassDao.listClass(teacherId);
@@ -54,26 +53,27 @@ public class TeacherServiceImpl implements TeacherService {
         this.listClassName(listTeacherClassByTermDTOS);
         return listTeacherClassByTermDTOS;
     }
+
     /*
      * @author ll
      * @Description 给教师课程查询课程名称
      * @param List<ListTeacherClassByTermDTO>
      * @return void
      */
-    private void listClassName(List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS){
-        if(listTeacherClassByTermDTOS != null){
+    private void listClassName(List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS) {
+        if (listTeacherClassByTermDTOS != null) {
             List<ClassInfo> classInfoList = classInfoDao.list(null);
             // 本应该有缓存   此处用map代替
-            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
-            if(classInfoList != null){
-                for(ClassInfo classInfo : classInfoList){
-                    classInfoMap.put(classInfo.getClassId() , classInfo);
+            Map<Integer, ClassInfo> classInfoMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (ClassInfo classInfo : classInfoList) {
+                    classInfoMap.put(classInfo.getClassId(), classInfo);
                 }
             }
             //设置课程名称与课程编号
-            for(ListTeacherClassByTermDTO teacherClassByTermDTO : listTeacherClassByTermDTOS){
+            for (ListTeacherClassByTermDTO teacherClassByTermDTO : listTeacherClassByTermDTOS) {
                 ClassInfo classInfo = classInfoMap.get(teacherClassByTermDTO.getClassId());
-                if(classInfo != null){
+                if (classInfo != null) {
                     teacherClassByTermDTO.setClassName(classInfo.getClassName());
                     teacherClassByTermDTO.setClassNumber(classInfo.getClassNumber());
                 }
@@ -84,7 +84,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel() throws Exception {
         List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassDao.listTeacherByTeacherLevel();
-        if(listTeacherClassScoreDTOS != null) {
+        if (listTeacherClassScoreDTOS != null) {
             List<ClassInfo> classInfoList = classInfoDao.list(null);
             // 本应该有缓存   此处用map代替
             Map<Integer, ClassInfo> classInfoMap = new HashMap<>();

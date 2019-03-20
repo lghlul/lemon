@@ -32,26 +32,25 @@ public class StudentClassServiceImpl implements StudentClassService {
         //关联属性不应该关联表查询   应将关联表查询 存入缓存
         List<ListStudentClassDTO> studentClassList = this.studentClassDao.list(listStudentClassDTO);
 
-        if(studentClassList != null){
+        if (studentClassList != null) {
             List<ClassInfo> classInfoList = classInfoDao.list(null);
             // 本应该有缓存   此处用map代替
-            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
-            if(classInfoList != null){
-                for(ClassInfo classInfo : classInfoList){
-                    classInfoMap.put(classInfo.getClassId() , classInfo);
+            Map<Integer, ClassInfo> classInfoMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (ClassInfo classInfo : classInfoList) {
+                    classInfoMap.put(classInfo.getClassId(), classInfo);
                 }
             }
-            for(ListStudentClassDTO listStudentClass : studentClassList){
+            for (ListStudentClassDTO listStudentClass : studentClassList) {
                 //设置教师名称与教师编号
                 ClassInfo classInfo = classInfoMap.get(listStudentClass.getClassId());
-                if(classInfo != null){
+                if (classInfo != null) {
                     listStudentClass.setClassName(classInfo.getClassName());
                 }
             }
         }
         return studentClassList;
     }
-
 
 
     @Override

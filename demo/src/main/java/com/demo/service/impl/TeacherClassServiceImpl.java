@@ -32,7 +32,6 @@ public class TeacherClassServiceImpl implements TeacherClassService {
     private ClassInfoDao classInfoDao;
 
 
-
     @Override
     public TeacherClassDTO saveOrUpdate(TeacherClassDTO teacherClassDTO) throws Exception {
         if (teacherClassDTO.getTeacherClassId() != null) {
@@ -55,33 +54,33 @@ public class TeacherClassServiceImpl implements TeacherClassService {
         PageInfo<TeacherClassDTO> pageInfo = new PageInfo<>(teacherClassDTOList);
         List<TeacherClassDTO> teacherClassList = pageInfo.getList();
 
-        if(teacherClassList != null){
+        if (teacherClassList != null) {
             List<ClassInfo> classInfoList = classInfoDao.list(null);
             // 本应该有缓存   此处用map代替
-            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
-            if(classInfoList != null){
-                for(ClassInfo classInfo : classInfoList){
-                    classInfoMap.put(classInfo.getClassId() , classInfo);
+            Map<Integer, ClassInfo> classInfoMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (ClassInfo classInfo : classInfoList) {
+                    classInfoMap.put(classInfo.getClassId(), classInfo);
                 }
             }
 
             List<Teacher> teacherList = teacherDao.list(null);
             // 本应该有缓存   此处用map代替
-            Map<Integer , Teacher> teacherMap = new HashMap<>();
-            if(classInfoList != null){
-                for(Teacher teacher : teacherList){
-                    teacherMap.put(teacher.getTeacherId() , teacher);
+            Map<Integer, Teacher> teacherMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (Teacher teacher : teacherList) {
+                    teacherMap.put(teacher.getTeacherId(), teacher);
                 }
             }
-            for(TeacherClassDTO teacherClassDTO : teacherClassList){
+            for (TeacherClassDTO teacherClassDTO : teacherClassList) {
                 //设置课程名称与课程编号
                 ClassInfo classInfo = classInfoMap.get(teacherClassDTO.getClassId());
-                if(classInfo != null){
+                if (classInfo != null) {
                     teacherClassDTO.setClassName(classInfo.getClassName());
                 }
                 //设置教师名称与教师编号
                 Teacher teacher = teacherMap.get(teacherClassDTO.getTeacherId());
-                if(teacher != null){
+                if (teacher != null) {
                     teacherClassDTO.setTeacherName(teacher.getTeacherName());
                 }
             }

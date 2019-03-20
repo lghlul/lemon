@@ -49,7 +49,7 @@ public class ClassInfoController {
         try {
 
             ClassInfoDTO classInfo = new ClassInfoDTO();
-            if(classInfoDTO.getClassId() != null){
+            if (classInfoDTO.getClassId() != null) {
                 //查询课程是否存在
                 classInfo.setClassId(classInfoDTO.getClassId());
                 if (!classInfoService.checkClassExist(classInfo)) {
@@ -60,12 +60,12 @@ public class ClassInfoController {
                 classInfo.setClassNumber(classInfoDTO.getClassNumber());
                 ClassInfo classInfoDO = classInfoService.get(classInfo);
                 //校验编号
-                if (classInfoDO != null &&  classInfoDO.getClassId() != classInfoDTO.getClassId()) {
+                if (classInfoDO != null && classInfoDO.getClassId() != classInfoDTO.getClassId()) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "课程编号已存在");
                 }
-            }else {
+            } else {
                 classInfo.setClassNumber(classInfoDTO.getClassNumber());
-                if(classInfoService.checkClassExist(classInfoDTO)){
+                if (classInfoService.checkClassExist(classInfoDTO)) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "课程编号已存在");
                 }
             }
@@ -109,11 +109,11 @@ public class ClassInfoController {
                 return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST, "课程不存在");
             }
             ClassInfo classInfo = classInfoService.get(classInfoDTO);
-            return new ResultBean(ResultCodeConstant.SUCCESS , "成功" , classInfo);
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", classInfo);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION , "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 

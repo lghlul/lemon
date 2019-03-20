@@ -89,7 +89,7 @@ public class StudentController {
     public ResultBean saveOrUpdate(StudentDTO studentDTO) {
         try {
             StudentDTO student = new StudentDTO();
-            if(studentDTO.getStudentId() != null){
+            if (studentDTO.getStudentId() != null) {
                 //查询该学生是否存在
                 student.setStudentId(studentDTO.getStudentId());
                 if (!studentService.checkStudentExist(student)) {
@@ -101,12 +101,12 @@ public class StudentController {
                 student.setStudentNumber(studentDTO.getStudentNumber());
                 Student studentDO = studentService.get(student);
                 //如果改变的编号已经存在与其他学生
-                if (studentDO != null &&  studentDO.getStudentId() != studentDTO.getStudentId()) {
+                if (studentDO != null && studentDO.getStudentId() != studentDTO.getStudentId()) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
                 }
-            }else{
+            } else {
                 student.setStudentNumber(studentDTO.getStudentNumber());
-                if(studentService.checkStudentExist(student)){
+                if (studentService.checkStudentExist(student)) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
                 }
             }

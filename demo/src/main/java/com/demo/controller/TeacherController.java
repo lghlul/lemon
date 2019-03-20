@@ -22,7 +22,6 @@ public class TeacherController {
     private TeacherService teacherService;
 
 
-
     /*
      * @author ll
      * @Description 分页查询教师
@@ -136,7 +135,7 @@ public class TeacherController {
     public ResultBean saveOrUpdate(TeacherDTO teacherDTO) {
         try {
             TeacherDTO teacher = new TeacherDTO();
-            if(teacherDTO.getTeacherId() != null){
+            if (teacherDTO.getTeacherId() != null) {
                 //查询该教师是否存在
                 teacher.setTeacherId(teacherDTO.getTeacherId());
                 if (!teacherService.checkTeacherExist(teacher)) {
@@ -151,9 +150,9 @@ public class TeacherController {
                 if (teacherDO != null && teacherDO.getTeacherId() != teacherDTO.getTeacherId()) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
                 }
-            }else{
+            } else {
                 teacher.setTeacherNumber(teacherDTO.getTeacherNumber());
-                if (teacherService.checkTeacherExist(teacher)){
+                if (teacherService.checkTeacherExist(teacher)) {
                     return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
                 }
             }

@@ -11,14 +11,15 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
+
 @Transactional
 @Service
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
     private StudentDao studentDao;
-
 
 
     @Override
@@ -29,8 +30,6 @@ public class StudentServiceImpl implements StudentService {
         PageInfo<Student> pageInfo = new PageInfo<>(studentList);
         return pageInfo;
     }
-
-
 
 
     @Override

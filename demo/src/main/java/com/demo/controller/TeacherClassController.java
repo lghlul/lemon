@@ -53,8 +53,8 @@ public class TeacherClassController {
                     return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST, "课程不存在");
                 }
             }
-            if(teacherClassDTO.getTeacherClassId() != null){
-                if(!teacherClassService.checkTeacherClassExist(teacherClassDTO.getTeacherClassId())){
+            if (teacherClassDTO.getTeacherClassId() != null) {
+                if (!teacherClassService.checkTeacherClassExist(teacherClassDTO.getTeacherClassId())) {
                     return new ResultBean(ResultCodeConstant.TEACHER_CLASS_NOT_EXIST, "课程不存在");
                 }
             }
@@ -81,7 +81,6 @@ public class TeacherClassController {
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
-
 
 
 }
