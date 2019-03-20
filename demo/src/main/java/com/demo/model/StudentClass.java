@@ -1,36 +1,41 @@
-package com.demo.dto;
+package com.demo.model;
 
 /**
- * @ClassName AddStudentClassDTO
- * @Description 学生选课对象
+ * @ClassName StudentClass
+ * @Description 表 studentClass
+ * @date 2019年3月18日
  * @Auther ll
  **/
-public class AddStudentClassDTO {
-
-
+public class StudentClass {
     /**
-     * 自增主键
+     * 主键ID
      */
-    private int id;
+    private Integer studentClassId;
     /**
      * 学生编号
      */
     private String studentNumber;
+
     /**
      * 关联教师课程
      */
     private int teacherClassId;
     /**
+     * 课程得分
+     */
+    private Double score;
+
+    /**
      * 选课时间
      */
     private long createTime;
 
-    public int getId() {
-        return id;
+    public Integer getStudentClassId() {
+        return studentClassId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setStudentClassId(Integer studentClassId) {
+        this.studentClassId = studentClassId;
     }
 
     public String getStudentNumber() {
@@ -47,6 +52,14 @@ public class AddStudentClassDTO {
 
     public void setTeacherClassId(int teacherClassId) {
         this.teacherClassId = teacherClassId;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
     }
 
     public long getCreateTime() {

@@ -9,11 +9,11 @@ public class ListStudentClassDTO {
     /**
      * 学生编号
      */
-    private String studentNumber;
+    private Integer studentId;
     /**
      * 课程编号
      */
-    private String classNumber;
+    private Integer classId;
     /**
      * 课程名称
      */
@@ -27,21 +27,20 @@ public class ListStudentClassDTO {
      */
     private int term;
 
-
-    public String getStudentNumber() {
-        return studentNumber;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setStudentNumber(String studentNumber) {
-        this.studentNumber = studentNumber;
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
     }
 
-    public String getClassNumber() {
-        return classNumber;
+    public Integer getClassId() {
+        return classId;
     }
 
-    public void setClassNumber(String classNumber) {
-        this.classNumber = classNumber;
+    public void setClassId(Integer classId) {
+        this.classId = classId;
     }
 
     public String getClassName() {

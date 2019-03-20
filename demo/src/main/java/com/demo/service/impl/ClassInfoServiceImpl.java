@@ -1,60 +1,61 @@
 package com.demo.service.impl;
 
-import com.demo.constant.ResultCodeConstant;
 import com.demo.model.ClassInfo;
 import com.demo.dto.*;
-import com.demo.common.ResultBean;
-import com.demo.mapper.ClassInfoMapper;
+import com.demo.dao.ClassInfoDao;
 import com.demo.service.IClassInfoService;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ClassInfoServiceImpl implements IClassInfoService {
 
     @Autowired
-    private ClassInfoMapper classMapper;
+    private ClassInfoDao classInfoDao;
 
     @Override
-    public ResultBean save(AddClassDTO addClassDTO)  throws Exception{
-        if (classMapper.save(addClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS , addClassDTO);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
+    public ClassInfoDTO saveOrUpdate(ClassInfoDTO classInfoDTO)  throws Exception{
+        if(classInfoDTO.getClassId() != null){
+            classInfoDao.update(classInfoDTO);
+        }else{
+            classInfoDTO.setCreateTime(System.currentTimeMillis());
+            classInfoDao.save(classInfoDTO);
         }
+        return classInfoDTO;
     }
 
 
     @Override
-    public ResultBean delete(String classNumber) throws Exception {
-        if (classMapper.delete(classNumber) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
-    }
-
-    @Override
-    public ResultBean update(UpdateClassDTO updateClassDTO) throws Exception {
-        if (classMapper.update(updateClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
+    public void delete(Integer classId) throws Exception {
+        classInfoDao.delete(classId);
     }
 
 
     @Override
-    public ClassInfo get(String classNumber) {
-        return classMapper.get(classNumber);
+    public ClassInfo get(ClassInfoDTO classInfoDTO) {
+        return classInfoDao.get(classInfoDTO);
     }
 
     @Override
-    public boolean checkClassExist(String classNumber) throws Exception {
-        ClassInfo classInfo = classMapper.get(classNumber);
+    public boolean checkClassExist(ClassInfoDTO classInfoDTO) throws Exception {
+        ClassInfo classInfo = classInfoDao.get(classInfoDTO);
         if (classInfo == null) {
             return false;
         }
         return true;
+    }
+
+
+    @Override
+    public PageInfo<ClassInfo> list(ListClassInfoDTO listClassInfoDTO) throws Exception {
+        PageHelper.startPage(listClassInfoDTO.getOffset(), listClassInfoDTO.getLimit());
+        List<ClassInfo> classInfoList = classInfoDao.list(listClassInfoDTO);
+        //得到分页的结果对象
+        PageInfo<ClassInfo> pageInfo = new PageInfo<>(classInfoList);
+        return pageInfo;
     }
 }

@@ -3,27 +3,27 @@ package com.demo.service;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.Student;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface IStudentService {
 
-    ResultBean save(AddStudentDTO addStudentDTO) throws Exception;
+    PageInfo<Student> list(ListStudentDTO studentDTO) throws Exception;
 
-    ResultBean list(ListStudentDTO studentDTO) throws Exception;
 
-    ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) throws Exception;
+    StudentClassDTO saveOrUpdateStudentClass(StudentClassDTO studentClassDTO) throws Exception;
 
-    ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) throws Exception;
+    List<ListStudentClassDTO> listStudentClass(ListStudentClassDTO studentClassWithScoreDTO) throws Exception;
 
-    ResultBean listStudentClass(ListStudentClassDTO studentClassWithScoreDTO) throws Exception;
+    void delete(Integer studentId) throws Exception;
 
-    ResultBean delete(String studentNumber) throws Exception;
+    Student get(StudentDTO studentDTO);
 
-    ResultBean update(UpdateStudentDTO updateStudentDTO) throws Exception;
+    boolean checkStudentExist(StudentDTO studentDTO);
 
-    Student get(String studentNumber);
+    boolean checkStudentClassExist(StudentClassDTO studentClassDTO);
 
-    boolean checkStudentExist(String studentNumber);
-
-    boolean checkStudentClassExist(String studentNumber , int teacherClassId);
+    StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception;
 
 }

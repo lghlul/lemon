@@ -1,11 +1,16 @@
-package com.demo.dto;
+package com.demo.model;
 
 /**
- * @ClassName AddClassDTO
- * @Description 添加课程对象
+ * @ClassName ClassInfo
+ * @Description 表 class
+ * @date 2019年3月18日
  * @Auther ll
  **/
-public class AddClassDTO {
+public class ClassInfo {
+    /**
+     * 主键
+     */
+    private int classId;
     /**
      * 课程编号
      */
@@ -15,9 +20,17 @@ public class AddClassDTO {
      */
     private String className;
     /**
-     * 录入时间
+     * 创建时间
      */
     private long createTime;
+
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
+    }
 
     public long getCreateTime() {
         return createTime;

@@ -1,11 +1,16 @@
-package com.demo.dto;
+package com.demo.model;
 
 /**
- * @ClassName UpdateTeacherDTO
- * @Description 更新教师传输对象
+ * @ClassName Teacher
+ * @Description 表 teacher
+ * @date 2019年3月18日
  * @Auther ll
  **/
-public class UpdateTeacherDTO {
+public class Teacher {
+    /**
+     * 主键
+     */
+    private int teacherId;
     /**
      * 教师编号
      */
@@ -15,10 +20,30 @@ public class UpdateTeacherDTO {
      */
     private String teacherName;
     /**
-     * 教师等级
+     * 教师等级  1普通教师  2教务主任
      */
     private int teacherLevel;
 
+    /**
+     * 录入时间
+     */
+    private long createTime;
+
+    public int getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
 
     public String getTeacherNumber() {
         return teacherNumber;
@@ -35,6 +60,7 @@ public class UpdateTeacherDTO {
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
     }
+
 
     public int getTeacherLevel() {
         return teacherLevel;

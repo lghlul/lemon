@@ -1,23 +1,23 @@
 package com.demo.dto;
 
 /**
- * @ClassName AddTeacherClassDTO
+ * @ClassName TeacherClassDTO
  * @Description 添加教师课程信息
  * @Auther ll
  **/
-public class AddTeacherClassDTO {
+public class TeacherClassDTO {
     /**
      * 自增主键
      */
-    private int teacherClassId;
+    private Integer teacherClassId;
     /**
-     * 课程编号
+     * 课程主键
      */
-    private String classNumber;
+    private Integer classId;
     /**
-     * 教师编号
+     * 教师主键
      */
-    private String teacherNumber;
+    private Integer teacherId;
     /**
      * 录入时间
      */
@@ -27,28 +27,29 @@ public class AddTeacherClassDTO {
      */
     private Integer term;
 
-    public int getTeacherClassId() {
+
+    public Integer getTeacherClassId() {
         return teacherClassId;
     }
 
-    public void setTeacherClassId(int teacherClassId) {
+    public void setTeacherClassId(Integer teacherClassId) {
         this.teacherClassId = teacherClassId;
     }
 
-    public String getClassNumber() {
-        return classNumber;
+    public Integer getClassId() {
+        return classId;
     }
 
-    public void setClassNumber(String classNumber) {
-        this.classNumber = classNumber;
+    public void setClassId(Integer classId) {
+        this.classId = classId;
     }
 
-    public String getTeacherNumber() {
-        return teacherNumber;
+    public Integer getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacherNumber(String teacherNumber) {
-        this.teacherNumber = teacherNumber;
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 
     public Long getCreateTime() {

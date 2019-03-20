@@ -1,10 +1,7 @@
 package com.demo.service.impl;
 
-import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
-import com.demo.common.ResultBean;
-import com.demo.mapper.*;
-import com.demo.model.Student;
+import com.demo.dao.*;
 import com.demo.model.Teacher;
 import com.demo.model.TeacherClass;
 import com.demo.service.ITeacherService;
@@ -13,106 +10,95 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TeacherServiceImpl implements ITeacherService {
 
     @Autowired
-    private TeacherMapper teacherMapper;
+    private TeacherDao teacherDao;
 
     @Autowired
-    private TeacherClassMapper teacherClassMapper;
+    private TeacherClassDao teacherClassDao;
 
 
     @Override
-    public ResultBean save(AddTeacherDTO addTeacherDTO) throws Exception {
-        addTeacherDTO.setCreateTime(System.currentTimeMillis());
-        if (teacherMapper.save(addTeacherDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS, addTeacherDTO);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
-    }
-
-    @Override
-    public ResultBean list(ListTeacherDTO listTeacherDTO) throws Exception {
-        PageHelper.startPage(listTeacherDTO.getOffset() , listTeacherDTO.getLimit());
-        List<Teacher> teacherList = teacherMapper.list(listTeacherDTO);
+    public PageInfo<Teacher> list(ListTeacherDTO listTeacherDTO) throws Exception {
+        PageHelper.startPage(listTeacherDTO.getOffset(), listTeacherDTO.getLimit());
+        List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
         //得到分页的结果对象
         PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
-        return new ResultBean(ResultCodeConstant.SUCCESS, pageInfo);
+        return pageInfo;
     }
 
     @Override
-    public ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) throws Exception {
-        addTeacherClassDTO.setCreateTime(System.currentTimeMillis());
-        if (this.teacherClassMapper.save(addTeacherClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS , addTeacherClassDTO);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
+    public TeacherClassDTO saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) throws Exception {
+        if(teacherClassDTO.getTeacherClassId() != null){
+            teacherClassDao.update(teacherClassDTO);
+        }else{
+            teacherClassDTO.setCreateTime(System.currentTimeMillis());
+            teacherClassDao.save(teacherClassDTO);
         }
+
+        return teacherClassDTO;
     }
 
 
     @Override
-    public ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
-        PageHelper.startPage(listTeacherClassDTO.getOffset() , listTeacherClassDTO.getLimit());
-        List<ListTeacherClassDTO> teacherClassDTOList = teacherClassMapper.list(listTeacherClassDTO);
+    public PageInfo<ListTeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
+        PageHelper.startPage(listTeacherClassDTO.getOffset(), listTeacherClassDTO.getLimit());
+        //关联属性不应该关联表查询   应将关联表查询 存入缓存
+        List<ListTeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
         //得到分页的结果对象
         PageInfo<ListTeacherClassDTO> pagrInfo = new PageInfo<>(teacherClassDTOList);
-        return new ResultBean(ResultCodeConstant.SUCCESS, pagrInfo);
+        return pagrInfo;
     }
 
 
     @Override
-    public ResultBean listByTerm(String teacherNumber) throws Exception {
-        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listClass(teacherNumber);
-        return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassByTermDTOS);
+    public List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception {
+        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassDao.listClass(teacherId);
+        return listTeacherClassByTermDTOS;
     }
 
 
     @Override
-    public ResultBean listClassByTeacherLevel(String teacherNumber) throws Exception {
-        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassMapper.listClass(null);
-        return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassByTermDTOS);
+    public List<ListTeacherClassByTermDTO> listClassByTeacherLevel() throws Exception {
+        List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassDao.listClass(null);
+        return listTeacherClassByTermDTOS;
     }
 
     @Override
-    public ResultBean listTeacherByTeacherLevel(String teacherNumber) throws Exception {
-        List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassMapper.listTeacherByTeacherLevel();
-        return new ResultBean(ResultCodeConstant.SUCCESS, listTeacherClassScoreDTOS);
+    public List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel() throws Exception {
+        List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassDao.listTeacherByTeacherLevel();
+        return listTeacherClassScoreDTOS;
     }
 
     @Override
-    public ResultBean delete(String teacherNumber) throws Exception {
-        if (teacherMapper.delete(teacherNumber) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
+    public void delete(Integer teacherId) throws Exception {
+        teacherDao.delete(teacherId);
+    }
+
+    @Override
+    public TeacherDTO saveOrUpdate(TeacherDTO teacherDTO) throws Exception {
+        if(teacherDTO.getTeacherId() != null){
+            teacherDao.update(teacherDTO);
+        }else{
+            teacherDTO.setCreateTime(System.currentTimeMillis());
+            teacherDao.save(teacherDTO);
         }
+        return teacherDTO;
     }
 
     @Override
-    public ResultBean update(UpdateTeacherDTO updateTeacherDTO) throws Exception {
-        if (teacherMapper.update(updateTeacherDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
+    public Teacher get(TeacherDTO teacherDTO) {
+        return teacherDao.get(teacherDTO);
     }
 
     @Override
-    public Teacher get(String teacherNumber) {
-        return teacherMapper.get(teacherNumber);
-    }
-
-    @Override
-    public boolean checkTeacherExist(String teacherNumber) {
+    public boolean checkTeacherExist(TeacherDTO teacherDTO) {
         //校验 老师是否存在
-        Teacher teacher = teacherMapper.get(teacherNumber);
+        Teacher teacher = teacherDao.get(teacherDTO);
         if (teacher == null) {
             return false;
         }
@@ -125,7 +111,7 @@ public class TeacherServiceImpl implements ITeacherService {
         //检验这门课程是否存在
         GetTeacherClassDTO readTeacherClassDTO = new GetTeacherClassDTO();
         readTeacherClassDTO.setTeacherClassId(teacherClassId);
-        TeacherClass teacherClass = this.teacherClassMapper.get(readTeacherClassDTO);
+        TeacherClass teacherClass = this.teacherClassDao.get(readTeacherClassDTO);
         if (teacherClass == null) {
             return false;
         } else {

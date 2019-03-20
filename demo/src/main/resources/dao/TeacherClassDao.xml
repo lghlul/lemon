@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.demo.mapper.TeacherClassMapper">
+<mapper namespace="com.demo.dao.TeacherClassDao">
 
 
-    <insert id="save" parameterType="addTeacherClassDTO" keyProperty="teacherClassId" useGeneratedKeys="true">
-    insert into teacherClass(teacherNumber , classNumber  , createTime , term) values( #{teacherNumber} , #{classNumber}  , #{createTime} , #{term})
+    <insert id="save" parameterType="teacherClassDTO" keyProperty="teacherClassId" useGeneratedKeys="true">
+    insert into teacherClass(teacherId , classId  , createTime , term) values( #{teacherId} , #{classId}  , #{createTime} , #{term})
    </insert>
+    <update id="update" parameterType="teacherClassDTO">
+        update teacherClass
+        <set>
+            <if test="teacherId != null">
+                teacherId = #{teacherId},
+            </if>
+            <if test="classId != null">
+                classId = #{classId},
+            </if>
+            <if test="term != null">
+                term = #{term},
+            </if>
+        </set>
+        where teacherClassId = #{teacherClassId}
+    </update>
 
 
     <select id="get" parameterType="getTeacherClassDTO" resultType="teacherClass">
@@ -29,11 +44,11 @@
 
 
     <select id="list" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
-        select a.*,c.* from teacher a , teacherClass b , classInfo c where a.teacherNumber = b.teacherNumber and
-        b.classNumber = c.classNumber
+        select a.*,c.* from teacher a , teacherClass b , classInfo c where a.teacherId = b.teacherId and
+        b.classId = c.classId
     </select>
 
-    <select id="listClass" parameterType="string" resultType="listTeacherClassByTermDTO">
+    <select id="listClass" parameterType="int" resultType="listTeacherClassByTermDTO">
         SELECT
         m.*, n.className
         FROM
@@ -43,20 +58,20 @@
         max(score) maxScore,
         min(score) minScore,
         AVG(score) avgScore,
-        classNumber
+        classId
         FROM
         teacherClass a
         JOIN studentClass b ON a.teacherClassId = b.teacherClassId
         <where>
-            <if test="teacherNumber != null">
-                and teacherNumber = #{teacherNumber}
+            <if test="teacherId != null">
+                and teacherId = #{teacherId}
             </if>
         </where>
         GROUP BY
         term,
-        classNumber
+        classId
         ) m
-        JOIN classInfo n ON m.classNumber = n.classNumber
+        JOIN classInfo n ON m.classId = n.classId
     </select>
 
 
@@ -66,19 +81,19 @@
         FROM
             (
                 SELECT
-                    teacherNumber,
+                    teacherId,
                     max(score) maxScore,
                     min(score) minScore,
                     AVG(score) avgScore,
-                    classNumber
+                    classId
                 FROM
                     teacherClass a
                 JOIN studentClass b ON a.teacherClassId = b.teacherClassId
                 GROUP BY
-                    teacherNumber,
-                    classNumber
+                    teacherId,
+                    classId
             ) m
-        , classInfo n , teacher t where m.classNumber = n.classNumber and m.teacherNumber = t.teacherNumber
+        , classInfo n , teacher t where m.classId = n.classId and m.teacherId = t.teacherId
     </select>
 
 

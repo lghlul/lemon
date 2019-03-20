@@ -1,4 +1,4 @@
-package com.demo.mapper;
+package com.demo.dao;
 
 import com.demo.model.TeacherClass;
 import com.demo.dto.*;
@@ -6,15 +6,17 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface TeacherClassMapper {
+public interface TeacherClassDao {
 
-    int save(AddTeacherClassDTO addTeacherClassDTO);
+    int save(TeacherClassDTO teacherClassDTO);
+
+    int update(TeacherClassDTO teacherClassDTO);
 
     TeacherClass get(GetTeacherClassDTO getTeacherClassDTO);
 
     List<ListTeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO);
 
-    List<ListTeacherClassByTermDTO> listClass(@Param("teacherNumber") String teacherNumber);
+    List<ListTeacherClassByTermDTO> listClass(@Param("teacherId") Integer teacherId);
 
     List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel();
 

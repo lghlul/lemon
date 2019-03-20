@@ -1,16 +1,20 @@
-package com.demo.dto;
+package com.demo.model;
 
 /**
- * @ClassName AddStudentDTO
- * @Description 添加学生传输对象
+ * @ClassName Student
+ * @Description 表 student
+ * @date 2019年3月18日
  * @Auther ll
  **/
-public class AddStudentDTO {
+public class Student {
+    /**
+     * 主键
+     */
+    private int studentId;
     /**
      * 学生编号
      */
     private String studentNumber;
-
     /**
      * 学生名称
      */
@@ -20,6 +24,13 @@ public class AddStudentDTO {
      */
     private long createTime;
 
+    public int getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
 
     public long getCreateTime() {
         return createTime;

@@ -1,11 +1,15 @@
 package com.demo.dto;
 
 /**
- * @ClassName AddTeacherDTO
+ * @ClassName TeacherDTO
  * @Description 添加教师传输对象
  * @Auther ll
  **/
-public class AddTeacherDTO {
+public class TeacherDTO {
+    /**
+     * 主键
+     */
+    private Integer teacherId;
     /**
      * 教师编号
      */
@@ -24,12 +28,13 @@ public class AddTeacherDTO {
      */
     private long createTime;
 
-    public long getCreateTime() {
-        return createTime;
+
+    public Integer getTeacherId() {
+        return teacherId;
     }
 
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getTeacherNumber() {
@@ -54,5 +59,13 @@ public class AddTeacherDTO {
 
     public void setTeacherLevel(int teacherLevel) {
         this.teacherLevel = teacherLevel;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }

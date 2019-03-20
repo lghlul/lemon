@@ -3,17 +3,20 @@ package com.demo.service;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.ClassInfo;
+import com.demo.model.Student;
+import com.github.pagehelper.PageInfo;
 
 public interface IClassInfoService {
 
-    ResultBean save(AddClassDTO addClassDTO) throws Exception;
 
-    ResultBean delete(String classNumber) throws Exception;
+    void delete(Integer classId) throws Exception;
 
-    ResultBean update(UpdateClassDTO updateClassDTO) throws Exception;
+    PageInfo<ClassInfo> list(ListClassInfoDTO listClassInfoDTO) throws Exception;
 
-    ClassInfo get(String classNumber) throws Exception;
+    ClassInfo get(ClassInfoDTO classInfoDTO) throws Exception;
 
-    boolean checkClassExist(String classNumber) throws Exception;
+    boolean checkClassExist(ClassInfoDTO classInfoDTO) throws Exception;
+
+    ClassInfoDTO saveOrUpdate(ClassInfoDTO classInfoDTO) throws Exception;
 
 }

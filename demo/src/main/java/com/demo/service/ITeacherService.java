@@ -3,30 +3,31 @@ package com.demo.service;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.Teacher;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface ITeacherService {
 
-    ResultBean save(AddTeacherDTO addTeacherDTO) throws Exception;
+    PageInfo<Teacher> list(ListTeacherDTO listTeacherDTO) throws Exception;
 
-    ResultBean list(ListTeacherDTO listTeacherDTO) throws Exception;
+    TeacherClassDTO saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) throws Exception;
 
-    ResultBean addTeacherClass(AddTeacherClassDTO addTeacherClassDTO) throws Exception;
+    PageInfo<ListTeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
 
-    ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
+    List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception;
 
-    ResultBean listByTerm(String teacherNumber) throws Exception;
+    List<ListTeacherClassByTermDTO> listClassByTeacherLevel() throws Exception;
 
-    ResultBean listClassByTeacherLevel(String teacherNumber) throws Exception;
+    List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel() throws Exception;
 
-    ResultBean listTeacherByTeacherLevel(String teacherNumber) throws Exception;
+    void delete(Integer teacherId) throws Exception;
 
-    ResultBean delete(String teacherNumber) throws Exception;
+    TeacherDTO saveOrUpdate(TeacherDTO teacherDTO) throws Exception;
 
-    ResultBean update(UpdateTeacherDTO updateTeacherDTO) throws Exception;
+    Teacher get(TeacherDTO teacherDTO);
 
-    Teacher get(String teacherNumber);
-
-    boolean checkTeacherExist(String teacherNumber);
+    boolean checkTeacherExist(TeacherDTO teacherDTO);
 
     boolean checkTeacherClassExist(int teacherClassId);
 

@@ -1,114 +1,61 @@
 package com.demo.service.impl;
 
-import com.demo.constant.ResultCodeConstant;
 import com.demo.model.Student;
 import com.demo.model.StudentClass;
-import com.demo.model.TeacherClass;
 import com.demo.dto.*;
-import com.demo.common.ResultBean;
-import com.demo.mapper.StudentClassMapper;
-import com.demo.mapper.StudentMapper;
-import com.demo.mapper.TeacherClassMapper;
+import com.demo.dao.StudentClassDao;
+import com.demo.dao.StudentDao;
+import com.demo.dao.TeacherClassDao;
 import com.demo.service.IStudentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
 
     @Autowired
-    private StudentMapper studentMapper;
+    private StudentDao studentDao;
 
     @Autowired
-    private StudentClassMapper studentClassMapper;
-
-    @Autowired
-    private TeacherClassMapper teacherClassMapper;
-
-    @Override
-    public ResultBean save(AddStudentDTO addStudentDTO) throws Exception {
-        addStudentDTO.setCreateTime(System.currentTimeMillis());
-        if (studentMapper.save(addStudentDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS , addStudentDTO);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
-    }
+    private StudentClassDao studentClassDao;
 
 
     @Override
-    public ResultBean list(ListStudentDTO listStudentDTO) throws Exception {
-        PageHelper.startPage(listStudentDTO.getOffset() , listStudentDTO.getLimit());
-        List<Student> studentList = studentMapper.list(listStudentDTO);
+    public PageInfo<Student> list(ListStudentDTO listStudentDTO) throws Exception {
+        PageHelper.startPage(listStudentDTO.getOffset(), listStudentDTO.getLimit());
+        List<Student> studentList = studentDao.list(listStudentDTO);
         //得到分页的结果对象
         PageInfo<Student> pageInfo = new PageInfo<>(studentList);
-        return new ResultBean(ResultCodeConstant.SUCCESS, pageInfo);
+        return pageInfo;
     }
 
 
     @Override
-    public ResultBean addStudentClass(AddStudentClassDTO addStudentClassDTO) throws Exception {
-
-        addStudentClassDTO.setCreateTime(System.currentTimeMillis());
-        if (this.studentClassMapper.save(addStudentClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS , addStudentClassDTO);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
+    public List<ListStudentClassDTO> listStudentClass(ListStudentClassDTO listStudentClassDTO) throws Exception {
+        //关联属性不应该关联表查询   应将关联表查询 存入缓存
+        List<ListStudentClassDTO> studentClassList = this.studentClassDao.list(listStudentClassDTO);
+        return studentClassList;
     }
 
 
     @Override
-    public ResultBean updateStudentClass(UpdateStudentClassDTO updateStudentClassDTO) throws Exception {
-        //录入分数
-        if (this.studentClassMapper.update(updateStudentClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
+    public void delete(Integer studentId) throws Exception {
+        studentDao.delete(studentId);
+    }
+
+    @Override
+    public Student get(StudentDTO studentDTO) {
+        return this.studentDao.get(studentDTO);
     }
 
 
     @Override
-    public ResultBean listStudentClass(ListStudentClassDTO listStudentClassDTO) throws Exception {
-        List<ListStudentClassDTO> studentClassList = this.studentClassMapper.list(listStudentClassDTO);
-        return new ResultBean(ResultCodeConstant.SUCCESS, studentClassList);
-    }
-
-
-    @Override
-    public ResultBean delete(String studentNumber) throws Exception {
-        if (studentMapper.delete(studentNumber) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
-    }
-
-    @Override
-    public ResultBean update(UpdateStudentDTO updateClassDTO) throws Exception {
-        if (studentMapper.update(updateClassDTO) > 0) {
-            return new ResultBean(ResultCodeConstant.SUCCESS);
-        } else {
-            return new ResultBean(ResultCodeConstant.FAIL);
-        }
-    }
-
-    @Override
-    public Student get(String studentNumber) {
-        return this.studentMapper.get(studentNumber);
-    }
-
-
-    @Override
-    public boolean checkStudentExist(String studentNumber) {
-        Student student = studentMapper.get(studentNumber);
+    public boolean checkStudentExist(StudentDTO studentDTO) {
+        Student student = studentDao.get(studentDTO);
         if (student == null) {
             return false;
         } else {
@@ -117,11 +64,8 @@ public class StudentServiceImpl implements IStudentService {
     }
 
     @Override
-    public boolean checkStudentClassExist(String studentNumber, int teacherClassId) {
-        GetStudentClassDTO getStudentClassDTO = new GetStudentClassDTO();
-        getStudentClassDTO.setStudentNumber(studentNumber);
-        getStudentClassDTO.setTeacherClassId(teacherClassId);
-        StudentClass studentClass = this.studentClassMapper.get(getStudentClassDTO);
+    public boolean checkStudentClassExist(StudentClassDTO studentClassDTO) {
+        StudentClass studentClass = this.studentClassDao.get(studentClassDTO);
         if (studentClass == null) {
             //没有选课
             return false;
@@ -130,4 +74,26 @@ public class StudentServiceImpl implements IStudentService {
         }
     }
 
+
+    @Override
+    public StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception {
+        if (studentDTO.getStudentId() != null) {
+            this.studentDao.update(studentDTO);
+        } else {
+            studentDTO.setCreateTime(System.currentTimeMillis());
+            this.studentDao.save(studentDTO);
+        }
+        return studentDTO;
+    }
+
+    @Override
+    public StudentClassDTO saveOrUpdateStudentClass(StudentClassDTO studentClassDTO) throws Exception {
+        if (studentClassDTO.getStudentClassId() != null) {
+            this.studentClassDao.update(studentClassDTO);
+        } else {
+            studentClassDTO.setCreateTime(System.currentTimeMillis());
+            this.studentClassDao.save(studentClassDTO);
+        }
+        return studentClassDTO;
+    }
 }

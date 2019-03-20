@@ -1,11 +1,15 @@
 package com.demo.dto;
 
 /**
- * @ClassName UpdateStudentDTO
- * @Description 更新学生传输对象
+ * @ClassName StudentDTO
+ * @Description 添加学生传输对象
  * @Auther ll
  **/
-public class UpdateStudentDTO {
+public class StudentDTO {
+    /**
+     * 主键
+     */
+    private Integer studentId;
     /**
      * 学生编号
      */
@@ -15,7 +19,18 @@ public class UpdateStudentDTO {
      * 学生名称
      */
     private String studentName;
+    /**
+     * 录入时间
+     */
+    private long createTime;
 
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
 
     public String getStudentNumber() {
         return studentNumber;
@@ -31,5 +46,13 @@ public class UpdateStudentDTO {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 }
