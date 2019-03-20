@@ -32,6 +32,18 @@ public class ListTeacherClassByTermDTO {
      * 课程编号
      */
     private String classNumber;
+    /**
+     * 课程 主键
+     */
+    private Integer classId;
+
+    public Integer getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Integer classId) {
+        this.classId = classId;
+    }
 
     public int getTerm() {
         return term;

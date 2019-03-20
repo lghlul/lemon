@@ -12,7 +12,7 @@ public interface ITeacherService {
 
     TeacherClassDTO saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) throws Exception;
 
-    PageInfo<ListTeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
+    PageInfo<TeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
 
     List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception;
 

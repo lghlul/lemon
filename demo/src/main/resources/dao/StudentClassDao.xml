@@ -35,8 +35,8 @@
 
 
     <select id="list" parameterType="listStudentClassDTO" resultType="listStudentClassDTO">
-        select a.*,c.className,b.term from studentClass a ,teacherClass b , classInfo c where a.teacherClassId =
-        b.teacherClassId and b.classId = c.classId
+        select a.*,b.term,b.classId from studentClass a ,teacherClass b  where a.teacherClassId =
+        b.teacherClassId
         <if test="studentId != null">
             and studentId = #{studentId}
         </if>

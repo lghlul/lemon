@@ -26,7 +26,31 @@ public class TeacherClassDTO {
      * 学年
      */
     private Integer term;
+    /**
+     * 教师名称
+     */
+    private String teacherName;
+    /**
+     * 课程名称
+     */
+    private String className;
 
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
 
     public Integer getTeacherClassId() {
         return teacherClassId;

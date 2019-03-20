@@ -14,7 +14,7 @@ public interface TeacherClassDao {
 
     TeacherClass get(GetTeacherClassDTO getTeacherClassDTO);
 
-    List<ListTeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO);
+    List<TeacherClassDTO> list(ListTeacherClassDTO listTeacherClassDTO);
 
     List<ListTeacherClassByTermDTO> listClass(@Param("teacherId") Integer teacherId);
 

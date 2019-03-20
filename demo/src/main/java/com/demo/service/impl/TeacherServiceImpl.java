@@ -2,6 +2,7 @@ package com.demo.service.impl;
 
 import com.demo.dto.*;
 import com.demo.dao.*;
+import com.demo.model.ClassInfo;
 import com.demo.model.Teacher;
 import com.demo.model.TeacherClass;
 import com.demo.service.ITeacherService;
@@ -10,7 +11,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TeacherServiceImpl implements ITeacherService {
@@ -20,6 +23,9 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Autowired
     private TeacherClassDao teacherClassDao;
+
+    @Autowired
+    private ClassInfoDao classInfoDao;
 
 
     @Override
@@ -45,19 +51,53 @@ public class TeacherServiceImpl implements ITeacherService {
 
 
     @Override
-    public PageInfo<ListTeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
+    public PageInfo<TeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
         PageHelper.startPage(listTeacherClassDTO.getOffset(), listTeacherClassDTO.getLimit());
         //关联属性不应该关联表查询   应将关联表查询 存入缓存
-        List<ListTeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
+        List<TeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
         //得到分页的结果对象
-        PageInfo<ListTeacherClassDTO> pagrInfo = new PageInfo<>(teacherClassDTOList);
-        return pagrInfo;
+        PageInfo<TeacherClassDTO> pageInfo = new PageInfo<>(teacherClassDTOList);
+        List<TeacherClassDTO> teacherClassList = pageInfo.getList();
+
+        if(teacherClassList != null){
+            List<ClassInfo> classInfoList = classInfoDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
+            if(classInfoList != null){
+                for(ClassInfo classInfo : classInfoList){
+                    classInfoMap.put(classInfo.getClassId() , classInfo);
+                }
+            }
+
+            List<Teacher> teacherList = teacherDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer , Teacher> teacherMap = new HashMap<>();
+            if(classInfoList != null){
+                for(Teacher teacher : teacherList){
+                    teacherMap.put(teacher.getTeacherId() , teacher);
+                }
+            }
+            for(TeacherClassDTO teacherClassDTO : teacherClassList){
+                //设置课程名称与课程编号
+                ClassInfo classInfo = classInfoMap.get(teacherClassDTO.getClassId());
+                if(classInfo != null){
+                    teacherClassDTO.setClassName(classInfo.getClassName());
+                }
+                //设置教师名称与教师编号
+                Teacher teacher = teacherMap.get(teacherClassDTO.getTeacherId());
+                if(teacher != null){
+                    teacherClassDTO.setTeacherName(teacher.getTeacherName());
+                }
+            }
+        }
+        return pageInfo;
     }
 
 
     @Override
     public List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception {
         List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassDao.listClass(teacherId);
+        this.listClassName(listTeacherClassByTermDTOS);
         return listTeacherClassByTermDTOS;
     }
 
@@ -65,12 +105,72 @@ public class TeacherServiceImpl implements ITeacherService {
     @Override
     public List<ListTeacherClassByTermDTO> listClassByTeacherLevel() throws Exception {
         List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS = this.teacherClassDao.listClass(null);
+        this.listClassName(listTeacherClassByTermDTOS);
         return listTeacherClassByTermDTOS;
+    }
+    /*
+     * @author ll
+     * @Description 给教师课程查询课程名称
+     * @param List<ListTeacherClassByTermDTO>
+     * @return void
+     */
+    private void listClassName(List<ListTeacherClassByTermDTO> listTeacherClassByTermDTOS){
+        if(listTeacherClassByTermDTOS != null){
+            List<ClassInfo> classInfoList = classInfoDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
+            if(classInfoList != null){
+                for(ClassInfo classInfo : classInfoList){
+                    classInfoMap.put(classInfo.getClassId() , classInfo);
+                }
+            }
+            //设置课程名称与课程编号
+            for(ListTeacherClassByTermDTO teacherClassByTermDTO : listTeacherClassByTermDTOS){
+                ClassInfo classInfo = classInfoMap.get(teacherClassByTermDTO.getClassId());
+                if(classInfo != null){
+                    teacherClassByTermDTO.setClassName(classInfo.getClassName());
+                    teacherClassByTermDTO.setClassNumber(classInfo.getClassNumber());
+                }
+            }
+        }
     }
 
     @Override
     public List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel() throws Exception {
         List<ListTeacherClassScoreDTO> listTeacherClassScoreDTOS = this.teacherClassDao.listTeacherByTeacherLevel();
+        if(listTeacherClassScoreDTOS != null) {
+            List<ClassInfo> classInfoList = classInfoDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer, ClassInfo> classInfoMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (ClassInfo classInfo : classInfoList) {
+                    classInfoMap.put(classInfo.getClassId(), classInfo);
+                }
+            }
+
+            List<Teacher> teacherList = teacherDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer, Teacher> teacherMap = new HashMap<>();
+            if (classInfoList != null) {
+                for (Teacher teacher : teacherList) {
+                    teacherMap.put(teacher.getTeacherId(), teacher);
+                }
+            }
+            for (ListTeacherClassScoreDTO listTeacherClassScore : listTeacherClassScoreDTOS) {
+                //设置课程名称与课程编号
+                ClassInfo classInfo = classInfoMap.get(listTeacherClassScore.getClassId());
+                if (classInfo != null) {
+                    listTeacherClassScore.setClassName(classInfo.getClassName());
+                    listTeacherClassScore.setClassNumber(classInfo.getClassNumber());
+                }
+                //设置教师名称与教师编号
+                Teacher teacher = teacherMap.get(listTeacherClassScore.getTeacherId());
+                if (teacher != null) {
+                    listTeacherClassScore.setTeacherName(teacher.getTeacherName());
+                    listTeacherClassScore.setTeacherNumber(teacher.getTeacherNumber());
+                }
+            }
+        }
         return listTeacherClassScoreDTOS;
     }
 

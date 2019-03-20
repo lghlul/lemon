@@ -43,16 +43,11 @@
     </select>
 
 
-    <select id="list" parameterType="listTeacherClassDTO" resultType="listTeacherClassDTO">
-        select a.*,c.* from teacher a , teacherClass b , classInfo c where a.teacherId = b.teacherId and
-        b.classId = c.classId
+    <select id="list" parameterType="listTeacherClassDTO" resultType="teacherClassDTO">
+      select * from teacherClass
     </select>
 
     <select id="listClass" parameterType="int" resultType="listTeacherClassByTermDTO">
-        SELECT
-        m.*, n.className
-        FROM
-        (
         SELECT
         term,
         max(score) maxScore,
@@ -70,30 +65,22 @@
         GROUP BY
         term,
         classId
-        ) m
-        JOIN classInfo n ON m.classId = n.classId
     </select>
 
 
     <select id="listTeacherByTeacherLevel" resultType="listTeacherClassScoreDTO">
         SELECT
-            m.*, n.className,t.teacherName
+            teacherId,
+            max(score) maxScore,
+            min(score) minScore,
+            AVG(score) avgScore,
+            classId
         FROM
-            (
-                SELECT
-                    teacherId,
-                    max(score) maxScore,
-                    min(score) minScore,
-                    AVG(score) avgScore,
-                    classId
-                FROM
-                    teacherClass a
-                JOIN studentClass b ON a.teacherClassId = b.teacherClassId
-                GROUP BY
-                    teacherId,
-                    classId
-            ) m
-        , classInfo n , teacher t where m.classId = n.classId and m.teacherId = t.teacherId
+            teacherClass a
+        JOIN studentClass b ON a.teacherClassId = b.teacherClassId
+        GROUP BY
+            teacherId,
+            classId
     </select>
 
 

@@ -1,5 +1,7 @@
 package com.demo.service.impl;
 
+import com.demo.dao.ClassInfoDao;
+import com.demo.model.ClassInfo;
 import com.demo.model.Student;
 import com.demo.model.StudentClass;
 import com.demo.dto.*;
@@ -11,7 +13,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements IStudentService {
@@ -21,6 +25,9 @@ public class StudentServiceImpl implements IStudentService {
 
     @Autowired
     private StudentClassDao studentClassDao;
+
+    @Autowired
+    private ClassInfoDao classInfoDao;
 
 
     @Override
@@ -37,6 +44,24 @@ public class StudentServiceImpl implements IStudentService {
     public List<ListStudentClassDTO> listStudentClass(ListStudentClassDTO listStudentClassDTO) throws Exception {
         //关联属性不应该关联表查询   应将关联表查询 存入缓存
         List<ListStudentClassDTO> studentClassList = this.studentClassDao.list(listStudentClassDTO);
+
+        if(studentClassList != null){
+            List<ClassInfo> classInfoList = classInfoDao.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer , ClassInfo> classInfoMap = new HashMap<>();
+            if(classInfoList != null){
+                for(ClassInfo classInfo : classInfoList){
+                    classInfoMap.put(classInfo.getClassId() , classInfo);
+                }
+            }
+            for(ListStudentClassDTO listStudentClass : studentClassList){
+                //设置教师名称与教师编号
+                ClassInfo classInfo = classInfoMap.get(listStudentClass.getClassId());
+                if(classInfo != null){
+                    listStudentClass.setClassName(classInfo.getClassName());
+                }
+            }
+        }
         return studentClassList;
     }
 

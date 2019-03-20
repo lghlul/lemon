@@ -36,7 +36,30 @@ public class ListTeacherClassScoreDTO {
      * 教师名称
      */
     private String teacherName;
+    /**
+     * 课程主键
+     */
+    private Integer classId;
+    /**
+     * 教师主键
+     */
+    private Integer teacherId;
 
+    public Integer getClassId() {
+        return classId;
+    }
+
+    public void setClassId(Integer classId) {
+        this.classId = classId;
+    }
+
+    public Integer getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(Integer teacherId) {
+        this.teacherId = teacherId;
+    }
 
     public String getTeacherNumber() {
         return teacherNumber;
