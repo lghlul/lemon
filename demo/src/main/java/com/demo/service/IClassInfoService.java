@@ -1,9 +1,7 @@
 package com.demo.service;
 
 import com.demo.dto.*;
-import com.demo.common.ResultBean;
 import com.demo.model.ClassInfo;
-import com.demo.model.Student;
 import com.github.pagehelper.PageInfo;
 
 public interface IClassInfoService {

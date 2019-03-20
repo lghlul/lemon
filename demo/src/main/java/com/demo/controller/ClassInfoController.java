@@ -4,7 +4,6 @@ import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.ClassInfo;
-import com.demo.model.Student;
 import com.demo.service.IClassInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -89,6 +88,7 @@ public class ClassInfoController {
                 return new ResultBean(ResultCodeConstant.SUCCESS, "成功", classInfoService.saveOrUpdate(classInfoDTO));
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
         }
     }
@@ -104,6 +104,7 @@ public class ClassInfoController {
         try {
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", classInfoService.list(listClassInfoDTO));
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }

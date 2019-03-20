@@ -39,11 +39,12 @@ public class StudentController {
                 return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
             } else {
                 //编号不存在
-                return new ResultBean(ResultCodeConstant.SUCCESS, studentService.saveOrUpdate(studentDTO));
+                return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdate(studentDTO));
             }
 
         } catch (Exception e) {
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+            e.printStackTrace();
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -58,6 +59,7 @@ public class StudentController {
         try {
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.list(studentDTO));
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
@@ -125,10 +127,10 @@ public class StudentController {
     @GetMapping("listStudentClass")
     public ResultBean listStudentClass(ListStudentClassDTO listStudentClassDTO) {
         try {
-            return new ResultBean(ResultCodeConstant.SUCCESS,"成功", studentService.listStudentClass(listStudentClassDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.listStudentClass(listStudentClassDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION , "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -142,10 +144,11 @@ public class StudentController {
     public ResultBean delete(Integer studentId) {
         try {
             studentService.delete(studentId);
-            return new ResultBean(ResultCodeConstant.SUCCESS);
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功");
 
         } catch (Exception e) {
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+            e.printStackTrace();
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -165,11 +168,11 @@ public class StudentController {
                 return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
             }
             Student student = studentService.get(studentDTO);
-            return new ResultBean(ResultCodeConstant.SUCCESS , "成功" , student);
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", student);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION , "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -199,7 +202,7 @@ public class StudentController {
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdate(studentDTO));
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION , "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 }

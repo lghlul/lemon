@@ -33,9 +33,9 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Override
     public TeacherClassDTO saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) throws Exception {
-        if(teacherClassDTO.getTeacherClassId() != null){
+        if (teacherClassDTO.getTeacherClassId() != null) {
             teacherClassDao.update(teacherClassDTO);
-        }else{
+        } else {
             teacherClassDTO.setCreateTime(System.currentTimeMillis());
             teacherClassDao.save(teacherClassDTO);
         }
@@ -81,9 +81,9 @@ public class TeacherServiceImpl implements ITeacherService {
 
     @Override
     public TeacherDTO saveOrUpdate(TeacherDTO teacherDTO) throws Exception {
-        if(teacherDTO.getTeacherId() != null){
+        if (teacherDTO.getTeacherId() != null) {
             teacherDao.update(teacherDTO);
-        }else{
+        } else {
             teacherDTO.setCreateTime(System.currentTimeMillis());
             teacherDao.save(teacherDTO);
         }

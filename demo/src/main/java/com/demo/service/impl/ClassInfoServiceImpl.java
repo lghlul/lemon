@@ -18,10 +18,10 @@ public class ClassInfoServiceImpl implements IClassInfoService {
     private ClassInfoDao classInfoDao;
 
     @Override
-    public ClassInfoDTO saveOrUpdate(ClassInfoDTO classInfoDTO)  throws Exception{
-        if(classInfoDTO.getClassId() != null){
+    public ClassInfoDTO saveOrUpdate(ClassInfoDTO classInfoDTO) throws Exception {
+        if (classInfoDTO.getClassId() != null) {
             classInfoDao.update(classInfoDTO);
-        }else{
+        } else {
             classInfoDTO.setCreateTime(System.currentTimeMillis());
             classInfoDao.save(classInfoDTO);
         }

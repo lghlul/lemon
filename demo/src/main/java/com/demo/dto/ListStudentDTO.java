@@ -14,8 +14,6 @@ public class ListStudentDTO extends PageQuery {
     private String studentName;
 
 
-
-
     public String getStudentName() {
         return studentName;
     }

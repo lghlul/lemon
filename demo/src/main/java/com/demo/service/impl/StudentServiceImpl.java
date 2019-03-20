@@ -5,7 +5,6 @@ import com.demo.model.StudentClass;
 import com.demo.dto.*;
 import com.demo.dao.StudentClassDao;
 import com.demo.dao.StudentDao;
-import com.demo.dao.TeacherClassDao;
 import com.demo.service.IStudentService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

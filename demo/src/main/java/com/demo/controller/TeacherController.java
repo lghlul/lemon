@@ -4,7 +4,6 @@ import com.demo.constant.CommonConstant;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
-import com.demo.model.Student;
 import com.demo.model.Teacher;
 import com.demo.service.IClassInfoService;
 import com.demo.service.ITeacherService;
@@ -55,9 +54,10 @@ public class TeacherController {
     @GetMapping("list")
     public ResultBean list(ListTeacherDTO listTeacherDTO) {
         try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, teacherService.list(listTeacherDTO));
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.list(listTeacherDTO));
         } catch (Exception e) {
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+            e.printStackTrace();
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -72,9 +72,15 @@ public class TeacherController {
         return saveOrUpdateTeacherClass(teacherClassDTO);
     }
 
-    private ResultBean saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO){
+    /*
+     * @author ll
+     * @Description 更新或添加教师课程
+     * @param TeacherClassDTO
+     * @return ResultBean
+     */
+    private ResultBean saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) {
         try {
-            if(teacherClassDTO.getTeacherId() != null){
+            if (teacherClassDTO.getTeacherId() != null) {
                 //校验 老师是否存在
                 TeacherDTO teacherDTO = new TeacherDTO();
                 teacherDTO.setTeacherId(teacherClassDTO.getTeacherId());
@@ -82,7 +88,7 @@ public class TeacherController {
                     return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
                 }
             }
-            if(teacherClassDTO.getClassId() != null){
+            if (teacherClassDTO.getClassId() != null) {
                 ClassInfoDTO classInfoDTO = new ClassInfoDTO();
                 classInfoDTO.setClassId(teacherClassDTO.getClassId());
                 //校验课程是否存在
@@ -136,13 +142,13 @@ public class TeacherController {
             TeacherDTO teacherDTO = new TeacherDTO();
             teacherDTO.setTeacherId(teacherId);
             if (teacherService.checkTeacherExist(teacherDTO)) {
-                return new ResultBean(ResultCodeConstant.SUCCESS, teacherService.listByTerm(teacherId));
+                return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.listByTerm(teacherId));
             } else {
-                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
+                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
             }
 
         } catch (Exception e) {
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 
@@ -205,6 +211,7 @@ public class TeacherController {
             teacherService.delete(teacherId);
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功");
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
@@ -234,6 +241,7 @@ public class TeacherController {
             }
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.saveOrUpdate(teacherDTO));
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
@@ -274,11 +282,11 @@ public class TeacherController {
                 return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
             }
             Teacher teacher = teacherService.get(teacherDTO);
-            return new ResultBean(ResultCodeConstant.SUCCESS , "成功" , teacher);
+            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacher);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION , "服务器异常");
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
         }
     }
 }
