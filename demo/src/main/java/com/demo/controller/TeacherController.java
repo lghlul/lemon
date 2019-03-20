@@ -5,8 +5,7 @@ import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.Teacher;
-import com.demo.service.IClassInfoService;
-import com.demo.service.ITeacherService;
+import com.demo.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,30 +19,9 @@ import org.springframework.web.bind.annotation.*;
 public class TeacherController {
 
     @Autowired
-    private ITeacherService teacherService;
+    private TeacherService teacherService;
 
-    @Autowired
-    private IClassInfoService classInfoService;
 
-    /*
-     * @author ll
-     * @Description 添加教师信息
-     * @param TeacherDTO
-     * @return ResultBean
-     */
-    @PostMapping("save")
-    public ResultBean save(TeacherDTO teacherDTO) {
-        try {
-            if (teacherService.checkTeacherExist(teacherDTO)) {
-                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
-            } else {
-                return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.saveOrUpdate(teacherDTO));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
 
     /*
      * @author ll
@@ -61,74 +39,6 @@ public class TeacherController {
         }
     }
 
-    /*
-     * @author ll
-     * @Description 添加教师课程信息
-     * @param TeacherClassDTO
-     * @return ResultBean
-     */
-    @PostMapping("saveTeacherClass")
-    public ResultBean saveTeacherClass(TeacherClassDTO teacherClassDTO) {
-        return saveOrUpdateTeacherClass(teacherClassDTO);
-    }
-
-    /*
-     * @author ll
-     * @Description 更新或添加教师课程
-     * @param TeacherClassDTO
-     * @return ResultBean
-     */
-    private ResultBean saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) {
-        try {
-            if (teacherClassDTO.getTeacherId() != null) {
-                //校验 老师是否存在
-                TeacherDTO teacherDTO = new TeacherDTO();
-                teacherDTO.setTeacherId(teacherClassDTO.getTeacherId());
-                if (!teacherService.checkTeacherExist(teacherDTO)) {
-                    return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
-                }
-            }
-            if (teacherClassDTO.getClassId() != null) {
-                ClassInfoDTO classInfoDTO = new ClassInfoDTO();
-                classInfoDTO.setClassId(teacherClassDTO.getClassId());
-                //校验课程是否存在
-                if (!classInfoService.checkClassExist(classInfoDTO)) {
-                    return new ResultBean(ResultCodeConstant.CLASS_NOT_EXIST, "课程不存在");
-                }
-            }
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.saveOrUpdateTeacherClass(teacherClassDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
-
-    /*
-     * @author ll
-     * @Description 更新教师课程信息
-     * @param TeacherClassDTO
-     * @return ResultBean
-     */
-    @PutMapping("updateTeacherClass")
-    public ResultBean updateTeacherClass(TeacherClassDTO teacherClassDTO) {
-        return saveOrUpdateTeacherClass(teacherClassDTO);
-    }
-
-    /*
-     * @author ll
-     * @Description 分页查询教师课程
-     * @param ListTeacherClassDTO
-     * @return ResultBean
-     */
-    @GetMapping("listTeacherClass")
-    public ResultBean listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) {
-        try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.listTeacherClass(listTeacherClassDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
 
     /*
      * @author ll
@@ -218,26 +128,34 @@ public class TeacherController {
 
     /*
      * @author ll
-     * @Description 更新教师信息
+     * @Description 添加或者更新教师信息
      * @param UpdateTeacherDTO
      * @return ResultBean
      */
-    @PutMapping("update")
-    public ResultBean update(TeacherDTO teacherDTO) {
+    @PostMapping("saveOrUpdate")
+    public ResultBean saveOrUpdate(TeacherDTO teacherDTO) {
         try {
-            //查询该教师是否存在
             TeacherDTO teacher = new TeacherDTO();
-            teacher.setTeacherId(teacherDTO.getTeacherId());
-            if (!teacherService.checkTeacherExist(teacher)) {
-                //教师不存在
-                return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
-            }
-            teacher.setTeacherId(null);
-            teacher.setTeacherNumber(teacherDTO.getTeacherNumber());
-            Teacher teacherDO = teacherService.get(teacher);
-            //如果改变的编号已经存在与其他学生
-            if (teacherDO != null && teacherDO.getTeacherId() != teacherDTO.getTeacherId()) {
-                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
+            if(teacherDTO.getTeacherId() != null){
+                //查询该教师是否存在
+                teacher.setTeacherId(teacherDTO.getTeacherId());
+                if (!teacherService.checkTeacherExist(teacher)) {
+                    //教师不存在
+                    return new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST, "教师不存在");
+                }
+
+                teacher.setTeacherId(null);
+                teacher.setTeacherNumber(teacherDTO.getTeacherNumber());
+                Teacher teacherDO = teacherService.get(teacher);
+                //如果改变的编号已经存在与其他学生
+                if (teacherDO != null && teacherDO.getTeacherId() != teacherDTO.getTeacherId()) {
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
+                }
+            }else{
+                teacher.setTeacherNumber(teacherDTO.getTeacherNumber());
+                if (teacherService.checkTeacherExist(teacher)){
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "教师编号已存在");
+                }
             }
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", teacherService.saveOrUpdate(teacherDTO));
         } catch (Exception e) {

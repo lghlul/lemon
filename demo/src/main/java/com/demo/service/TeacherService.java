@@ -6,13 +6,9 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
-public interface ITeacherService {
+public interface TeacherService {
 
     PageInfo<Teacher> list(ListTeacherDTO listTeacherDTO) throws Exception;
-
-    TeacherClassDTO saveOrUpdateTeacherClass(TeacherClassDTO teacherClassDTO) throws Exception;
-
-    PageInfo<TeacherClassDTO> listTeacherClass(ListTeacherClassDTO listTeacherClassDTO) throws Exception;
 
     List<ListTeacherClassByTermDTO> listByTerm(Integer teacherId) throws Exception;
 
@@ -28,6 +24,5 @@ public interface ITeacherService {
 
     boolean checkTeacherExist(TeacherDTO teacherDTO);
 
-    boolean checkTeacherClassExist(int teacherClassId);
 
 }

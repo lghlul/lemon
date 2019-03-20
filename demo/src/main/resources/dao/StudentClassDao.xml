@@ -11,7 +11,13 @@
         update studentClass
         <set>
             <if test="score != null">
-                score = #{score}
+                score = #{score},
+            </if>
+            <if test="teacherClassId != null">
+                teacherClassId = #{teacherClassId},
+            </if>
+            <if test="studentId != null">
+                studentId = #{studentId},
             </if>
         </set>
         where studentClassId = #{studentClassId}

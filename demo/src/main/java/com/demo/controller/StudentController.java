@@ -4,8 +4,7 @@ import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.Student;
-import com.demo.service.IStudentService;
-import com.demo.service.ITeacherService;
+import com.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,34 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
 
     @Autowired
-    private IStudentService studentService;
-
-    @Autowired
-    private ITeacherService teacherService;
-
-
-    /*
-     * @author ll
-     * @Description 添加学生信息
-     * @param ListStudentDTO
-     * @return ResultBean
-     */
-    @PostMapping("save")
-    public ResultBean save(StudentDTO studentDTO) {
-        try {
-
-            if (studentService.checkStudentExist(studentDTO)) {
-                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
-            } else {
-                //编号不存在
-                return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdate(studentDTO));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
+    private StudentService studentService;
 
     /*
      * @author ll
@@ -64,75 +36,6 @@ public class StudentController {
         }
     }
 
-    /*
-     * @author ll
-     * @Description 学生选课
-     * @param StudentClassDTO
-     * @return ResultBean
-     */
-    @PostMapping("saveStudentClass")
-    public ResultBean saveStudentClass(StudentClassDTO studentClassDTO) {
-        try {
-            StudentDTO studentDTO = new StudentDTO();
-            studentDTO.setStudentId(studentClassDTO.getStudentId());
-            //校验学生是否存在
-            if (!studentService.checkStudentExist(studentDTO)) {
-                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
-            }
-            //校验是否存在这门课程
-            if (!teacherService.checkTeacherClassExist(studentClassDTO.getTeacherClassId())) {
-                return new ResultBean(ResultCodeConstant.TEACHER_CLASS_MISMATCHING, "教师课程不存在");
-            }
-            //校验该学生是否选过这门课程
-            if (!studentService.checkStudentClassExist(studentClassDTO)) {
-                return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdateStudentClass(studentClassDTO));
-            } else {
-                //已经选过该课程
-                return new ResultBean(ResultCodeConstant.STUDENT_CLASS_EXIST, "重复选课");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
-
-    /*
-     * @author ll
-     * @Description 更新学生课程信息(录入课程分数)
-     * @param UpdateStudentClassDTO
-     * @return ResultBean
-     */
-    @PutMapping("updateStudentClass")
-    public ResultBean updateStudentClass(StudentClassDTO studentClassDTO) {
-        try {
-            //是否选课
-            if (!studentService.checkStudentClassExist(studentClassDTO)) {
-                //没有选课
-                return new ResultBean(ResultCodeConstant.STUDENT_NOT_HAVE_CLASS, "学生没有该课程");
-            }
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdateStudentClass(studentClassDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
-
-    /*
-     * @author ll
-     * @Description 学生课程列表(用于查看学生学年成绩)
-     * @param ListStudentClassDTO
-     * @return ResultBean
-     */
-    @GetMapping("listStudentClass")
-    public ResultBean listStudentClass(ListStudentClassDTO listStudentClassDTO) {
-        try {
-            return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.listStudentClass(listStudentClassDTO));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION, "服务器异常");
-        }
-    }
 
     /*
      * @author ll
@@ -182,22 +85,30 @@ public class StudentController {
      * @param UpdateStudentDTO
      * @return ResultBean
      */
-    @PutMapping("update")
-    public ResultBean update(StudentDTO studentDTO) {
+    @PostMapping("saveOrUpdate")
+    public ResultBean saveOrUpdate(StudentDTO studentDTO) {
         try {
-            //查询该学生是否存在
             StudentDTO student = new StudentDTO();
-            student.setStudentId(studentDTO.getStudentId());
-            if (!studentService.checkStudentExist(student)) {
-                //学生不存在
-                return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
-            }
-            student.setStudentId(null);
-            student.setStudentNumber(studentDTO.getStudentNumber());
-            Student studentDO = studentService.get(student);
-            //如果改变的编号已经存在与其他学生
-            if (studentDO != null && studentDO.getStudentId() != studentDTO.getStudentId()) {
-                return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
+            if(studentDTO.getStudentId() != null){
+                //查询该学生是否存在
+                student.setStudentId(studentDTO.getStudentId());
+                if (!studentService.checkStudentExist(student)) {
+                    //学生不存在
+                    return new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST, "学生不存在");
+                }
+
+                student.setStudentId(null);
+                student.setStudentNumber(studentDTO.getStudentNumber());
+                Student studentDO = studentService.get(student);
+                //如果改变的编号已经存在与其他学生
+                if (studentDO != null &&  studentDO.getStudentId() != studentDTO.getStudentId()) {
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
+                }
+            }else{
+                student.setStudentNumber(studentDTO.getStudentNumber());
+                if(studentService.checkStudentExist(student)){
+                    return new ResultBean(ResultCodeConstant.NUMBER_REPEAT, "学生编号已存在");
+                }
             }
             return new ResultBean(ResultCodeConstant.SUCCESS, "成功", studentService.saveOrUpdate(studentDTO));
         } catch (Exception e) {

@@ -4,7 +4,7 @@ import com.demo.dto.*;
 import com.demo.model.ClassInfo;
 import com.github.pagehelper.PageInfo;
 
-public interface IClassInfoService {
+public interface ClassInfoService {
 
 
     void delete(Integer classId) throws Exception;

@@ -3,16 +3,17 @@ package com.demo.service.impl;
 import com.demo.model.ClassInfo;
 import com.demo.dto.*;
 import com.demo.dao.ClassInfoDao;
-import com.demo.service.IClassInfoService;
+import com.demo.service.ClassInfoService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 @Service
-public class ClassInfoServiceImpl implements IClassInfoService {
+public class ClassInfoServiceImpl implements ClassInfoService {
 
     @Autowired
     private ClassInfoDao classInfoDao;
