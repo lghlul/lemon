@@ -54,6 +54,9 @@ public class PageQuery {
     }
 
     public String getSortDir() {
+        if(sortDir == null){
+            return CommonConstant.DEFAULT_SORTDIR;
+        }
         return sortDir;
     }
 

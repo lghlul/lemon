@@ -33,6 +33,9 @@ public class TeacherServiceImpl implements TeacherService {
     public Object list(ListTeacherDTO listTeacherDTO) throws Exception {
         if(listTeacherDTO.getPaging()){
             PageHelper.startPage(listTeacherDTO.getOffset(), listTeacherDTO.getLimit());
+            if(listTeacherDTO.getSort() != null){
+                PageHelper.orderBy(listTeacherDTO.getSort() + " " + listTeacherDTO.getSortDir());
+            }
             List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
             //得到分页的结果对象
             PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);

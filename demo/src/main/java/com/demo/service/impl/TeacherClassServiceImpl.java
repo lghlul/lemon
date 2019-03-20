@@ -49,6 +49,9 @@ public class TeacherClassServiceImpl implements TeacherClassService {
     public Object list(ListTeacherClassDTO listTeacherClassDTO) throws Exception {
         if(listTeacherClassDTO.getPaging()){
             PageHelper.startPage(listTeacherClassDTO.getOffset(), listTeacherClassDTO.getLimit());
+            if(listTeacherClassDTO.getSort() != null){
+                PageHelper.orderBy(listTeacherClassDTO.getSort() + " " + listTeacherClassDTO.getSortDir());
+            }
             //关联属性不应该关联表查询   应将关联表查询 存入缓存
             List<TeacherClassDTO> teacherClassDTOList = teacherClassDao.list(listTeacherClassDTO);
             //得到分页的结果对象

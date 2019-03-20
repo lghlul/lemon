@@ -16,6 +16,8 @@ public class CommonConstant {
      */
     public final static Integer DEFAULT_LIMIT = 10;
 
+    public final static String DEFAULT_SORTDIR = "asc";
+
     /**
      * 教师等级 2  教务主任
      */

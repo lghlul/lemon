@@ -26,6 +26,9 @@ public class StudentServiceImpl implements StudentService {
     public Object list(ListStudentDTO listStudentDTO) throws Exception {
         if (listStudentDTO.getPaging()) {
             PageHelper.startPage(listStudentDTO.getOffset(), listStudentDTO.getLimit());
+            if(listStudentDTO.getSort() != null){
+                PageHelper.orderBy(listStudentDTO.getSort() + " " + listStudentDTO.getSortDir());
+            }
             List<Student> studentList = studentDao.list(listStudentDTO);
             //得到分页的结果对象
             PageInfo<Student> pageInfo = new PageInfo<>(studentList);

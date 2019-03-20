@@ -56,6 +56,9 @@ public class ClassInfoServiceImpl implements ClassInfoService {
     public Object list(ListClassInfoDTO listClassInfoDTO) throws Exception {
         if(listClassInfoDTO.getPaging()){
             PageHelper.startPage(listClassInfoDTO.getOffset(), listClassInfoDTO.getLimit());
+            if(listClassInfoDTO.getSort() != null){
+                PageHelper.orderBy(listClassInfoDTO.getSort() + " " + listClassInfoDTO.getSortDir());
+            }
             List<ClassInfo> classInfoList = classInfoDao.list(listClassInfoDTO);
             //得到分页的结果对象
             PageInfo<ClassInfo> pageInfo = new PageInfo<>(classInfoList);
