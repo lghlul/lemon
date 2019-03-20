@@ -100,4 +100,10 @@ public class TeacherClassServiceImpl implements TeacherClassService {
             return true;
         }
     }
+
+
+    @Override
+    public void delete(Integer teacherClassId) throws Exception {
+        this.teacherClassDao.delete(teacherClassId);
+    }
 }

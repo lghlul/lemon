@@ -87,4 +87,22 @@ public class StudentClassController {
         }
     }
 
+
+    /*
+     * @author ll
+     * @Description 删除学生课程信息
+     * @param String
+     * @return ResultBean
+     */
+    @DeleteMapping("delete")
+    public ResultBean delete(Integer studentClassId) {
+        try {
+            studentClassService.delete(studentClassId);
+            return new ResultBean(ResultCodeConstant.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
+
 }

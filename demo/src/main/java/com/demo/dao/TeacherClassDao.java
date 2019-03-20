@@ -20,4 +20,6 @@ public interface TeacherClassDao {
 
     List<ListTeacherClassScoreDTO> listTeacherByTeacherLevel();
 
+    int delete(int teacherClassId);
+
 }

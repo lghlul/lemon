@@ -83,5 +83,9 @@
             classId
     </select>
 
+    <delete id="delete" parameterType="int">
+      delete from teacherClass where teacherClassId = #{teacherClassId}
+    </delete>
+
 
 </mapper>

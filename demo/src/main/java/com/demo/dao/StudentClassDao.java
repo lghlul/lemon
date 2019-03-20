@@ -16,4 +16,6 @@ public interface StudentClassDao {
 
     List<ListStudentClassDTO> list(ListStudentClassDTO studentClassWithScoreDTO);
 
+    int delete(int studentClassId);
+
 }

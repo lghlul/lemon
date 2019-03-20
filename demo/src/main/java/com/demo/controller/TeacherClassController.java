@@ -83,4 +83,20 @@ public class TeacherClassController {
     }
 
 
+    /*
+     * @author ll
+     * @Description 删除教师课程信息
+     * @param String
+     * @return ResultBean
+     */
+    @DeleteMapping("delete")
+    public ResultBean delete(Integer teacherClassId) {
+        try {
+            teacherClassService.delete(teacherClassId);
+            return new ResultBean(ResultCodeConstant.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
+        }
+    }
 }

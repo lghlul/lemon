@@ -15,4 +15,6 @@ public interface TeacherClassService {
 
     boolean checkTeacherClassExist(int teacherClassId);
 
+    void delete(Integer teacherClassId) throws Exception;
+
 }

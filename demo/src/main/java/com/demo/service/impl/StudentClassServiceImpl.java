@@ -74,4 +74,9 @@ public class StudentClassServiceImpl implements StudentClassService {
         }
         return studentClassDTO;
     }
+
+    @Override
+    public void delete(Integer studentClassId) throws Exception {
+        this.studentClassDao.delete(studentClassId);
+    }
 }

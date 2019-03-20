@@ -18,5 +18,7 @@ public interface StudentClassService {
 
     boolean checkStudentClassExist(StudentClassDTO studentClassDTO);
 
+    void delete(Integer studentClassId) throws Exception;
+
 
 }

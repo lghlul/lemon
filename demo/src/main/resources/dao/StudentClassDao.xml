@@ -51,4 +51,9 @@
             and term = #{term}
         </if>
     </select>
+
+
+    <delete id="delete" parameterType="int">
+      delete from studentClass where studentClassId = #{studentClassId}
+    </delete>
 </mapper>
