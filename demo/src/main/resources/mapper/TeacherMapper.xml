@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.TeacherDao">
+
+
+    <insert id="save" parameterType="teacherDTO" keyProperty="teacherNumber" useGeneratedKeys="true">
+    insert into teacher(teacherId , teacherName , teacherLevel , createTime) values(#{teacherId} , #{teacherName} , #{teacherLevel} , now())
+   </insert>
+
+    <select id="get" parameterType="int" resultType="teacher">
+        select * from teacher where teacherNumber = #{teacherNumber}
+    </select>
+
+    <select id="getById" parameterType="string" resultType="teacher">
+        select * from teacher where teacherId = #{teacherId}
+    </select>
+
+    <select id="list" parameterType="TeacherQueryDTO" resultType="teacher">
+        select * from teacher
+        <where>
+            <if test="teacherName != null">
+                and teacherName like CONCAT('%',#{teacherName},'%')
+            </if>
+            <if test="teacherLevel != null">
+                and teacherLevel = #{teacherLevel}
+            </if>
+        </where>
+    </select>
+
+
+    <update id="update" parameterType="teacherDTO">
+        update teacher
+       set
+                teacherName = #{teacherName},
+                teacherLevel = #{teacherLevel},
+                teacherId = #{teacherId}
+        where teacherNumber = #{teacherNumber}
+    </update>
+
+    <delete id="delete" parameterType="int">
+      delete from teacher where teacherNumber = #{teacherNumber}
+    </delete>
+
+</mapper>

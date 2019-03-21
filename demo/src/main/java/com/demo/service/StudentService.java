@@ -6,13 +6,15 @@ import com.demo.model.Student;
 
 public interface StudentService {
 
-    Object list(ListStudentDTO studentDTO) throws Exception;
+    Object list(StudentQueryDTO studentDTO) throws Exception;
 
     void delete(Integer studentId) throws Exception;
 
-    Student get(StudentDTO studentDTO);
+    Student read(Integer studentNumber);
 
-    boolean checkStudentExist(StudentDTO studentDTO);
+    Student readById(String studentId);
+
+    boolean checkStudentNumberExist(Integer studentNumber);
 
     StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception;
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.StudentDao">
+
+    <insert id="save" parameterType="studentDTO" keyProperty="studentNumber" useGeneratedKeys="true">
+    insert into student(studentId , studentName , createTime) values(#{studentId} , #{studentName} , now())
+   </insert>
+
+    <select id="get" parameterType="int" resultType="student">
+        select * from student where studentNumber = #{studentNumber}
+    </select>
+
+    <select id="getById" parameterType="string" resultType="student">
+        select * from student where studentId = #{studentId}
+    </select>
+
+    <select id="list" parameterType="studentQueryDTO" resultType="student">
+        select * from student
+        <where>
+            <if test="studentName != null">
+                and studentName like CONCAT('%',#{studentName},'%')
+            </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="studentDTO">
+        update student
+        <set>
+            <if test="studentName != null">
+                studentName = #{studentName},
+            </if>
+            <if test="studentNumber != null">
+                studentNumber = #{studentNumber},
+            </if>
+        </set>
+        where studentId = #{studentId}
+    </update>
+
+    <delete id="delete" parameterType="int">
+      delete from student where studentNumber = #{studentNumber}
+    </delete>
+
+
+</mapper>

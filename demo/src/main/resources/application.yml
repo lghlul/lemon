@@ -11,7 +11,7 @@ spring:
     livereload:
       enabled: true
 mybatis:
-  mapper-locations: classpath:/dao/*.xml
+  mapper-locations: classpath:/mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

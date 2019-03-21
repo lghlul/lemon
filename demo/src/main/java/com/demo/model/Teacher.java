@@ -1,5 +1,7 @@
 package com.demo.model;
 
+import java.util.Date;
+
 /**
  * @ClassName Teacher
  * @Description 表 teacher
@@ -10,11 +12,11 @@ public class Teacher {
     /**
      * 主键
      */
-    private int teacherId;
+    private Integer teacherNumber;
     /**
-     * 教师编号
+     * 教师号
      */
-    private String teacherNumber;
+    private String teacherId;
     /**
      * 教师名称
      */
@@ -22,35 +24,26 @@ public class Teacher {
     /**
      * 教师等级  1普通教师  2教务主任
      */
-    private int teacherLevel;
-
+    private Integer teacherLevel;
     /**
      * 录入时间
      */
-    private long createTime;
+    private Date createTime;
 
-    public int getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getTeacherNumber() {
+    public Integer getTeacherNumber() {
         return teacherNumber;
     }
 
-    public void setTeacherNumber(String teacherNumber) {
+    public void setTeacherNumber(Integer teacherNumber) {
         this.teacherNumber = teacherNumber;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getTeacherName() {
@@ -61,12 +54,19 @@ public class Teacher {
         this.teacherName = teacherName;
     }
 
-
-    public int getTeacherLevel() {
+    public Integer getTeacherLevel() {
         return teacherLevel;
     }
 
-    public void setTeacherLevel(int teacherLevel) {
+    public void setTeacherLevel(Integer teacherLevel) {
         this.teacherLevel = teacherLevel;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

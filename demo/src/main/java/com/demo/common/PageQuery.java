@@ -20,7 +20,7 @@ public class PageQuery {
     private Integer offset;
 
     /**
-     *  排序字段
+     * 排序字段
      */
     private String sort;
 
@@ -35,7 +35,7 @@ public class PageQuery {
     private Boolean paging;
 
     public Boolean getPaging() {
-        if(paging == null){
+        if (paging == null) {
             return true;
         }
         return paging;
@@ -54,7 +54,7 @@ public class PageQuery {
     }
 
     public String getSortDir() {
-        if(sortDir == null){
+        if (sortDir == null) {
             return CommonConstant.DEFAULT_SORTDIR;
         }
         return sortDir;
@@ -65,9 +65,8 @@ public class PageQuery {
     }
 
 
-
     public Integer getLimit() {
-        if(limit == null){
+        if (limit == null) {
             return CommonConstant.DEFAULT_LIMIT;
         }
         return limit;
@@ -78,7 +77,7 @@ public class PageQuery {
     }
 
     public Integer getOffset() {
-        if(offset == null){
+        if (offset == null) {
             return CommonConstant.DEFAULT_OFFSET;
         }
         return offset;

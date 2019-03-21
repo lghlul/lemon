@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.StudentClazzDao">
+
+    <insert id="save" parameterType="studentClazzDTO">
+    insert into student_clazz(studentNumber , clazzNumber ,term , createTime) values(#{studentNumber} , #{clazzNumber} ,#{term} , now())
+   </insert>
+
+    <update id="update" parameterType="studentClazzDTO">
+        update student_clazz set
+                score = #{score}
+        where studentNumber = #{studentNumber} and clazzNumber = #{clazzNumber}
+    </update>
+
+
+    <select id="get" resultType="studentClazz">
+        select * from student_clazz
+        where studentNumber = #{studentNumber}
+                and clazzNumber = #{clazzNumber}
+    </select>
+
+
+    <select id="list" parameterType="studentClazzQueryDTO" resultType="studentClazzDTO">
+        select * from student_clazz
+        <where>
+            <if test="studentNumber != null">
+                and studentNumber = #{studentNumber}
+            </if>
+            <if test="term != null">
+                and term = #{term}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="delete">
+      delete from student_clazz where studentNumber = #{studentNumber}
+                and clazzNumber = #{clazzNumber}
+    </delete>
+</mapper>

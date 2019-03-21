@@ -35,11 +35,11 @@ public class ResultCodeConstant {
     /**
      * 课程不存在
      */
-    public static final String CLASS_NOT_EXIST = "1004,课程不存在";
+    public static final String CLAZZ_NOT_EXIST = "1004,课程不存在";
     /**
      * 学生暂未拥有该课程
      */
-    public static final String STUDENT_NOT_HAVE_CLASS = "1005,学生暂未拥有该课程";
+    public static final String STUDENT_NOT_HAVE_CLAZZ = "1005,学生暂未拥有该课程";
     /**
      * 没有权限
      */
@@ -47,11 +47,11 @@ public class ResultCodeConstant {
     /**
      * 不能重复选课
      */
-    public static final String STUDENT_CLASS_EXIST = "1007,不能重复选课";
+    public static final String STUDENT_CLAZZ_EXIST = "1007,不能重复选课";
     /**
      * 教师课程不存在
      */
-    public static final String TEACHER_CLASS_NOT_EXIST = "1008,教师课程不存在";
+    public static final String TEACHER_CLAZZ_NOT_EXIST = "1008,教师课程不存在";
 
 
 }

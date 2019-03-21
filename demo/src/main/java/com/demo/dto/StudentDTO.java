@@ -1,5 +1,7 @@
 package com.demo.dto;
 
+import java.util.Date;
+
 /**
  * @ClassName StudentDTO
  * @Description 添加学生传输对象
@@ -9,12 +11,11 @@ public class StudentDTO {
     /**
      * 主键
      */
-    private Integer studentId;
+    private Integer studentNumber;
     /**
-     * 学生编号
+     * 学号
      */
-    private String studentNumber;
-
+    private String studentId;
     /**
      * 学生名称
      */
@@ -22,22 +23,22 @@ public class StudentDTO {
     /**
      * 录入时间
      */
-    private long createTime;
+    private Date createTime;
 
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentNumber() {
+    public Integer getStudentNumber() {
         return studentNumber;
     }
 
-    public void setStudentNumber(String studentNumber) {
+    public void setStudentNumber(Integer studentNumber) {
         this.studentNumber = studentNumber;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentName() {
@@ -48,11 +49,11 @@ public class StudentDTO {
         this.studentName = studentName;
     }
 
-    public long getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 }

@@ -1,5 +1,7 @@
 package com.demo.dto;
 
+import java.util.Date;
+
 /**
  * @ClassName TeacherDTO
  * @Description 添加教师传输对象
@@ -9,40 +11,38 @@ public class TeacherDTO {
     /**
      * 主键
      */
-    private Integer teacherId;
+    private Integer teacherNumber;
     /**
-     * 教师编号
+     * 教师号
      */
-    private String teacherNumber;
+    private String teacherId;
     /**
      * 教师名称
      */
     private String teacherName;
     /**
-     * 教师等级
+     * 教师等级  1普通教师  2教务主任
      */
     private int teacherLevel;
-
     /**
      * 录入时间
      */
-    private long createTime;
+    private Date createTime;
 
-
-    public Integer getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
-    }
-
-    public String getTeacherNumber() {
+    public Integer getTeacherNumber() {
         return teacherNumber;
     }
 
-    public void setTeacherNumber(String teacherNumber) {
+    public void setTeacherNumber(Integer teacherNumber) {
         this.teacherNumber = teacherNumber;
+    }
+
+    public String getTeacherId() {
+        return teacherId;
+    }
+
+    public void setTeacherId(String teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getTeacherName() {
@@ -61,11 +61,11 @@ public class TeacherDTO {
         this.teacherLevel = teacherLevel;
     }
 
-    public long getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(long createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 }

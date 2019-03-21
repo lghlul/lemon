@@ -1,9 +1,7 @@
 package com.demo.service.impl;
 
-import com.demo.dao.ClassInfoDao;
 import com.demo.model.Student;
 import com.demo.dto.*;
-import com.demo.dao.StudentClassDao;
 import com.demo.dao.StudentDao;
 import com.demo.service.StudentService;
 import com.github.pagehelper.PageHelper;
@@ -23,18 +21,18 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Object list(ListStudentDTO listStudentDTO) throws Exception {
-        if (listStudentDTO.getPaging()) {
-            PageHelper.startPage(listStudentDTO.getOffset(), listStudentDTO.getLimit());
-            if(listStudentDTO.getSort() != null){
-                PageHelper.orderBy(listStudentDTO.getSort() + " " + listStudentDTO.getSortDir());
+    public Object list(StudentQueryDTO studentQueryDTO) throws Exception {
+        if (studentQueryDTO.getPaging()) {
+            PageHelper.startPage(studentQueryDTO.getOffset(), studentQueryDTO.getLimit());
+            if(studentQueryDTO.getSort() != null){
+                PageHelper.orderBy(studentQueryDTO.getSort() + " " + studentQueryDTO.getSortDir());
             }
-            List<Student> studentList = studentDao.list(listStudentDTO);
+            List<Student> studentList = studentDao.list(studentQueryDTO);
             //得到分页的结果对象
             PageInfo<Student> pageInfo = new PageInfo<>(studentList);
             return pageInfo;
         } else {
-            List<Student> studentList = studentDao.list(listStudentDTO);
+            List<Student> studentList = studentDao.list(studentQueryDTO);
             return studentList;
         }
 
@@ -48,14 +46,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student get(StudentDTO studentDTO) {
-        return this.studentDao.get(studentDTO);
+    public Student read(Integer studentNumber) {
+        return this.studentDao.get(studentNumber);
     }
 
 
     @Override
-    public boolean checkStudentExist(StudentDTO studentDTO) {
-        Student student = studentDao.get(studentDTO);
+    public boolean checkStudentNumberExist(Integer studentNumber) {
+        Student student = studentDao.get(studentNumber);
         if (student == null) {
             return false;
         } else {
@@ -66,13 +64,18 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception {
-        if (studentDTO.getStudentId() != null) {
+        if (studentDTO.getStudentNumber() != null) {
             this.studentDao.update(studentDTO);
         } else {
-            studentDTO.setCreateTime(System.currentTimeMillis());
             this.studentDao.save(studentDTO);
         }
         return studentDTO;
     }
 
+
+    @Override
+    public Student readById(String studentId) {
+        Student student = this.studentDao.getById(studentId);
+        return student;
+    }
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.TeacherClazzDao">
+
+
+    <insert id="save" parameterType="teacherClazzDTO" keyProperty="teacherClazzId" useGeneratedKeys="true">
+    insert into teacher_clazz(teacherNumber , clazzNumber  , createTime , term) values( #{teacherNumber} , #{clazzNumber}  ,now() , #{term})
+   </insert>
+    <update id="update" parameterType="teacherClazzDTO">
+        update teacher_clazz
+        set
+            term = #{term}
+        where teacherNumber = #{teacherNumber} and clazzNumber = #{clazzNumber}
+    </update>
+
+
+    <select id="get" resultType="teacherClazz">
+        select * from teacher_clazz
+    </select>
+
+
+    <select id="list" parameterType="teacherClazzQueryDTO" resultType="teacherClazzDTO">
+      select * from teacher_clazz
+      <where>
+        <if test="teacherNumber != null">
+          teacherNumber = #{teacherNumber}
+        </if>
+      </where>
+    </select>
+
+    <select id="listClazz" parameterType="int" resultType="teacherClazzTermQueryDTO">
+        SELECT
+        b.term,
+        max(score) maxScore,
+        min(score) minScore,
+        AVG(score) avgScore,
+        a.clazzNumber
+        FROM
+        teacher_clazz a
+        JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        <where>
+            <if test="teacherNumber != null">
+                and teacherNumber = #{teacherNumber}
+            </if>
+        </where>
+        GROUP BY
+        term,
+        clazzNumber
+    </select>
+
+
+    <select id="listTeacherByTeacherLevel" resultType="teacherClazzScoreQueryDTO">
+        SELECT
+            a.teacherNumber,
+            max(score) maxScore,
+            min(score) minScore,
+            AVG(score) avgScore,
+            a.clazzNumber
+        FROM
+            teacher_clazz a
+        JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        GROUP BY
+            teacherNumber,
+            clazzNumber
+    </select>
+
+    <delete id="delete" parameterType="int">
+      delete from teacher_clazz where teacherNumber = #{teacherNumber} and clazzNumber = #{clazzNumber}
+    </delete>
+
+
+</mapper>

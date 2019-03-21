@@ -1,5 +1,7 @@
 package com.demo.model;
 
+import java.util.Date;
+
 /**
  * @ClassName Student
  * @Description 表 student
@@ -10,11 +12,11 @@ public class Student {
     /**
      * 主键
      */
-    private int studentId;
+    private Integer studentNumber;
     /**
-     * 学生编号
+     * 学号
      */
-    private String studentNumber;
+    private String studentId;
     /**
      * 学生名称
      */
@@ -22,30 +24,22 @@ public class Student {
     /**
      * 录入时间
      */
-    private long createTime;
+    private Date createTime;
 
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(long createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStudentNumber() {
+    public Integer getStudentNumber() {
         return studentNumber;
     }
 
-    public void setStudentNumber(String studentNumber) {
+    public void setStudentNumber(Integer studentNumber) {
         this.studentNumber = studentNumber;
+    }
+
+    public String getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public String getStudentName() {
@@ -54,5 +48,13 @@ public class Student {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
