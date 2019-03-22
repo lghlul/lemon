@@ -45,7 +45,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher saveOrUpdate(Teacher teacher) throws Exception {
-        if (teacher.getTeacherNumber() != null) {
+        if (teacher.getTeacherNum() != null) {
             teacherDao.update(teacher);
         } else {
             teacherDao.save(teacher);
@@ -54,8 +54,8 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher read(Integer teacherNumber) {
-        return teacherDao.read(teacherNumber);
+    public Teacher read(Integer teacherNum) {
+        return teacherDao.read(teacherNum);
     }
 
     @Override

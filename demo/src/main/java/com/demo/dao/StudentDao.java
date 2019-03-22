@@ -9,13 +9,13 @@ public interface StudentDao {
 
     int save(Student student);
 
-    Student read(int studentNumber);
+    Student read(int studentNum);
 
     Student readById(String studentId);
 
     List<Student> list(StudentQuery studentQuery);
 
-    int delete(int studentNumber);
+    int delete(int studentNum);
 
     int update(Student student);
 

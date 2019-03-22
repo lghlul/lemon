@@ -21,7 +21,7 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public Clazz saveOrUpdate(Clazz clazz) throws Exception {
-        if (clazz.getClazzNumber() != null) {
+        if (clazz.getClazzNum() != null) {
             clazzDao.update(clazz);
         } else {
             clazzDao.save(clazz);
@@ -31,14 +31,14 @@ public class ClazzServiceImpl implements ClazzService {
 
 
     @Override
-    public void delete(Integer clazzNumber) throws Exception {
-        clazzDao.delete(clazzNumber);
+    public void delete(Integer clazzNum) throws Exception {
+        clazzDao.delete(clazzNum);
     }
 
 
     @Override
-    public Clazz read(Integer clazzNumber) {
-        return clazzDao.read(clazzNumber);
+    public Clazz read(Integer clazzNum) {
+        return clazzDao.read(clazzNum);
     }
 
     @Override

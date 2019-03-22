@@ -4,13 +4,13 @@ import com.demo.common.PageResult;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.dto.conveter.StudentConveter;
 import com.demo.model.Student;
 import com.demo.service.StudentService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,13 +42,13 @@ public class StudentController {
                 PageResult pageResult = new PageResult();
                 pageResult.setTotalCount(clazzPageInfo.getTotal());
                 pageResult.setTotalPage(clazzPageInfo.getPages());
-                List<StudentDTO> StudentDTOList = this.batchModelToDto(studentList);
+                List<StudentDTO> StudentDTOList = (List<StudentDTO>)StudentConveter.createDTOs(studentList);
                 pageResult.setList(StudentDTOList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, pageResult);
                 return resultBean;
             } else {
                 studentList = studentService.list(studentQuery);
-                List<StudentDTO> studentDTOList = this.batchModelToDto(studentList);
+                List<StudentDTO> studentDTOList = (List<StudentDTO>)StudentConveter.createDTOs(studentList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, studentDTOList);
                 return resultBean;
             }
@@ -66,9 +66,9 @@ public class StudentController {
      * @return ResultBean
      */
     @DeleteMapping("delete")
-    public ResultBean delete(Integer studentNumber) {
+    public ResultBean delete(Integer studentNum) {
         try {
-            studentService.delete(studentNumber);
+            studentService.delete(studentNum);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS);
             return resultBean;
         } catch (Exception e) {
@@ -84,15 +84,15 @@ public class StudentController {
      * @return ResultBean
      */
     @GetMapping("read")
-    public ResultBean read(Integer studentNumber) {
+    public ResultBean read(Integer studentNum) {
         try {
-            Student student = studentService.read(studentNumber);
+            Student student = studentService.read(studentNum);
             if (student == null) {
                 //学生不存在
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
                 return resultBean;
             }
-            StudentDTO studentDTO = this.modelToDto(student);
+            StudentDTO studentDTO = StudentConveter.createDTO(student);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, studentDTO);
             return resultBean;
 
@@ -113,24 +113,24 @@ public class StudentController {
         try {
 
             Student student = studentService.readById(studentDTO.getStudentId());
-            if (studentDTO.getStudentNumber() != null) {
+            if (studentDTO.getStudentNum() != null) {
                 //更新
                 //如果改变的编号已经存在与其他学生
-                if (student != null && student.getStudentNumber() != studentDTO.getStudentNumber()) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                if (student != null && student.getStudentNum() != studentDTO.getStudentNum()) {
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             } else {
                 //添加
                 //校验编号
                 if (student != null) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             }
-            Student studentModel = this.dtoToModel(studentDTO);
+            Student studentModel = StudentConveter.createModel(studentDTO);
             Student resultStudent = studentService.saveOrUpdate(studentModel);
-            StudentDTO resultStudentDTO = this.modelToDto(resultStudent);
+            StudentDTO resultStudentDTO = StudentConveter.createDTO(resultStudent);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultStudentDTO);
             return resultBean;
         } catch (Exception e) {
@@ -139,52 +139,4 @@ public class StudentController {
         }
     }
 
-
-    /*
-     * @author ll
-     * @Description dto转model
-     * @param StudentDTO
-     * @return Student
-     */
-    private Student dtoToModel(StudentDTO studentDTO) {
-        Student student = new Student();
-        student.setCreateTime(studentDTO.getCreateTime());
-        student.setStudentId(studentDTO.getStudentId());
-        student.setStudentName(studentDTO.getStudentName());
-        student.setStudentNumber(studentDTO.getStudentNumber());
-        return student;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto
-     * @param Student
-     * @return StudentDTO
-     */
-    private StudentDTO modelToDto(Student student) {
-        StudentDTO studentDTO = new StudentDTO();
-        studentDTO.setCreateTime(student.getCreateTime());
-        studentDTO.setStudentId(student.getStudentId());
-        studentDTO.setStudentName(student.getStudentName());
-        studentDTO.setStudentNumber(student.getStudentNumber());
-        return studentDTO;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto(批量)
-     * @param List<Student>
-     * @return List<StudentDTO>
-     */
-    private List<StudentDTO> batchModelToDto(List<Student> studentList) {
-        List<StudentDTO> studentDTOList = null;
-        if (studentList != null) {
-            studentDTOList = new ArrayList<>();
-            for (Student student : studentList) {
-                StudentDTO studentDTO = this.modelToDto(student);
-                studentDTOList.add(studentDTO);
-            }
-        }
-        return studentDTOList;
-    }
 }

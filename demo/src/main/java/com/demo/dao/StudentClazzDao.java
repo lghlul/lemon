@@ -12,10 +12,10 @@ public interface StudentClazzDao {
 
     int update(StudentClazz studentClazz);
 
-    StudentClazz read(@Param("studentNumber") Integer studentNumber, @Param("clazzNumber") Integer clazzNumber);
+    StudentClazz read(@Param("studentNum") Integer studentNum, @Param("clazzNum") Integer clazzNum);
 
     List<StudentClazz> list(StudentClazzQuery studentClazzQuery);
 
-    int delete(@Param("studentNumber") Integer studentNumber, @Param("clazzNumber") Integer clazzNumber);
+    int delete(@Param("studentNum") Integer studentNum, @Param("clazzNum") Integer clazzNum);
 
 }

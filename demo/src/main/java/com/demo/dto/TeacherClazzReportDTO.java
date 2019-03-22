@@ -39,11 +39,11 @@ public class TeacherClazzReportDTO {
     /**
      * 课程主键
      */
-    private Integer clazzNumber;
+    private Integer clazzNum;
     /**
      * 教师主键
      */
-    private Integer teacherNumber;
+    private Integer teacherNum;
 
 
     public String getTeacherId() {
@@ -94,20 +94,20 @@ public class TeacherClazzReportDTO {
         this.teacherName = teacherName;
     }
 
-    public Integer getClazzNumber() {
-        return clazzNumber;
+    public Integer getClazzNum() {
+        return clazzNum;
     }
 
-    public void setClazzNumber(Integer clazzNumber) {
-        this.clazzNumber = clazzNumber;
+    public void setClazzNum(Integer clazzNum) {
+        this.clazzNum = clazzNum;
     }
 
-    public Integer getTeacherNumber() {
-        return teacherNumber;
+    public Integer getTeacherNum() {
+        return teacherNum;
     }
 
-    public void setTeacherNumber(Integer teacherNumber) {
-        this.teacherNumber = teacherNumber;
+    public void setTeacherNum(Integer teacherNum) {
+        this.teacherNum = teacherNum;
     }
 
     public String getClazzName() {

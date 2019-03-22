@@ -23,7 +23,7 @@ public class ResultCodeConstant {
     /**
      * 编号重复
      */
-    public static final String NUMBER_REPEAT = "1000,编号重复";
+    public static final String NUM_REPEAT = "1000,编号重复";
     /**
      * 学生不存在
      */

@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.dao.StudentDao">
 
-    <insert id="save" parameterType="com.demo.model.Student" keyProperty="studentNumber" useGeneratedKeys="true">
+    <insert id="save" parameterType="com.demo.model.Student" keyProperty="studentNum" useGeneratedKeys="true">
     insert into student(studentId , studentName , createTime) values(#{studentId} , #{studentName} , now())
    </insert>
 
     <select id="read" parameterType="int" resultType="com.demo.model.Student">
-        select * from student where studentNumber = #{studentNumber}
+        select * from student where studentNum = #{studentNum}
     </select>
 
     <select id="readById" parameterType="string" resultType="com.demo.model.Student">
@@ -30,11 +30,11 @@
             studentName = #{studentName},
             studentId = #{studentId}
         where
-            studentNumber = #{studentNumber}
+            studentNum = #{studentNum}
     </update>
 
     <delete id="delete" parameterType="int">
-      delete from student where studentNumber = #{studentNumber}
+      delete from student where studentNum = #{studentNum}
     </delete>
 
 

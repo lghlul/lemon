@@ -35,7 +35,7 @@ public class ClazzTermReportDTO {
     /**
      * 课程 主键
      */
-    private Integer clazzNumber;
+    private Integer clazzNum;
 
 
     public Integer getTerm() {
@@ -86,11 +86,11 @@ public class ClazzTermReportDTO {
         this.clazzId = clazzId;
     }
 
-    public Integer getClazzNumber() {
-        return clazzNumber;
+    public Integer getClazzNum() {
+        return clazzNum;
     }
 
-    public void setClazzNumber(Integer clazzNumber) {
-        this.clazzNumber = clazzNumber;
+    public void setClazzNum(Integer clazzNum) {
+        this.clazzNum = clazzNum;
     }
 }

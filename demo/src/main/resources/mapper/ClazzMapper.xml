@@ -4,12 +4,12 @@
 <mapper namespace="com.demo.dao.ClazzDao">
 
 
-    <insert id="save" parameterType="com.demo.model.Clazz" keyProperty="clazzNumber" useGeneratedKeys="true">
+    <insert id="save" parameterType="com.demo.model.Clazz" keyProperty="clazzNum" useGeneratedKeys="true">
       insert into clazz(clazzId , clazzName  , createTime) values(#{clazzId} , #{clazzName}  , now())
    </insert>
 
     <select id="read" parameterType="int" resultType="com.demo.model.Clazz">
-        select * from clazz where clazzNumber = #{clazzNumber}
+        select * from clazz where clazzNum = #{clazzNum}
     </select>
 
     <select id="readById" parameterType="string" resultType="com.demo.model.Clazz">
@@ -22,11 +22,11 @@
           clazzName = #{clazzName},
           clazzId = #{clazzId}
         where
-          clazzNumber = #{clazzNumber}
+          clazzNum = #{clazzNum}
     </update>
 
     <delete id="delete" parameterType="int">
-      delete from clazz where clazzNumber = #{clazzNumber}
+      delete from clazz where clazzNum = #{clazzNum}
     </delete>
 
     <select id="list" parameterType="com.demo.dto.ClazzQuery" resultType="com.demo.model.Clazz">

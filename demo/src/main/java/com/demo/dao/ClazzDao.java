@@ -9,11 +9,11 @@ import java.util.List;
 public interface ClazzDao {
     int save(Clazz Clazz);
 
-    Clazz read(Integer clazzNumber);
+    Clazz read(Integer clazzNum);
 
     Clazz readById(String clazzId);
 
-    int delete(Integer clazzNumber);
+    int delete(Integer clazzNum);
 
     int update(Clazz clazz);
 

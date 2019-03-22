@@ -4,13 +4,13 @@ import com.demo.common.PageResult;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.dto.conveter.TeacherConveter;
 import com.demo.model.Teacher;
 import com.demo.service.TeacherService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,13 +43,13 @@ public class TeacherController {
                 PageResult pageResult = new PageResult();
                 pageResult.setTotalCount(clazzPageInfo.getTotal());
                 pageResult.setTotalPage(clazzPageInfo.getPages());
-                List<TeacherDTO> teacherDTOList = this.batchModelToDto(teacherList);
+                List<TeacherDTO> teacherDTOList = (List<TeacherDTO>)TeacherConveter.createDTOs(teacherList);
                 pageResult.setList(teacherDTOList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, pageResult);
                 return resultBean;
             } else {
                 teacherList = teacherService.list(teacherQuery);
-                List<TeacherDTO> teacherDTOList = this.batchModelToDto(teacherList);
+                List<TeacherDTO> teacherDTOList = (List<TeacherDTO>)TeacherConveter.createDTOs(teacherList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, teacherDTOList);
                 return resultBean;
             }
@@ -67,9 +67,9 @@ public class TeacherController {
      * @return ResultBean
      */
     @DeleteMapping("delete")
-    public ResultBean delete(Integer teacherNumber) {
+    public ResultBean delete(Integer teacherNum) {
         try {
-            teacherService.delete(teacherNumber);
+            teacherService.delete(teacherNum);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS);
             return resultBean;
         } catch (Exception e) {
@@ -88,11 +88,11 @@ public class TeacherController {
     public ResultBean saveOrUpdate(TeacherDTO teacherDTO) {
         try {
             Teacher teacherDO = teacherService.readById(teacherDTO.getTeacherId());
-            if (teacherDTO.getTeacherNumber() != null) {
+            if (teacherDTO.getTeacherNum() != null) {
                 //更新
                 //如果改变的编号已经存在与其他教师
                 if (teacherDO != null && teacherDO.getTeacherId() != teacherDTO.getTeacherId()) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             } else {
@@ -100,13 +100,13 @@ public class TeacherController {
                 //校验编号
                 Teacher teacher = teacherService.readById(teacherDTO.getTeacherId());
                 if (teacher != null) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             }
-            Teacher teacher = this.dtoToModel(teacherDTO);
+            Teacher teacher = TeacherConveter.createModel(teacherDTO);
             Teacher resultTeacher = teacherService.saveOrUpdate(teacher);
-            TeacherDTO resultTeacherDTO = this.modelToDto(resultTeacher);
+            TeacherDTO resultTeacherDTO = TeacherConveter.createDTO(resultTeacher);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultTeacherDTO);
             return resultBean;
         } catch (Exception e) {
@@ -123,16 +123,16 @@ public class TeacherController {
      * @return ResultBean
      */
     @GetMapping("read")
-    public ResultBean read(Integer teacherNumber) {
+    public ResultBean read(Integer teacherNum) {
         try {
 
-            Teacher teacher = teacherService.read(teacherNumber);
+            Teacher teacher = teacherService.read(teacherNum);
             if (teacher == null) {
                 //教师不存在
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
                 return resultBean;
             }
-            TeacherDTO teacherDTO = this.modelToDto(teacher);
+            TeacherDTO teacherDTO = TeacherConveter.createDTO(teacher);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, teacherDTO);
             return resultBean;
 
@@ -142,54 +142,4 @@ public class TeacherController {
         }
     }
 
-
-    /*
-     * @author ll
-     * @Description dto转model
-     * @param TeacherDTO
-     * @return Teacher
-     */
-    private Teacher dtoToModel(TeacherDTO teacherDTO) {
-        Teacher teacher = new Teacher();
-        teacher.setCreateTime(teacherDTO.getCreateTime());
-        teacher.setTeacherId(teacherDTO.getTeacherId());
-        teacher.setTeacherName(teacherDTO.getTeacherName());
-        teacher.setTeacherLevel(teacherDTO.getTeacherLevel());
-        teacher.setTeacherNumber(teacherDTO.getTeacherNumber());
-        return teacher;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto
-     * @param Teacher
-     * @return TeacherDTO
-     */
-    private TeacherDTO modelToDto(Teacher teacher) {
-        TeacherDTO teacherDTO = new TeacherDTO();
-        teacherDTO.setCreateTime(teacher.getCreateTime());
-        teacherDTO.setTeacherId(teacher.getTeacherId());
-        teacherDTO.setTeacherName(teacher.getTeacherName());
-        teacherDTO.setTeacherLevel(teacher.getTeacherLevel());
-        teacherDTO.setTeacherNumber(teacher.getTeacherNumber());
-        return teacherDTO;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto(批量)
-     * @param List<Teacher>
-     * @return List<TeacherDTO>
-     */
-    private List<TeacherDTO> batchModelToDto(List<Teacher> teacherList) {
-        List<TeacherDTO> teacherDTOList = null;
-        if (teacherList != null) {
-            teacherDTOList = new ArrayList<>();
-            for (Teacher teacher : teacherList) {
-                TeacherDTO teacherDTO = this.modelToDto(teacher);
-                teacherDTOList.add(teacherDTO);
-            }
-        }
-        return teacherDTOList;
-    }
 }

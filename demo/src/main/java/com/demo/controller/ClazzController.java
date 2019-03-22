@@ -4,13 +4,13 @@ import com.demo.common.PageResult;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
+import com.demo.dto.conveter.ClazzConveter;
 import com.demo.model.Clazz;
 import com.demo.service.ClazzService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,9 +33,9 @@ public class ClazzController {
      * @return ResultBean
      */
     @DeleteMapping("delete")
-    public ResultBean delete(Integer clazzNumber) {
+    public ResultBean delete(Integer clazzNum) {
         try {
-            clazzService.delete(clazzNumber);
+            clazzService.delete(clazzNum);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS);
             return resultBean;
         } catch (Exception e) {
@@ -55,24 +55,24 @@ public class ClazzController {
         try {
             Clazz clazz = clazzService.readById(clazzDTO.getClazzId());
 
-            if (clazzDTO.getClazzNumber() != null) {
+            if (clazzDTO.getClazzNum() != null) {
                 //更新
                 //校验编号
-                if (clazz != null && clazz.getClazzNumber() != clazzDTO.getClazzNumber()) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                if (clazz != null && clazz.getClazzNum() != clazzDTO.getClazzNum()) {
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             } else {
                 //添加
                 //校验编号
                 if (clazz != null) {
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
+                    ResultBean resultBean = new ResultBean(ResultCodeConstant.NUM_REPEAT);
                     return resultBean;
                 }
             }
-            Clazz clazzModel = this.dtoToModel(clazzDTO);
+            Clazz clazzModel = ClazzConveter.createModel(clazzDTO);
             Clazz resultClazz = clazzService.saveOrUpdate(clazzModel);
-            ClazzDTO resultClazzDTO = this.modelToDto(resultClazz);
+            ClazzDTO resultClazzDTO = ClazzConveter.createDTO(resultClazz);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultClazzDTO);
             return resultBean;
         } catch (Exception e) {
@@ -98,13 +98,13 @@ public class ClazzController {
                 PageResult pageResult = new PageResult();
                 pageResult.setTotalCount(clazzPageInfo.getTotal());
                 pageResult.setTotalPage(clazzPageInfo.getPages());
-                List<ClazzDTO> clazzDTOList = this.batchModelToDto(clazzList);
+                List<ClazzDTO> clazzDTOList = (List<ClazzDTO>) ClazzConveter.createDTOs(clazzList);
                 pageResult.setList(clazzDTOList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, pageResult);
                 return resultBean;
             } else {
                 clazzList = clazzService.list(clazzQuery);
-                List<ClazzDTO> clazzDTOList = this.batchModelToDto(clazzList);
+                List<ClazzDTO> clazzDTOList = (List<ClazzDTO>) ClazzConveter.createDTOs(clazzList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzDTOList);
                 return resultBean;
             }
@@ -121,15 +121,15 @@ public class ClazzController {
      * @return ResultBean
      */
     @GetMapping("read")
-    public ResultBean read(Integer clazzNumber) {
+    public ResultBean read(Integer clazzNum) {
         try {
-            Clazz clazz = clazzService.read(clazzNumber);
+            Clazz clazz = clazzService.read(clazzNum);
             if (clazz == null) {
                 //课程不存在
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.CLAZZ_NOT_EXIST);
                 return resultBean;
             } else {
-                ClazzDTO clazzDTO = this.modelToDto(clazz);
+                ClazzDTO clazzDTO = ClazzConveter.createDTO(clazz);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzDTO);
                 return resultBean;
             }
@@ -139,52 +139,5 @@ public class ClazzController {
         }
     }
 
-    /*
-     * @author ll
-     * @Description dto转model
-     * @param ClazzDTO
-     * @return Clazz
-     */
-    private Clazz dtoToModel(ClazzDTO clazzDTO) {
-        Clazz clazz = new Clazz();
-        clazz.setClazzId(clazzDTO.getClazzId());
-        clazz.setClazzName(clazzDTO.getClazzName());
-        clazz.setClazzNumber(clazzDTO.getClazzNumber());
-        clazz.setCreateTime(clazzDTO.getCreateTime());
-        return clazz;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto
-     * @param Clazz
-     * @return ClazzDTO
-     */
-    private ClazzDTO modelToDto(Clazz clazz) {
-        ClazzDTO clazzDTO = new ClazzDTO();
-        clazzDTO.setClazzId(clazz.getClazzId());
-        clazzDTO.setClazzName(clazz.getClazzName());
-        clazzDTO.setClazzNumber(clazz.getClazzNumber());
-        clazzDTO.setCreateTime(clazz.getCreateTime());
-        return clazzDTO;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto(批量)
-     * @param List<Clazz>
-     * @return List<ClazzDTO>
-     */
-    private List<ClazzDTO> batchModelToDto(List<Clazz> clazzList) {
-        List<ClazzDTO> clazzDTOList = null;
-        if (clazzList != null) {
-            clazzDTOList = new ArrayList<>();
-            for (Clazz clazz : clazzList) {
-                ClazzDTO clazzDTO = this.modelToDto(clazz);
-                clazzDTOList.add(clazzDTO);
-            }
-        }
-        return clazzDTOList;
-    }
 
 }

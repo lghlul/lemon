@@ -45,14 +45,14 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student read(Integer studentNumber) {
-        return this.studentDao.read(studentNumber);
+    public Student read(Integer studentNum) {
+        return this.studentDao.read(studentNum);
     }
 
 
     @Override
     public Student saveOrUpdate(Student student) throws Exception {
-        if (student.getStudentNumber() != null) {
+        if (student.getStudentNum() != null) {
             this.studentDao.update(student);
         } else {
             this.studentDao.save(student);

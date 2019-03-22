@@ -16,10 +16,10 @@ public interface TeacherClazzDao {
 
     List<TeacherClazz> list(TeacherClazzQuery teacherClazzQuery);
 
-    List<ClazzTermReport> listClazz(@Param("teacherNumber") Integer teacherNumber);
+    List<ClazzTermReport> listClazz(@Param("teacherNum") Integer teacherNum);
 
     List<TeacherClazzReport> listTeacherByTeacherLevel();
 
-    int delete(@Param("teacherNumber") Integer teacherNumber, @Param("clazzNumber") Integer clazzNumber);
+    int delete(@Param("teacherNum") Integer teacherNum, @Param("clazzNum") Integer clazzNum);
 
 }

@@ -24,7 +24,7 @@ public class TeacherClazzServiceImpl implements TeacherClazzService {
 
     @Override
     public TeacherClazz saveOrUpdate(TeacherClazz teacherClazz) throws Exception {
-        /*if (teacherClazzDTO.getClazzNumber() != null && teacherClazzDTO.getTeacherNumber() != null && teacherClazzDTO.getTerm() != null) {
+        /*if (teacherClazzDTO.getClazzNum() != null && teacherClazzDTO.getTeacherNum() != null && teacherClazzDTO.getTerm() != null) {
             teacherClazzDao.update(teacherClazzDTO);
         } else {
             teacherClazzDao.save(teacherClazzDTO);
@@ -55,14 +55,14 @@ public class TeacherClazzServiceImpl implements TeacherClazzService {
 
 
     @Override
-    public void delete(Integer teacherNumber, Integer clazzNumber) throws Exception {
-        this.teacherClazzDao.delete(teacherNumber, clazzNumber);
+    public void delete(Integer teacherNum, Integer clazzNum) throws Exception {
+        this.teacherClazzDao.delete(teacherNum, clazzNum);
     }
 
 
     @Override
-    public List<ClazzTermReport> listByTerm(Integer teacherNumber) throws Exception {
-        List<ClazzTermReport> clazzTermReports = this.teacherClazzDao.listClazz(teacherNumber);
+    public List<ClazzTermReport> listByTerm(Integer teacherNum) throws Exception {
+        List<ClazzTermReport> clazzTermReports = this.teacherClazzDao.listClazz(teacherNum);
         return clazzTermReports;
     }
 

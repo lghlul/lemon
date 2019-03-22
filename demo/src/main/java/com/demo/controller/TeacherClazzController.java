@@ -5,6 +5,9 @@ import com.demo.common.ResultBean;
 import com.demo.constant.CommonConstant;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
+import com.demo.dto.conveter.ClazzTermReportConveter;
+import com.demo.dto.conveter.TeacherClazzConveter;
+import com.demo.dto.conveter.TeacherClazzReportConveter;
 import com.demo.model.*;
 import com.demo.service.ClazzService;
 import com.demo.service.TeacherClazzService;
@@ -13,7 +16,6 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,9 +48,9 @@ public class TeacherClazzController {
     @PostMapping("saveOrUpdate")
     public ResultBean saveOrUpdate(TeacherClazzDTO teacherClazzDTO) {
         try {
-            TeacherClazz teacherClazz = this.dtoToModel(teacherClazzDTO);
+            TeacherClazz teacherClazz = TeacherClazzConveter.createModel(teacherClazzDTO);
             TeacherClazz resultTeacherClazz = teacherClazzService.saveOrUpdate(teacherClazz);
-            TeacherClazzDTO resultTeacherDTOClazz = this.modelToDto(resultTeacherClazz);
+            TeacherClazzDTO resultTeacherDTOClazz = TeacherClazzConveter.createDTO(resultTeacherClazz);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultTeacherDTOClazz);
             return resultBean;
         } catch (Exception e) {
@@ -75,13 +77,15 @@ public class TeacherClazzController {
                 PageResult pageResult = new PageResult();
                 pageResult.setTotalCount(clazzPageInfo.getTotal());
                 pageResult.setTotalPage(clazzPageInfo.getPages());
-                List<TeacherClazzDTO> teacherClazzDTOList = this.batchModelToDto(teacherClazzList);
+                List<TeacherClazzDTO> teacherClazzDTOList = (List<TeacherClazzDTO>) TeacherClazzConveter.createDTOs(teacherClazzList);
+                this.listNameForTeacherClass(teacherClazzDTOList);
                 pageResult.setList(teacherClazzDTOList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, pageResult);
                 return resultBean;
             } else {
                 teacherClazzList = teacherClazzService.list(teacherClazzQuery);
-                List<TeacherClazzDTO> teacherClazzDTOList = this.batchModelToDto(teacherClazzList);
+                List<TeacherClazzDTO> teacherClazzDTOList = (List<TeacherClazzDTO>) TeacherClazzConveter.createDTOs(teacherClazzList);
+                this.listNameForTeacherClass(teacherClazzDTOList);
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, teacherClazzDTOList);
                 return resultBean;
             }
@@ -100,9 +104,9 @@ public class TeacherClazzController {
      * @return ResultBean
      */
     @DeleteMapping("delete")
-    public ResultBean delete(Integer teacherNumber, Integer clazzNumber) {
+    public ResultBean delete(Integer teacherNum, Integer clazzNum) {
         try {
-            teacherClazzService.delete(teacherNumber, clazzNumber);
+            teacherClazzService.delete(teacherNum, clazzNum);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS);
             return resultBean;
         } catch (Exception e) {
@@ -119,10 +123,11 @@ public class TeacherClazzController {
      * @return ResultBean
      */
     @GetMapping("listByTerm")
-    public ResultBean listByTerm(Integer teacherNumber) {
+    public ResultBean listByTerm(Integer teacherNum) {
         try {
-            List<ClazzTermReport> clazzTermReports = teacherClazzService.listByTerm(teacherNumber);
-            List<ClazzTermReportDTO> clazzTermReportDTOList = this.batchClazzTermReportModelToDto(clazzTermReports);
+            List<ClazzTermReport> clazzTermReports = teacherClazzService.listByTerm(teacherNum);
+            List<ClazzTermReportDTO> clazzTermReportDTOList = (List<ClazzTermReportDTO>) ClazzTermReportConveter.createDTOs(clazzTermReports);
+            this.listClazzName(clazzTermReportDTOList);
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzTermReportDTOList);
             return resultBean;
         } catch (Exception e) {
@@ -138,14 +143,15 @@ public class TeacherClazzController {
      * @return ResultBean
      */
     @GetMapping("listClazzByTeacherLevel")
-    public ResultBean listClazzByTeacherLevel(Integer teacherNumber) {
+    public ResultBean listClazzByTeacherLevel(Integer teacherNum) {
         try {
-            ResultBean resultBean = checkPermission(teacherNumber);
+            ResultBean resultBean = checkPermission(teacherNum);
             if (resultBean != null) {
                 return resultBean;
             }
             List<ClazzTermReport> clazzTermReports = teacherClazzService.listClazzByTeacherLevel();
-            List<ClazzTermReportDTO> clazzTermReportDTOList = this.batchClazzTermReportModelToDto(clazzTermReports);
+            List<ClazzTermReportDTO> clazzTermReportDTOList = (List<ClazzTermReportDTO>) ClazzTermReportConveter.createDTOs(clazzTermReports);
+            this.listClazzName(clazzTermReportDTOList);
             resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzTermReportDTOList);
             return resultBean;
         } catch (Exception e) {
@@ -163,15 +169,16 @@ public class TeacherClazzController {
      * @return ResultBean
      */
     @GetMapping("listTeacherByTeacherLevel")
-    public ResultBean listTeacherByTeacherLevel(Integer teacherNumber) {
+    public ResultBean listTeacherByTeacherLevel(Integer teacherNum) {
         try {
-            ResultBean resultBean = checkPermission(teacherNumber);
+            ResultBean resultBean = checkPermission(teacherNum);
             if (resultBean != null) {
                 return resultBean;
             }
             List<TeacherClazzReport> teacherClazzReports = teacherClazzService.listTeacherByTeacherLevel();
 
-            List<TeacherClazzReportDTO> teacherClazzReportDTOList = this.batchTeacherClazzReportModelToDto(teacherClazzReports);
+            List<TeacherClazzReportDTO> teacherClazzReportDTOList = (List<TeacherClazzReportDTO>) TeacherClazzReportConveter.createDTOs(teacherClazzReports);
+            this.listNameForReport(teacherClazzReportDTOList);
             resultBean = new ResultBean(ResultCodeConstant.SUCCESS, teacherClazzReportDTOList);
             return resultBean;
         } catch (Exception e) {
@@ -186,9 +193,9 @@ public class TeacherClazzController {
      * @param Integer
      * @return ResultBean
      */
-    private ResultBean checkPermission(Integer teacherNumber) {
+    private ResultBean checkPermission(Integer teacherNum) {
         //校验 老师是否存在
-        Teacher teacher = teacherService.read(teacherNumber);
+        Teacher teacher = teacherService.read(teacherNum);
         if (teacher == null) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.TEACHER_NOT_EXIST);
             return resultBean;
@@ -205,48 +212,18 @@ public class TeacherClazzController {
 
     /*
      * @author ll
-     * @Description dto转model
-     * @param TeacherClazzDTO
-     * @return TeacherClazz
+     * @Description 关联查询教师课程的名称
+     * @param List<TeacherClazzDTO>
+     * @return void
      */
-    private TeacherClazz dtoToModel(TeacherClazzDTO teacherClazzDTO) {
-        TeacherClazz teacherClazz = new TeacherClazz();
-        teacherClazz.setCreateTime(teacherClazzDTO.getCreateTime());
-        teacherClazz.setClazzNumber(teacherClazzDTO.getClazzNumber());
-        teacherClazz.setTeacherNumber(teacherClazzDTO.getTeacherNumber());
-        return teacherClazz;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto
-     * @param TeacherClazz
-     * @return TeacherClazzDTO
-     */
-    private TeacherClazzDTO modelToDto(TeacherClazz teacherClazz) {
-        TeacherClazzDTO teacherClazzDTO = new TeacherClazzDTO();
-        teacherClazzDTO.setCreateTime(teacherClazz.getCreateTime());
-        teacherClazzDTO.setClazzNumber(teacherClazz.getClazzNumber());
-        teacherClazzDTO.setTeacherNumber(teacherClazz.getTeacherNumber());
-        return teacherClazzDTO;
-    }
-
-    /*
-     * @author ll
-     * @Description model转dto(批量)
-     * @param List<TeacherClazz>
-     * @return List<TeacherClazzDTO>
-     */
-    private List<TeacherClazzDTO> batchModelToDto(List<TeacherClazz> teacherClazzList) throws Exception {
-        List<TeacherClazzDTO> teacherClazzDTOList = null;
-        if (teacherClazzList != null) {
-            teacherClazzDTOList = new ArrayList<>();
+    private void listNameForTeacherClass(List<TeacherClazzDTO> teacherClazzDTOList) throws Exception {
+        if (teacherClazzDTOList != null) {
             List<Clazz> clazzList = clazzService.list(null);
             // 本应该有缓存   此处用map代替
             Map<Integer, Clazz> clazzMap = new HashMap<>();
             if (clazzList != null) {
                 for (Clazz clazz : clazzList) {
-                    clazzMap.put(clazz.getClazzNumber(), clazz);
+                    clazzMap.put(clazz.getClazzNum(), clazz);
                 }
             }
 
@@ -255,80 +232,63 @@ public class TeacherClazzController {
             Map<Integer, Teacher> teacherMap = new HashMap<>();
             if (clazzList != null) {
                 for (Teacher teacher : teacherList) {
-                    teacherMap.put(teacher.getTeacherNumber(), teacher);
+                    teacherMap.put(teacher.getTeacherNum(), teacher);
                 }
             }
-
-            for (TeacherClazz teacherClazz : teacherClazzList) {
-                TeacherClazzDTO teacherClazzDTO = this.modelToDto(teacherClazz);
-                Clazz clazz = clazzMap.get(teacherClazz.getClazzNumber());
+            for (TeacherClazzDTO teacherClazzDTO : teacherClazzDTOList) {
+                Clazz clazz = clazzMap.get(teacherClazzDTO.getClazzNum());
                 if (clazz != null) {
                     teacherClazzDTO.setClazzName(clazz.getClazzName());
                 }
                 //设置教师名称与教师编号
-                Teacher teacher = teacherMap.get(teacherClazz.getTeacherNumber());
+                Teacher teacher = teacherMap.get(teacherClazzDTO.getTeacherNum());
                 if (teacher != null) {
                     teacherClazzDTO.setTeacherName(teacher.getTeacherName());
                 }
-                teacherClazzDTOList.add(teacherClazzDTO);
             }
         }
-        return teacherClazzDTOList;
     }
 
     /*
      * @author ll
-     * @Description ClazzTermReport model转dto(批量)
-     * @param List<ClazzTermReport>
-     * @return List<ClazzTermReportDTO>
+     * @Description 关联查询课程名称
+     * @param List<ClazzTermReportDTO>
+     * @return void
      */
-    private List<ClazzTermReportDTO> batchClazzTermReportModelToDto(List<ClazzTermReport> clazzTermReportList) throws Exception {
-        List<ClazzTermReportDTO> clazzTermReportDTOList = null;
-        if (clazzTermReportList != null) {
-            clazzTermReportDTOList = new ArrayList<>();
+    private void listClazzName(List<ClazzTermReportDTO> clazzTermReportDTOList) throws Exception {
+        if (clazzTermReportDTOList != null) {
             List<Clazz> clazzList = clazzService.list(null);
             // 本应该有缓存   此处用map代替
             Map<Integer, Clazz> clazzMap = new HashMap<>();
             if (clazzList != null) {
                 for (Clazz clazz : clazzList) {
-                    clazzMap.put(clazz.getClazzNumber(), clazz);
+                    clazzMap.put(clazz.getClazzNum(), clazz);
                 }
             }
-            for (ClazzTermReport clazzTermReport : clazzTermReportList) {
-                ClazzTermReportDTO clazzTermReportDTO = new ClazzTermReportDTO();
-                clazzTermReportDTO.setAvgScore(clazzTermReport.getAvgScore());
-                clazzTermReportDTO.setClazzId(clazzTermReport.getClazzId());
-                clazzTermReportDTO.setMaxScore(clazzTermReport.getMaxScore());
-                clazzTermReportDTO.setMinScore(clazzTermReport.getMinScore());
-                clazzTermReportDTO.setClazzNumber(clazzTermReport.getClazzNumber());
-                clazzTermReportDTO.setTerm(clazzTermReport.getTerm());
-                Clazz clazz = clazzMap.get(clazzTermReport.getClazzNumber());
+            for (ClazzTermReportDTO clazzTermReportDTO : clazzTermReportDTOList) {
+                Clazz clazz = clazzMap.get(clazzTermReportDTO.getClazzNum());
                 if (clazz != null) {
                     clazzTermReportDTO.setClazzName(clazz.getClazzName());
                     clazzTermReportDTO.setClazzId(clazz.getClazzId());
                 }
-                clazzTermReportDTOList.add(clazzTermReportDTO);
             }
         }
-        return clazzTermReportDTOList;
     }
 
     /*
      * @author ll
-     * @Description TeacherClazzReport model转dto(批量)
+     * @Description 关联查询出教师和课程的名称
      * @param List<TeacherClazzReport>
      * @return List<TeacherClazzReportDTO>
      */
-    private List<TeacherClazzReportDTO> batchTeacherClazzReportModelToDto(List<TeacherClazzReport> teacherClazzReportList) throws Exception {
-        List<TeacherClazzReportDTO> teacherClazzReportDTOList = null;
-        if (teacherClazzReportList != null) {
-            teacherClazzReportDTOList = new ArrayList<>();
+    private void listNameForReport(List<TeacherClazzReportDTO> teacherClazzReportDTOList) throws Exception {
+        if (teacherClazzReportDTOList != null) {
             List<Clazz> clazzList = clazzService.list(null);
             // 本应该有缓存   此处用map代替
             Map<Integer, Clazz> clazzMap = new HashMap<>();
             if (clazzList != null) {
                 for (Clazz clazz : clazzList) {
-                    clazzMap.put(clazz.getClazzNumber(), clazz);
+                    clazzMap.put(clazz.getClazzNum(), clazz);
                 }
             }
             List<Teacher> teacherList = teacherService.list(null);
@@ -336,33 +296,24 @@ public class TeacherClazzController {
             Map<Integer, Teacher> teacherMap = new HashMap<>();
             if (clazzList != null) {
                 for (Teacher teacher : teacherList) {
-                    teacherMap.put(teacher.getTeacherNumber(), teacher);
+                    teacherMap.put(teacher.getTeacherNum(), teacher);
                 }
             }
-            for (TeacherClazzReport teacherClazzReport : teacherClazzReportList) {
-                TeacherClazzReportDTO teacherClazzReportDTO = new TeacherClazzReportDTO();
-                teacherClazzReportDTO.setAvgScore(teacherClazzReport.getAvgScore());
-                teacherClazzReportDTO.setClazzId(teacherClazzReport.getClazzId());
-                teacherClazzReportDTO.setMaxScore(teacherClazzReport.getMaxScore());
-                teacherClazzReportDTO.setMinScore(teacherClazzReport.getMinScore());
-                teacherClazzReportDTO.setTeacherNumber(teacherClazzReport.getTeacherNumber());
-                teacherClazzReportDTO.setClazzNumber(teacherClazzReport.getClazzNumber());
+            for (TeacherClazzReportDTO teacherClazzReportDTO : teacherClazzReportDTOList) {
                 //设置课程名称与课程编号
-                Clazz clazz = clazzMap.get(teacherClazzReport.getClazzNumber());
+                Clazz clazz = clazzMap.get(teacherClazzReportDTO.getClazzNum());
                 if (clazz != null) {
                     teacherClazzReportDTO.setClazzName(clazz.getClazzName());
                     teacherClazzReportDTO.setClazzId(clazz.getClazzId());
                 }
                 //设置教师名称与教师编号
-                Teacher teacher = teacherMap.get(teacherClazzReport.getTeacherNumber());
+                Teacher teacher = teacherMap.get(teacherClazzReportDTO.getTeacherNum());
                 if (teacher != null) {
                     teacherClazzReportDTO.setTeacherName(teacher.getTeacherName());
                     teacherClazzReportDTO.setTeacherId(teacher.getTeacherId());
                 }
-                teacherClazzReportDTOList.add(teacherClazzReportDTO);
             }
         }
-        return teacherClazzReportDTOList;
     }
 
 }

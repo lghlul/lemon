@@ -12,7 +12,7 @@ public class Student {
     /**
      * 主键
      */
-    private Integer studentNumber;
+    private Integer studentNum;
     /**
      * 学号
      */
@@ -26,12 +26,12 @@ public class Student {
      */
     private Date createTime;
 
-    public Integer getStudentNumber() {
-        return studentNumber;
+    public Integer getStudentNum() {
+        return studentNum;
     }
 
-    public void setStudentNumber(Integer studentNumber) {
-        this.studentNumber = studentNumber;
+    public void setStudentNum(Integer studentNum) {
+        this.studentNum = studentNum;
     }
 
     public String getStudentId() {

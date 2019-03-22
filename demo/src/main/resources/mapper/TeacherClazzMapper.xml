@@ -4,24 +4,24 @@
 <mapper namespace="com.demo.dao.TeacherClazzDao">
 
 
-    <insert id="save" parameterType="com.demo.model.TeacherClazz" keyProperty="teacherClazzId" useGeneratedKeys="true">
-    insert into teacher_clazz(teacherNumber , clazzNumber  , createTime ) values( #{teacherNumber} , #{clazzNumber}  ,now())
+    <insert id="save" parameterType="com.demo.model.TeacherClazz">
+    insert into teacher_clazz(teacherNum , clazzNum  , createTime ) values( #{teacherNum} , #{clazzNum}  ,now())
    </insert>
     <update id="update" parameterType="com.demo.model.TeacherClazz">
         update teacher_clazz
         set
             term = #{term}
-        where teacherNumber = #{teacherNumber} and clazzNumber = #{clazzNumber}
+        where teacherNum = #{teacherNum} and clazzNum = #{clazzNum}
     </update>
 
 
     <select id="list" parameterType="com.demo.dto.TeacherClazzQuery" resultType="com.demo.model.TeacherClazz">
-      select * from teacher_clazz
-      <where>
-        <if test="teacherNumber != null">
-          teacherNumber = #{teacherNumber}
-        </if>
-      </where>
+        select * from teacher_clazz
+        <where>
+            <if test="teacherNum != null">
+                teacherNum = #{teacherNum}
+            </if>
+        </where>
     </select>
 
     <select id="listClazz" parameterType="int" resultType="com.demo.model.ClazzTermReport">
@@ -30,38 +30,38 @@
         max(score) maxScore,
         min(score) minScore,
         AVG(score) avgScore,
-        a.clazzNumber
+        a.clazzNum
         FROM
         teacher_clazz a
-        inner JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        inner JOIN student_clazz b ON a.clazzNum = b.clazzNum
         <where>
-            <if test="teacherNumber != null">
-                and teacherNumber = #{teacherNumber}
+            <if test="teacherNum != null">
+                and teacherNum = #{teacherNum}
             </if>
         </where>
         GROUP BY
         term,
-        clazzNumber
+        clazzNum
     </select>
 
 
     <select id="listTeacherByTeacherLevel" resultType="com.demo.model.TeacherClazzReport">
         SELECT
-            a.teacherNumber,
+            a.teacherNum,
             max(score) maxScore,
             min(score) minScore,
             AVG(score) avgScore,
-            a.clazzNumber
+            a.clazzNum
         FROM
             teacher_clazz a
-        inner JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        inner JOIN student_clazz b ON a.clazzNum = b.clazzNum
         GROUP BY
-            teacherNumber,
-            clazzNumber
+            teacherNum,
+            clazzNum
     </select>
 
     <delete id="delete" parameterType="int">
-      delete from teacher_clazz where teacherNumber = #{teacherNumber} and clazzNumber = #{clazzNumber}
+      delete from teacher_clazz where teacherNum = #{teacherNum} and clazzNum = #{clazzNum}
     </delete>
 
 

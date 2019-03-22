@@ -27,8 +27,8 @@ public class StudentClazzServiceImpl implements StudentClazzService {
 
 
     @Override
-    public boolean checkStudentClazzExist(Integer studentNumber, Integer clazzNumber) {
-        StudentClazz studentClazz = this.studentClazzDao.read(studentNumber, clazzNumber);
+    public boolean checkStudentClazzExist(Integer studentNum, Integer clazzNum) {
+        StudentClazz studentClazz = this.studentClazzDao.read(studentNum, clazzNum);
         if (studentClazz == null) {
             //没有选课
             return false;
@@ -39,7 +39,7 @@ public class StudentClazzServiceImpl implements StudentClazzService {
 
     @Override
     public StudentClazz saveOrUpdate(StudentClazz studentClazz) throws Exception {
-        if (studentClazz.getClazzNumber() != null && studentClazz.getStudentNumber() != null && studentClazz.getScore() != null) {
+        if (studentClazz.getClazzNum() != null && studentClazz.getStudentNum() != null && studentClazz.getScore() != null) {
             this.studentClazzDao.update(studentClazz);
         } else {
             this.studentClazzDao.save(studentClazz);
@@ -48,7 +48,7 @@ public class StudentClazzServiceImpl implements StudentClazzService {
     }
 
     @Override
-    public void delete(Integer studentNumber, Integer clazzNumber) throws Exception {
-        this.studentClazzDao.delete(studentNumber, clazzNumber);
+    public void delete(Integer studentNum, Integer clazzNum) throws Exception {
+        this.studentClazzDao.delete(studentNum, clazzNum);
     }
 }

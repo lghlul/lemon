@@ -11,13 +11,13 @@ public class TeacherClazzQuery extends PageQuery {
     /**
      * 教师主键  可选查询参数
      */
-    private Integer teacherNumber;
+    private Integer teacherNum;
 
-    public Integer getTeacherNumber() {
-        return teacherNumber;
+    public Integer getTeacherNum() {
+        return teacherNum;
     }
 
-    public void setTeacherNumber(Integer teacherNumber) {
-        this.teacherNumber = teacherNumber;
+    public void setTeacherNum(Integer teacherNum) {
+        this.teacherNum = teacherNum;
     }
 }

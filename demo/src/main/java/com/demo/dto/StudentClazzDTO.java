@@ -12,7 +12,7 @@ public class StudentClazzDTO {
     /**
      * 学生主键
      */
-    private Integer studentNumber;
+    private Integer studentNum;
     /**
      * 课程名称
      */
@@ -26,7 +26,7 @@ public class StudentClazzDTO {
     /**
      * 课程主键
      */
-    private Integer clazzNumber;
+    private Integer clazzNum;
 
     /**
      * 选课时间
@@ -39,12 +39,12 @@ public class StudentClazzDTO {
     private Integer term;
 
 
-    public Integer getStudentNumber() {
-        return studentNumber;
+    public Integer getStudentNum() {
+        return studentNum;
     }
 
-    public void setStudentNumber(Integer studentNumber) {
-        this.studentNumber = studentNumber;
+    public void setStudentNum(Integer studentNum) {
+        this.studentNum = studentNum;
     }
 
     public Double getScore() {
@@ -55,12 +55,12 @@ public class StudentClazzDTO {
         this.score = score;
     }
 
-    public Integer getClazzNumber() {
-        return clazzNumber;
+    public Integer getClazzNum() {
+        return clazzNum;
     }
 
-    public void setClazzNumber(Integer clazzNumber) {
-        this.clazzNumber = clazzNumber;
+    public void setClazzNum(Integer clazzNum) {
+        this.clazzNum = clazzNum;
     }
 
     public Date getCreateTime() {

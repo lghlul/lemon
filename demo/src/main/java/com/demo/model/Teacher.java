@@ -3,7 +3,7 @@ package com.demo.model;
 import java.util.Date;
 
 /**
- * @ClassName Teacher
+ * @ClassName TeacherConveter
  * @Description 表 teacher
  * @date 2019年3月18日
  * @Auther ll
@@ -12,7 +12,7 @@ public class Teacher {
     /**
      * 主键
      */
-    private Integer teacherNumber;
+    private Integer teacherNum;
     /**
      * 教师号
      */
@@ -30,12 +30,12 @@ public class Teacher {
      */
     private Date createTime;
 
-    public Integer getTeacherNumber() {
-        return teacherNumber;
+    public Integer getTeacherNum() {
+        return teacherNum;
     }
 
-    public void setTeacherNumber(Integer teacherNumber) {
-        this.teacherNumber = teacherNumber;
+    public void setTeacherNum(Integer teacherNum) {
+        this.teacherNum = teacherNum;
     }
 
     public String getTeacherId() {
