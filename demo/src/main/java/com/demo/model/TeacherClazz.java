@@ -21,10 +21,6 @@ public class TeacherClazz {
      * 录入时间
      */
     private Date createTime;
-    /**
-     * 学年
-     */
-    private Integer term;
 
 
     public Integer getTeacherNumber() {
@@ -49,13 +45,5 @@ public class TeacherClazz {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public Integer getTerm() {
-        return term;
-    }
-
-    public void setTerm(Integer term) {
-        this.term = term;
     }
 }

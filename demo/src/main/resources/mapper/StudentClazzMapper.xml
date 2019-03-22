@@ -3,25 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.dao.StudentClazzDao">
 
-    <insert id="save" parameterType="studentClazzDTO">
+    <insert id="save" parameterType="com.demo.model.StudentClazz">
     insert into student_clazz(studentNumber , clazzNumber ,term , createTime) values(#{studentNumber} , #{clazzNumber} ,#{term} , now())
    </insert>
 
-    <update id="update" parameterType="studentClazzDTO">
+    <update id="update" parameterType="com.demo.model.StudentClazz">
         update student_clazz set
                 score = #{score}
         where studentNumber = #{studentNumber} and clazzNumber = #{clazzNumber}
     </update>
 
 
-    <select id="get" resultType="studentClazz">
+    <select id="read" resultType="com.demo.model.StudentClazz">
         select * from student_clazz
         where studentNumber = #{studentNumber}
                 and clazzNumber = #{clazzNumber}
     </select>
 
 
-    <select id="list" parameterType="studentClazzQueryDTO" resultType="studentClazzDTO">
+    <select id="list" parameterType="com.demo.dto.StudentClazzQuery" resultType="com.demo.model.StudentClazz">
         select * from student_clazz
         <where>
             <if test="studentNumber != null">

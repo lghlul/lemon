@@ -3,11 +3,11 @@ package com.demo.dto;
 import com.demo.common.PageQuery;
 
 /**
- * @ClassName StudentQueryDTO
+ * @ClassName StudentQuery
  * @Description 分页查询学生参数
  * @Auther ll
  **/
-public class StudentQueryDTO extends PageQuery {
+public class StudentQuery extends PageQuery {
     /**
      * 名称 模糊查询 可选参数
      */

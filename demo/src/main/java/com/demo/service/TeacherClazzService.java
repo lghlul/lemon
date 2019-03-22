@@ -1,24 +1,28 @@
 package com.demo.service;
 
 import com.demo.dto.*;
+import com.demo.model.ClazzTermReport;
+import com.demo.model.TeacherClazz;
+import com.demo.model.TeacherClazzReport;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
 public interface TeacherClazzService {
 
 
-    TeacherClazzDTO saveOrUpdate(TeacherClazzDTO teacherClazzDTO) throws Exception;
+    TeacherClazz saveOrUpdate(TeacherClazz teacherClazz) throws Exception;
 
-    Object list(TeacherClazzQueryDTO teacherClazzQueryDTO) throws Exception;
+    List<TeacherClazz> list(TeacherClazzQuery teacherClazzQuery) throws Exception;
 
-    boolean checkTeacherClazzExist(Integer teacherNumber , Integer clazzNumber);
+    PageInfo<TeacherClazz> listPage(TeacherClazzQuery teacherClazzQuery) throws Exception;
 
-    void delete(Integer teacherNumber , Integer clazzNumber) throws Exception;
+    void delete(Integer teacherNumber, Integer clazzNumber) throws Exception;
 
-    List<TeacherClazzTermQueryDTO> listByTerm(Integer teacherNumber) throws Exception;
+    List<ClazzTermReport> listByTerm(Integer teacherNumber) throws Exception;
 
-    List<TeacherClazzTermQueryDTO> listClazzByTeacherLevel() throws Exception;
+    List<ClazzTermReport> listClazzByTeacherLevel() throws Exception;
 
-    List<TeacherClazzScoreQueryDTO> listTeacherByTeacherLevel() throws Exception;
+    List<TeacherClazzReport> listTeacherByTeacherLevel() throws Exception;
 
 }

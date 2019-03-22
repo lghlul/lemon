@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * @ClassName StudentDTO
- * @Description 添加学生传输对象
+ * @Description 学生DTO
  * @Auther ll
  **/
 public class StudentDTO {

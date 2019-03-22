@@ -4,31 +4,32 @@
 <mapper namespace="com.demo.dao.ClazzDao">
 
 
-    <insert id="save" parameterType="clazzDTO" keyProperty="clazzNumber" useGeneratedKeys="true">
+    <insert id="save" parameterType="com.demo.model.Clazz" keyProperty="clazzNumber" useGeneratedKeys="true">
       insert into clazz(clazzId , clazzName  , createTime) values(#{clazzId} , #{clazzName}  , now())
    </insert>
 
-    <select id="get" parameterType="clazzDTO" resultType="clazz">
+    <select id="read" parameterType="int" resultType="com.demo.model.Clazz">
         select * from clazz where clazzNumber = #{clazzNumber}
     </select>
 
-    <select id="getById" parameterType="string" resultType="clazz">
+    <select id="readById" parameterType="string" resultType="com.demo.model.Clazz">
         select * from clazz where clazzId = #{clazzId}
     </select>
 
-    <update id="update" parameterType="clazzDTO">
+    <update id="update" parameterType="com.demo.model.Clazz">
         update clazz
         set
-                clazzName = #{clazzName},
-                clazzId = #{clazzId}
-        where clazzNumber = #{clazzNumber}
+          clazzName = #{clazzName},
+          clazzId = #{clazzId}
+        where
+          clazzNumber = #{clazzNumber}
     </update>
 
     <delete id="delete" parameterType="int">
       delete from clazz where clazzNumber = #{clazzNumber}
     </delete>
 
-    <select id="list" parameterType="clazzQueryDTO" resultType="clazz">
+    <select id="list" parameterType="com.demo.dto.ClazzQuery" resultType="com.demo.model.Clazz">
         select * from clazz
         <where>
             <if test="clazzName != null">

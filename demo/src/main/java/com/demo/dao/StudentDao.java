@@ -1,24 +1,23 @@
 package com.demo.dao;
 
-import com.demo.dto.StudentQueryDTO;
+import com.demo.dto.StudentQuery;
 import com.demo.model.Student;
-import com.demo.dto.StudentDTO;
 
 import java.util.List;
 
 public interface StudentDao {
 
-    int save(StudentDTO studentDTO);
+    int save(Student student);
 
-    Student get(int studentNumber);
+    Student read(int studentNumber);
 
-    Student getById(String studentId);
+    Student readById(String studentId);
 
-    List<Student> list(StudentQueryDTO studentQueryDTO);
+    List<Student> list(StudentQuery studentQuery);
 
     int delete(int studentNumber);
 
-    int update(StudentDTO studentDTO);
+    int update(Student student);
 
 
 }

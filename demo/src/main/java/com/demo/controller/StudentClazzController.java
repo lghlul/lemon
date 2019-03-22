@@ -3,26 +3,28 @@ package com.demo.controller;
 import com.demo.common.ResultBean;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.StudentClazzDTO;
-import com.demo.dto.StudentClazzQueryDTO;
+import com.demo.dto.StudentClazzQuery;
+import com.demo.model.Clazz;
+import com.demo.model.StudentClazz;
 import com.demo.service.ClazzService;
 import com.demo.service.StudentClazzService;
-import com.demo.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName StudentController
- * @Description 学生控制器
+ * @ClassName StudentClazzController
+ * @Description 学生课程控制器
  * @Auther ll
  **/
 @RestController
 @RequestMapping("/studentClazz")
 public class StudentClazzController {
 
-    @Autowired
-    private StudentService studentService;
 
     @Autowired
     private StudentClazzService studentClazzService;
@@ -40,29 +42,20 @@ public class StudentClazzController {
     @PostMapping("saveOrUpdate")
     public ResultBean save(StudentClazzDTO studentClazzDTO) {
         try {
-
-            //校验学生是否存在
-            if (!studentService.checkStudentNumberExist(studentClazzDTO.getStudentNumber())) {
-                ResultBean resultBean = new ResultBean(ResultCodeConstant.STUDENT_NOT_EXIST);
-                return resultBean;
-            }
-            //校验是否存在这门课程
-            if (!clazzService.checkClazzNumberExist(studentClazzDTO.getClazzNumber())) {
-                ResultBean resultBean = new ResultBean(ResultCodeConstant.CLAZZ_NOT_EXIST);
-                return resultBean;
-            }
             //添加
             if (studentClazzDTO.getClazzNumber() != null && studentClazzDTO.getStudentNumber() != null && studentClazzDTO.getScore() == null) {
                 //校验是否重复选课
-                if (studentClazzService.checkStudentClazzExist(studentClazzDTO.getStudentNumber(), studentClazzDTO.getClazzNumber())) {
+                boolean studentClazzExist = studentClazzService.checkStudentClazzExist(studentClazzDTO.getStudentNumber(), studentClazzDTO.getClazzNumber());
+                if (studentClazzExist) {
                     //已经选过该课程
                     ResultBean resultBean = new ResultBean(ResultCodeConstant.STUDENT_CLAZZ_EXIST);
                     return resultBean;
                 }
             }
-
-            StudentClazzDTO resultStudentClazz = studentClazzService.saveOrUpdate(studentClazzDTO);
-            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultStudentClazz);
+            StudentClazz studentClazz = this.dtoToModel(studentClazzDTO);
+            StudentClazz resultStudentClazz = studentClazzService.saveOrUpdate(studentClazz);
+            StudentClazzDTO resultStudentClazzDTO = this.modelToDto(resultStudentClazz);
+            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultStudentClazzDTO);
             return resultBean;
         } catch (Exception e) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
@@ -73,14 +66,15 @@ public class StudentClazzController {
     /*
      * @author ll
      * @Description 学生课程列表(用于查看学生学年成绩)
-     * @param StudentClazzQueryDTO
+     * @param StudentClazzQuery
      * @return ResultBean
      */
     @GetMapping("list")
-    public ResultBean list(StudentClazzQueryDTO studentClazzQueryDTO) {
+    public ResultBean list(StudentClazzQuery studentClazzQuery) {
         try {
-            List<StudentClazzDTO> list = studentClazzService.list(studentClazzQueryDTO);
-            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, list);
+            List<StudentClazz> studentClazzList = studentClazzService.list(studentClazzQuery);
+            List<StudentClazzDTO> studentClazzDTOList = this.batchModelToDto(studentClazzList);
+            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, studentClazzDTOList);
             return resultBean;
         } catch (Exception e) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
@@ -92,7 +86,8 @@ public class StudentClazzController {
     /*
      * @author ll
      * @Description 删除学生课程信息
-     * @param String
+     * @param Integer
+     * @param Integer
      * @return ResultBean
      */
     @DeleteMapping("delete")
@@ -105,6 +100,70 @@ public class StudentClazzController {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
             return resultBean;
         }
+    }
+
+
+    /*
+     * @author ll
+     * @Description dto转model
+     * @param StudentClazzDTO
+     * @return StudentClazz
+     */
+    private StudentClazz dtoToModel(StudentClazzDTO studentClazzDTO) {
+        StudentClazz studentClazz = new StudentClazz();
+        studentClazz.setCreateTime(studentClazzDTO.getCreateTime());
+        studentClazz.setClazzNumber(studentClazzDTO.getClazzNumber());
+        studentClazz.setStudentNumber(studentClazzDTO.getStudentNumber());
+        studentClazz.setScore(studentClazzDTO.getScore());
+        studentClazz.setTerm(studentClazzDTO.getTerm());
+        return studentClazz;
+    }
+
+    /*
+     * @author ll
+     * @Description model转dto
+     * @param StudentClazz
+     * @return StudentClazzDTO
+     */
+    private StudentClazzDTO modelToDto(StudentClazz studentClazz) {
+        StudentClazzDTO studentClazzDTO = new StudentClazzDTO();
+        studentClazzDTO.setCreateTime(studentClazz.getCreateTime());
+        studentClazzDTO.setClazzNumber(studentClazz.getClazzNumber());
+        studentClazzDTO.setStudentNumber(studentClazz.getStudentNumber());
+        studentClazzDTO.setScore(studentClazz.getScore());
+        studentClazzDTO.setTerm(studentClazz.getTerm());
+        return studentClazzDTO;
+    }
+
+    /*
+     * @author ll
+     * @Description model转dto(批量)
+     * @param List<StudentClazz>
+     * @return List<StudentClazzDTO>
+     */
+    private List<StudentClazzDTO> batchModelToDto(List<StudentClazz> studentClazzList) throws Exception {
+        //关联属性不应该关联表查询   应将关联表查询 存入缓存
+        List<StudentClazzDTO> studentClazzDTOList = null;
+        if (studentClazzList != null) {
+            studentClazzDTOList = new ArrayList<>();
+            List<Clazz> clazzList = clazzService.list(null);
+            // 本应该有缓存   此处用map代替
+            Map<Integer, Clazz> clazzMap = new HashMap<>();
+            if (clazzList != null) {
+                for (Clazz clazz : clazzList) {
+                    clazzMap.put(clazz.getClazzNumber(), clazz);
+                }
+            }
+            for (StudentClazz studentClazz : studentClazzList) {
+                StudentClazzDTO studentClazzDTO = this.modelToDto(studentClazz);
+                Clazz clazz = clazzMap.get(studentClazz.getClazzNumber());
+                if (clazz != null) {
+                    studentClazzDTO.setClazzName(clazz.getClazzName());
+                }
+                studentClazzDTOList.add(studentClazzDTO);
+            }
+        }
+        return studentClazzDTOList;
     }
 
 }

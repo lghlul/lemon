@@ -4,10 +4,10 @@
 <mapper namespace="com.demo.dao.TeacherClazzDao">
 
 
-    <insert id="save" parameterType="teacherClazzDTO" keyProperty="teacherClazzId" useGeneratedKeys="true">
-    insert into teacher_clazz(teacherNumber , clazzNumber  , createTime , term) values( #{teacherNumber} , #{clazzNumber}  ,now() , #{term})
+    <insert id="save" parameterType="com.demo.model.TeacherClazz" keyProperty="teacherClazzId" useGeneratedKeys="true">
+    insert into teacher_clazz(teacherNumber , clazzNumber  , createTime ) values( #{teacherNumber} , #{clazzNumber}  ,now())
    </insert>
-    <update id="update" parameterType="teacherClazzDTO">
+    <update id="update" parameterType="com.demo.model.TeacherClazz">
         update teacher_clazz
         set
             term = #{term}
@@ -15,12 +15,7 @@
     </update>
 
 
-    <select id="get" resultType="teacherClazz">
-        select * from teacher_clazz
-    </select>
-
-
-    <select id="list" parameterType="teacherClazzQueryDTO" resultType="teacherClazzDTO">
+    <select id="list" parameterType="com.demo.dto.TeacherClazzQuery" resultType="com.demo.model.TeacherClazz">
       select * from teacher_clazz
       <where>
         <if test="teacherNumber != null">
@@ -29,7 +24,7 @@
       </where>
     </select>
 
-    <select id="listClazz" parameterType="int" resultType="teacherClazzTermQueryDTO">
+    <select id="listClazz" parameterType="int" resultType="com.demo.model.ClazzTermReport">
         SELECT
         b.term,
         max(score) maxScore,
@@ -38,7 +33,7 @@
         a.clazzNumber
         FROM
         teacher_clazz a
-        JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        inner JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
         <where>
             <if test="teacherNumber != null">
                 and teacherNumber = #{teacherNumber}
@@ -50,7 +45,7 @@
     </select>
 
 
-    <select id="listTeacherByTeacherLevel" resultType="teacherClazzScoreQueryDTO">
+    <select id="listTeacherByTeacherLevel" resultType="com.demo.model.TeacherClazzReport">
         SELECT
             a.teacherNumber,
             max(score) maxScore,
@@ -59,7 +54,7 @@
             a.clazzNumber
         FROM
             teacher_clazz a
-        JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
+        inner JOIN student_clazz b ON a.clazzNumber = b.clazzNumber
         GROUP BY
             teacherNumber,
             clazzNumber

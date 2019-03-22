@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * @ClassName TeacherDTO
- * @Description 添加教师传输对象
+ * @Description 教师DTO
  * @Auther ll
  **/
 public class TeacherDTO {
@@ -23,7 +23,7 @@ public class TeacherDTO {
     /**
      * 教师等级  1普通教师  2教务主任
      */
-    private int teacherLevel;
+    private Integer teacherLevel;
     /**
      * 录入时间
      */
@@ -53,11 +53,11 @@ public class TeacherDTO {
         this.teacherName = teacherName;
     }
 
-    public int getTeacherLevel() {
+    public Integer getTeacherLevel() {
         return teacherLevel;
     }
 
-    public void setTeacherLevel(int teacherLevel) {
+    public void setTeacherLevel(Integer teacherLevel) {
         this.teacherLevel = teacherLevel;
     }
 

@@ -1,12 +1,17 @@
 package com.demo.controller;
 
+import com.demo.common.PageResult;
 import com.demo.constant.ResultCodeConstant;
 import com.demo.dto.*;
 import com.demo.common.ResultBean;
 import com.demo.model.Clazz;
 import com.demo.service.ClazzService;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @ClassName ClassController
@@ -24,7 +29,7 @@ public class ClazzController {
     /*
      * @author ll
      * @Description 删除课程信息
-     * @param String
+     * @param Integer
      * @return ResultBean
      */
     @DeleteMapping("delete")
@@ -48,29 +53,27 @@ public class ClazzController {
     @PostMapping("saveOrUpdate")
     public ResultBean saveOrUpdate(ClazzDTO clazzDTO) {
         try {
-            //更新
+            Clazz clazz = clazzService.readById(clazzDTO.getClazzId());
+
             if (clazzDTO.getClazzNumber() != null) {
-                //查询课程是否存在
-                if (!clazzService.checkClazzNumberExist(clazzDTO.getClazzNumber())) {
-                    //课程不存在
-                    ResultBean resultBean = new ResultBean(ResultCodeConstant.CLAZZ_NOT_EXIST);
-                    return resultBean;
-                }
-                Clazz clazz = clazzService.readById(clazzDTO.getClazzId());
+                //更新
                 //校验编号
                 if (clazz != null && clazz.getClazzNumber() != clazzDTO.getClazzNumber()) {
                     ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
                     return resultBean;
                 }
             } else {
+                //添加
                 //校验编号
-                if (clazzService.readById(clazzDTO.getClazzId()) != null) {
+                if (clazz != null) {
                     ResultBean resultBean = new ResultBean(ResultCodeConstant.NUMBER_REPEAT);
                     return resultBean;
                 }
             }
-            ClazzDTO resultClazz = clazzService.saveOrUpdate(clazzDTO);
-            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultClazz);
+            Clazz clazzModel = this.dtoToModel(clazzDTO);
+            Clazz resultClazz = clazzService.saveOrUpdate(clazzModel);
+            ClazzDTO resultClazzDTO = this.modelToDto(resultClazz);
+            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, resultClazzDTO);
             return resultBean;
         } catch (Exception e) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
@@ -81,15 +84,30 @@ public class ClazzController {
     /*
      * @author ll
      * @Description 分页查询课程列表
-     * @param ClazzQueryDTO
+     * @param ClazzQuery
      * @return ResultBean
      */
     @GetMapping("list")
-    public ResultBean list(ClazzQueryDTO clazzQueryDTO) {
+    public ResultBean list(ClazzQuery clazzQuery) {
         try {
-            Object list = clazzService.list(clazzQueryDTO);
-            ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, list);
-            return resultBean;
+            List<Clazz> clazzList;
+            //是否需要分页
+            if (clazzQuery.getPaging()) {
+                PageInfo<Clazz> clazzPageInfo = clazzService.listPage(clazzQuery);
+                clazzList = clazzPageInfo.getList();
+                PageResult pageResult = new PageResult();
+                pageResult.setTotalCount(clazzPageInfo.getTotal());
+                pageResult.setTotalPage(clazzPageInfo.getPages());
+                List<ClazzDTO> clazzDTOList = this.batchModelToDto(clazzList);
+                pageResult.setList(clazzDTOList);
+                ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, pageResult);
+                return resultBean;
+            } else {
+                clazzList = clazzService.list(clazzQuery);
+                List<ClazzDTO> clazzDTOList = this.batchModelToDto(clazzList);
+                ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzDTOList);
+                return resultBean;
+            }
         } catch (Exception e) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
             return resultBean;
@@ -111,13 +129,62 @@ public class ClazzController {
                 ResultBean resultBean = new ResultBean(ResultCodeConstant.CLAZZ_NOT_EXIST);
                 return resultBean;
             } else {
-                ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazz);
+                ClazzDTO clazzDTO = this.modelToDto(clazz);
+                ResultBean resultBean = new ResultBean(ResultCodeConstant.SUCCESS, clazzDTO);
                 return resultBean;
             }
         } catch (Exception e) {
             ResultBean resultBean = new ResultBean(ResultCodeConstant.SERVER_EXCEPTION);
             return resultBean;
         }
+    }
+
+    /*
+     * @author ll
+     * @Description dto转model
+     * @param ClazzDTO
+     * @return Clazz
+     */
+    private Clazz dtoToModel(ClazzDTO clazzDTO) {
+        Clazz clazz = new Clazz();
+        clazz.setClazzId(clazzDTO.getClazzId());
+        clazz.setClazzName(clazzDTO.getClazzName());
+        clazz.setClazzNumber(clazzDTO.getClazzNumber());
+        clazz.setCreateTime(clazzDTO.getCreateTime());
+        return clazz;
+    }
+
+    /*
+     * @author ll
+     * @Description model转dto
+     * @param Clazz
+     * @return ClazzDTO
+     */
+    private ClazzDTO modelToDto(Clazz clazz) {
+        ClazzDTO clazzDTO = new ClazzDTO();
+        clazzDTO.setClazzId(clazz.getClazzId());
+        clazzDTO.setClazzName(clazz.getClazzName());
+        clazzDTO.setClazzNumber(clazz.getClazzNumber());
+        clazzDTO.setCreateTime(clazz.getCreateTime());
+        return clazzDTO;
+    }
+
+    /*
+     * @author ll
+     * @Description model转dto(批量)
+     * @param List<Clazz>
+     * @return List<ClazzDTO>
+     */
+    private List<ClazzDTO> batchModelToDto(List<Clazz> clazzList) {
+        List<ClazzDTO> clazzDTOList = null;
+        if (clazzList != null) {
+            clazzDTOList = new ArrayList<>();
+            for (Clazz clazz : clazzList) {
+                ClazzDTO clazzDTO = this.modelToDto(clazz);
+                clazzDTOList.add(clazzDTO);
+            }
+        }
+        return clazzDTOList;
     }
 
 }

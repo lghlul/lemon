@@ -20,24 +20,23 @@ public class TeacherServiceImpl implements TeacherService {
     private TeacherDao teacherDao;
 
     @Override
-    public Object list(TeacherQueryDTO listTeacherDTO) throws Exception {
-        if(listTeacherDTO.getPaging()){
-            PageHelper.startPage(listTeacherDTO.getOffset(), listTeacherDTO.getLimit());
-            if(listTeacherDTO.getSort() != null){
-                PageHelper.orderBy(listTeacherDTO.getSort() + " " + listTeacherDTO.getSortDir());
-            }
-            List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
-            //得到分页的结果对象
-            PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
-            return pageInfo;
-        }else{
-            List<Teacher> teacherList = teacherDao.list(listTeacherDTO);
-            return teacherList;
-        }
+    public List<Teacher> list(TeacherQuery teacherQuery) throws Exception {
+        List<Teacher> teacherList = teacherDao.list(teacherQuery);
+        return teacherList;
 
     }
 
-
+    @Override
+    public PageInfo<Teacher> listPage(TeacherQuery teacherQuery) throws Exception {
+        PageHelper.startPage(teacherQuery.getOffset(), teacherQuery.getLimit());
+        if (teacherQuery.getSort() != null) {
+            PageHelper.orderBy(teacherQuery.getSort() + " " + teacherQuery.getSortDir());
+        }
+        List<Teacher> teacherList = teacherDao.list(teacherQuery);
+        //得到分页的结果对象
+        PageInfo<Teacher> pageInfo = new PageInfo<>(teacherList);
+        return pageInfo;
+    }
 
     @Override
     public void delete(Integer teacherId) throws Exception {
@@ -45,33 +44,23 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public TeacherDTO saveOrUpdate(TeacherDTO teacherDTO) throws Exception {
-        if (teacherDTO.getTeacherNumber() != null) {
-            teacherDao.update(teacherDTO);
+    public Teacher saveOrUpdate(Teacher teacher) throws Exception {
+        if (teacher.getTeacherNumber() != null) {
+            teacherDao.update(teacher);
         } else {
-            teacherDao.save(teacherDTO);
+            teacherDao.save(teacher);
         }
-        return teacherDTO;
+        return teacher;
     }
 
     @Override
     public Teacher read(Integer teacherNumber) {
-        return teacherDao.get(teacherNumber);
-    }
-
-    @Override
-    public boolean checkTeacherNumberExist(Integer teacherNumber) {
-        //校验 老师是否存在
-        Teacher teacher = teacherDao.get(teacherNumber);
-        if (teacher == null) {
-            return false;
-        }
-        return true;
+        return teacherDao.read(teacherNumber);
     }
 
     @Override
     public Teacher readById(String teacherId) {
-        Teacher teacher = teacherDao.getById(teacherId);
+        Teacher teacher = teacherDao.readById(teacherId);
         return teacher;
     }
 }

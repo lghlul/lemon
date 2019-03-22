@@ -1,23 +1,22 @@
 package com.demo.dao;
 
-import com.demo.dto.ClazzQueryDTO;
+import com.demo.dto.ClazzQuery;
 import com.demo.model.Clazz;
-import com.demo.dto.ClazzDTO;
 
 import java.util.List;
 
 
 public interface ClazzDao {
-    int save(ClazzDTO clazzDTO);
+    int save(Clazz Clazz);
 
-    Clazz get(Integer clazzNumber);
+    Clazz read(Integer clazzNumber);
 
-    Clazz getById(String clazzId);
+    Clazz readById(String clazzId);
 
     int delete(Integer clazzNumber);
 
-    int update(ClazzDTO clazzDTO);
+    int update(Clazz clazz);
 
-    List<Clazz> list(ClazzQueryDTO clazzQueryDTO);
+    List<Clazz> list(ClazzQuery clazzQuery);
 
 }

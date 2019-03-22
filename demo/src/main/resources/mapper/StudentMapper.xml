@@ -3,19 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.demo.dao.StudentDao">
 
-    <insert id="save" parameterType="studentDTO" keyProperty="studentNumber" useGeneratedKeys="true">
+    <insert id="save" parameterType="com.demo.model.Student" keyProperty="studentNumber" useGeneratedKeys="true">
     insert into student(studentId , studentName , createTime) values(#{studentId} , #{studentName} , now())
    </insert>
 
-    <select id="get" parameterType="int" resultType="student">
+    <select id="read" parameterType="int" resultType="com.demo.model.Student">
         select * from student where studentNumber = #{studentNumber}
     </select>
 
-    <select id="getById" parameterType="string" resultType="student">
+    <select id="readById" parameterType="string" resultType="com.demo.model.Student">
         select * from student where studentId = #{studentId}
     </select>
 
-    <select id="list" parameterType="studentQueryDTO" resultType="student">
+    <select id="list" parameterType="com.demo.dto.StudentQuery" resultType="com.demo.model.Student">
         select * from student
         <where>
             <if test="studentName != null">
@@ -24,17 +24,13 @@
         </where>
     </select>
 
-    <update id="update" parameterType="studentDTO">
+    <update id="update" parameterType="com.demo.model.Student">
         update student
-        <set>
-            <if test="studentName != null">
-                studentName = #{studentName},
-            </if>
-            <if test="studentNumber != null">
-                studentNumber = #{studentNumber},
-            </if>
-        </set>
-        where studentId = #{studentId}
+        set
+            studentName = #{studentName},
+            studentId = #{studentId}
+        where
+            studentNumber = #{studentNumber}
     </update>
 
     <delete id="delete" parameterType="int">

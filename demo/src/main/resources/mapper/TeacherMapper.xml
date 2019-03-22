@@ -4,19 +4,19 @@
 <mapper namespace="com.demo.dao.TeacherDao">
 
 
-    <insert id="save" parameterType="teacherDTO" keyProperty="teacherNumber" useGeneratedKeys="true">
+    <insert id="save" parameterType="com.demo.model.Teacher" keyProperty="teacherNumber" useGeneratedKeys="true">
     insert into teacher(teacherId , teacherName , teacherLevel , createTime) values(#{teacherId} , #{teacherName} , #{teacherLevel} , now())
    </insert>
 
-    <select id="get" parameterType="int" resultType="teacher">
+    <select id="read" parameterType="int" resultType="com.demo.model.Teacher">
         select * from teacher where teacherNumber = #{teacherNumber}
     </select>
 
-    <select id="getById" parameterType="string" resultType="teacher">
+    <select id="readById" parameterType="string" resultType="com.demo.model.Teacher">
         select * from teacher where teacherId = #{teacherId}
     </select>
 
-    <select id="list" parameterType="TeacherQueryDTO" resultType="teacher">
+    <select id="list" parameterType="com.demo.dto.TeacherQuery" resultType="com.demo.model.Teacher">
         select * from teacher
         <where>
             <if test="teacherName != null">
@@ -29,7 +29,7 @@
     </select>
 
 
-    <update id="update" parameterType="teacherDTO">
+    <update id="update" parameterType="com.demo.model.Teacher">
         update teacher
        set
                 teacherName = #{teacherName},

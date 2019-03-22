@@ -1,13 +1,14 @@
-package com.demo.dto;
+package com.demo.model;
 
 /**
- * @ClassName TeacherClazzTermQueryDTO
- * @Description 教师本人每学年，学科平均成绩，最高分，最低分 返回对象
+ * @ClassName ClazzTermReport
+ * @Description 按学年查询课程返回对象
  * @Auther lgh_l
- * @Date 2019/3/19 10:05
+ * @Date 2019/3/21 17:11
  * @Version 1.0
  **/
-public class TeacherClazzTermQueryDTO {
+public class ClazzTermReport {
+
     /**
      * 学年
      */
@@ -25,10 +26,6 @@ public class TeacherClazzTermQueryDTO {
      */
     private double avgScore;
     /**
-     * 课程名称
-     */
-    private String clazzName;
-    /**
      * 课程号
      */
     private String clazzId;
@@ -36,7 +33,6 @@ public class TeacherClazzTermQueryDTO {
      * 课程 主键
      */
     private Integer clazzNumber;
-
 
     public Integer getTerm() {
         return term;
@@ -68,14 +64,6 @@ public class TeacherClazzTermQueryDTO {
 
     public void setAvgScore(double avgScore) {
         this.avgScore = avgScore;
-    }
-
-    public String getClazzName() {
-        return clazzName;
-    }
-
-    public void setClazzName(String clazzName) {
-        this.clazzName = clazzName;
     }
 
     public String getClazzId() {

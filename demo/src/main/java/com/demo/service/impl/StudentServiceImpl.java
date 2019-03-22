@@ -21,22 +21,21 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public Object list(StudentQueryDTO studentQueryDTO) throws Exception {
-        if (studentQueryDTO.getPaging()) {
-            PageHelper.startPage(studentQueryDTO.getOffset(), studentQueryDTO.getLimit());
-            if(studentQueryDTO.getSort() != null){
-                PageHelper.orderBy(studentQueryDTO.getSort() + " " + studentQueryDTO.getSortDir());
-            }
-            List<Student> studentList = studentDao.list(studentQueryDTO);
-            //得到分页的结果对象
-            PageInfo<Student> pageInfo = new PageInfo<>(studentList);
-            return pageInfo;
-        } else {
-            List<Student> studentList = studentDao.list(studentQueryDTO);
-            return studentList;
+    public List<Student> list(StudentQuery studentQuery) throws Exception {
+        List<Student> studentList = studentDao.list(studentQuery);
+        return studentList;
+    }
+
+    @Override
+    public PageInfo<Student> listPage(StudentQuery studentQuery) throws Exception {
+        PageHelper.startPage(studentQuery.getOffset(), studentQuery.getLimit());
+        if (studentQuery.getSort() != null) {
+            PageHelper.orderBy(studentQuery.getSort() + " " + studentQuery.getSortDir());
         }
-
-
+        List<Student> studentList = studentDao.list(studentQuery);
+        //得到分页的结果对象
+        PageInfo<Student> pageInfo = new PageInfo<>(studentList);
+        return pageInfo;
     }
 
 
@@ -47,35 +46,24 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student read(Integer studentNumber) {
-        return this.studentDao.get(studentNumber);
+        return this.studentDao.read(studentNumber);
     }
 
 
     @Override
-    public boolean checkStudentNumberExist(Integer studentNumber) {
-        Student student = studentDao.get(studentNumber);
-        if (student == null) {
-            return false;
+    public Student saveOrUpdate(Student student) throws Exception {
+        if (student.getStudentNumber() != null) {
+            this.studentDao.update(student);
         } else {
-            return true;
+            this.studentDao.save(student);
         }
-    }
-
-
-    @Override
-    public StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception {
-        if (studentDTO.getStudentNumber() != null) {
-            this.studentDao.update(studentDTO);
-        } else {
-            this.studentDao.save(studentDTO);
-        }
-        return studentDTO;
+        return student;
     }
 
 
     @Override
     public Student readById(String studentId) {
-        Student student = this.studentDao.getById(studentId);
+        Student student = this.studentDao.readById(studentId);
         return student;
     }
 }

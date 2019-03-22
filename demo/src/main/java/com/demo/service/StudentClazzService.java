@@ -1,20 +1,20 @@
 package com.demo.service;
 
-import com.demo.dto.StudentClazzDTO;
-import com.demo.dto.StudentClazzQueryDTO;
+import com.demo.dto.StudentClazzQuery;
+import com.demo.model.StudentClazz;
 
 import java.util.List;
 
 public interface StudentClazzService {
 
 
-    StudentClazzDTO saveOrUpdate(StudentClazzDTO studentClazzDTO) throws Exception;
+    StudentClazz saveOrUpdate(StudentClazz studentClazz) throws Exception;
 
-    List<StudentClazzDTO> list(StudentClazzQueryDTO studentClazzQueryDTO) throws Exception;
+    List<StudentClazz> list(StudentClazzQuery studentClazzQuery) throws Exception;
 
-    boolean checkStudentClazzExist(Integer studentNumber , Integer clazzNumber);
+    boolean checkStudentClazzExist(Integer studentNumber, Integer clazzNumber);
 
-    void delete(Integer studentNumber , Integer clazzNumber) throws Exception;
+    void delete(Integer studentNumber, Integer clazzNumber) throws Exception;
 
 
 }

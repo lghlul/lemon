@@ -1,25 +1,25 @@
 package com.demo.dao;
 
+import com.demo.model.ClazzTermReport;
 import com.demo.model.TeacherClazz;
 import com.demo.dto.*;
+import com.demo.model.TeacherClazzReport;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface TeacherClazzDao {
 
-    int save(TeacherClazzDTO teacherClazzDTO);
+    int save(TeacherClazz teacherClazz);
 
-    int update(TeacherClazzDTO teacherClazzDTO);
+    int update(TeacherClazz teacherClazz);
 
-    TeacherClazz get(@Param("teacherNumber") int teacherNumber ,@Param("clazzNumber") int clazzNumber);
+    List<TeacherClazz> list(TeacherClazzQuery teacherClazzQuery);
 
-    List<TeacherClazzDTO> list(TeacherClazzQueryDTO teacherClazzQueryDTO);
+    List<ClazzTermReport> listClazz(@Param("teacherNumber") Integer teacherNumber);
 
-    List<TeacherClazzTermQueryDTO> listClazz(@Param("teacherNumber") Integer teacherNumber);
+    List<TeacherClazzReport> listTeacherByTeacherLevel();
 
-    List<TeacherClazzScoreQueryDTO> listTeacherByTeacherLevel();
-
-    int delete(@Param("teacherNumber") int teacherNumber ,@Param("clazzNumber") int clazzNumber);
+    int delete(@Param("teacherNumber") Integer teacherNumber, @Param("clazzNumber") Integer clazzNumber);
 
 }

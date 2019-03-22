@@ -2,20 +2,23 @@ package com.demo.service;
 
 import com.demo.dto.*;
 import com.demo.model.Clazz;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 public interface ClazzService {
 
 
     void delete(Integer clazzNumber) throws Exception;
 
-    Object list(ClazzQueryDTO clazzQueryDTO) throws Exception;
+    List<Clazz> list(ClazzQuery clazzQuery) throws Exception;
+
+    PageInfo<Clazz> listPage(ClazzQuery clazzQuery);
 
     Clazz read(Integer clazzNumber) throws Exception;
 
     Clazz readById(String clazzId) throws Exception;
 
-    boolean checkClazzNumberExist(Integer clazzNumber) throws Exception;
-
-    ClazzDTO saveOrUpdate(ClazzDTO clazzDTO) throws Exception;
+    Clazz saveOrUpdate(Clazz clazz) throws Exception;
 
 }

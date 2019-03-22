@@ -1,11 +1,11 @@
 package com.demo.dto;
 
 /**
- * @ClassName StudentClazzQueryDTO
+ * @ClassName StudentClazzQuery
  * @Description 查询学生课程列表对象
  * @Auther ll
  **/
-public class StudentClazzQueryDTO {
+public class StudentClazzQuery {
     /**
      * 学生编号
      */

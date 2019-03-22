@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * @ClassName TeacherClazzDTO
- * @Description 添加教师课程信息
+ * @Description 教师课程DTO
  * @Auther ll
  **/
 public class TeacherClazzDTO {
@@ -20,11 +20,6 @@ public class TeacherClazzDTO {
      * 录入时间
      */
     private Date createTime;
-    /**
-     * 学年
-     */
-    private Integer term;
-
     /**
      * 课程名称
      */
@@ -50,15 +45,6 @@ public class TeacherClazzDTO {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
-
-    public Integer getTerm() {
-        return term;
-    }
-
-    public void setTerm(Integer term) {
-        this.term = term;
-    }
-
 
     public String getClazzName() {
         return clazzName;

@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * @ClassName ClazzDTO
- * @Description 添加课程对象
+ * @Description 课程DTO
  * @Auther ll
  **/
 public class ClazzDTO {

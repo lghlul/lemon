@@ -2,11 +2,16 @@ package com.demo.service;
 
 import com.demo.dto.*;
 import com.demo.model.Student;
+import com.github.pagehelper.PageInfo;
+
+import java.util.List;
 
 
 public interface StudentService {
 
-    Object list(StudentQueryDTO studentDTO) throws Exception;
+    List<Student> list(StudentQuery studentQuery) throws Exception;
+
+    PageInfo<Student> listPage(StudentQuery studentQuery) throws Exception;
 
     void delete(Integer studentId) throws Exception;
 
@@ -14,8 +19,6 @@ public interface StudentService {
 
     Student readById(String studentId);
 
-    boolean checkStudentNumberExist(Integer studentNumber);
-
-    StudentDTO saveOrUpdate(StudentDTO studentDTO) throws Exception;
+    Student saveOrUpdate(Student student) throws Exception;
 
 }

@@ -1,7 +1,6 @@
 package com.demo.dao;
 
-import com.demo.dto.StudentClazzDTO;
-import com.demo.dto.StudentClazzQueryDTO;
+import com.demo.dto.StudentClazzQuery;
 import com.demo.model.StudentClazz;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,14 +8,14 @@ import java.util.List;
 
 public interface StudentClazzDao {
 
-    int save(StudentClazzDTO studentClazzDTO);
+    int save(StudentClazz studentClazz);
 
-    int update(StudentClazzDTO studentClazzDTO);
+    int update(StudentClazz studentClazz);
 
-    StudentClazz get(@Param("studentNumber") int studentNumber, @Param("clazzNumber") int clazzNumber);
+    StudentClazz read(@Param("studentNumber") Integer studentNumber, @Param("clazzNumber") Integer clazzNumber);
 
-    List<StudentClazzDTO> list(StudentClazzQueryDTO studentClazzQueryDTO);
+    List<StudentClazz> list(StudentClazzQuery studentClazzQuery);
 
-    int delete(@Param("studentNumber") int studentNumber, @Param("clazzNumber") int clazzNumber);
+    int delete(@Param("studentNumber") Integer studentNumber, @Param("clazzNumber") Integer clazzNumber);
 
 }

@@ -1,13 +1,13 @@
 package com.demo.dto;
 
 /**
- * @ClassName TeacherClazzScoreQueryDTO
- * @Description 教师-学科平均成绩，最高分，最低分 返回对象
+ * @ClassName TeacherClazzReportDTO
+ * @Description 教师-学科平均成绩，最高分，最低分 DTO
  * @Auther lgh_l
  * @Date 2019/3/19 10:18
  * @Version 1.0
  **/
-public class TeacherClazzScoreQueryDTO {
+public class TeacherClazzReportDTO {
     /**
      * 教师号
      */
